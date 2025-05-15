@@ -105,10 +105,8 @@
 
                     <div class="sort-container">
                         <select>
-                            <option value="" disabled selected>Sort tasks by...</option>
-                            <!-- Thinking to remove the disabled selected now, because unable to think of any other way to reset sorting or remove sorting option. -->
-                            <!-- <option value="" >Sort tasks by...</option> -->
-                            <option value="none">Default order</option>
+                            <option value="newestFirst" selected>Newest First (default)</option>
+                            <option value="oldestFirst">Oldest First</option>
                             <option value="dueDateAsc">Due Date ↑</option>
                             <option value="dueDateDesc">Due Date ↓</option>
                             <option value="priority">Priority</option>
@@ -142,7 +140,8 @@
 
                 <div class="sidebar-section">
                     <button class="view-all-button">
-                        View All Tasks
+                        <i class="material-icons">view_list</i>
+                        <span>View All Tasks</span>
                     </button>
                     <button type="button" class="back-to-home" id="back-to-home">Home</button>
                 </div>
@@ -170,7 +169,9 @@
 
 
                     <!-- Delete selection bar container-->
+                    <div id="greet_user">
 
+                    </div>
                     <div class="selection-bar" style="display:none;">
                         <div class="selection-info">
                             <span class="selected-count">0 selected</span>
@@ -184,9 +185,9 @@
 
                     </div>
 
-                    <div id="greet_user">
+                    <!-- <div id="greet_user">
 
-                    </div>
+                    </div> -->
 
                     <div class="header-actions">
                         <button class="notification-center-button" id="notification-btn-${user.username}"
@@ -226,18 +227,12 @@
                             <div class="checkbox-group">
                                 <label class="checkbox-label">
                                     <input type="checkbox" name="status" value="not started"> ⭕ Not Started
-                                    <!-- <span class="checkbox-custom"></span>
-                                    <span class="status-icon">⭕</span>Not Started -->
                                 </label>
                                 <label class="checkbox-label">
                                     <input type="checkbox" name="status" value="in progress"> ⏳ In Progress
-                                    <!-- <span class="checkbox-custom"></span>
-                                    <span class="status-icon">⏳</span>In Progress -->
                                 </label>
                                 <label class="checkbox-label">
                                     <input type="checkbox" name="status" value="completed"> ✅ Completed
-                                    <!-- <span class="checkbox-custom"></span>
-                                    <span class="status-icon">✅</span>Completed -->
                                 </label>
                             </div>
                         </div>
@@ -247,20 +242,19 @@
                             <h4>Priority</h4>
                             <div class="checkbox-group">
                                 <label class="checkbox-label">
+                                    <input type="checkbox" name="priority" value=""> No Priority
+                                </label>                                
+                                <label class="checkbox-label">
                                     <input type="checkbox" name="priority" value="low"> 🔵 Low
-                                    <!-- <span class="checkbox-custom"></span>
-                                    <span class="priority-icon">🔵</span>Low -->
                                 </label>
                                 <label class="checkbox-label">
                                     <input type="checkbox" name="priority" value="medium"> 🟡 Medium
-                                    <!-- <span class="checkbox-custom"></span>
-                                    <span class="priority-icon">🟡</span>Medium -->
                                 </label>
                                 <label class="checkbox-label">
                                     <input type="checkbox" name="priority" value="high"> 🔴 High
-                                    <!-- <span class="checkbox-custom"></span>
-                                    <span class="priority-icon">🔴</span>High -->
                                 </label>
+
+
                             </div>
                         </div>
 
@@ -268,6 +262,10 @@
                         <div class="filter-section">
                             <h4>Time</h4>
                             <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="time" value="" class="time-icon">📅 No Due Date
+                                    <!-- <span class="checkbox-custom"></span> Overdue -->
+                                </label>                                
                                 <label class="checkbox-label">
                                     <input type="checkbox" name="time" value="overdue" class="time-icon">📅 Overdue
                                     <!-- <span class="checkbox-custom"></span> Overdue -->
