@@ -654,7 +654,8 @@ let notificationManagerInstance;
 
 const pageManager = new PageManager();
 
-// Populate user list
+// Populate user list and also handling switching of user.
+
 function populateUserList() {
 
     const selectUserBtn = document.getElementById("selectUserBtn");
@@ -706,9 +707,12 @@ function populateUserList() {
             initializeModules(currentUser);
 
             updateProfileView(currentUser);
+            // Reset the view toggle to see the correct name either dashboard or view all tasks
+            resetViewToggle();
             pageManager.showPage('profile');
             // const func = setupModalHandlers();
             // func.displayTasks(currentUser);
+            sorting();
             displayTasks(currentUser, currentUser["taskList"]);
             userModal.classList.remove('active');
         });
@@ -841,6 +845,53 @@ const getPriorityEmoji = (priority) => {
     }
 };
 
+function initViewToggle() {
+    const viewAllButton = document.querySelector(".view-all-button");
+    const viewToggleIcon = viewAllButton.querySelector('i');
+    const viewToggleText = viewAllButton.querySelector('span');
+
+    if (viewAllButton) {
+        // Set initial state
+        viewAllButton.dataset.viewMode = "card";
+        viewToggleIcon.textContent = "view_list"; // Initial icon for switching to list view
+        viewToggleText.textContent = "View All Tasks";
+
+        viewAllButton.addEventListener("click", function () {
+            const currentView = this.dataset.viewMode;
+            const newView = currentView === "card" ? "list" : "card";
+
+            // Update button text
+            // this.textContent = newView === "card" ? "View All Tasks" : "Dashboard";
+
+            // Update button text and icon
+            if (newView === "card") {
+                viewToggleIcon.textContent = "view_list"; // Show list icon (next state)
+                viewToggleText.textContent = "View All Tasks";
+            } else {
+                viewToggleIcon.textContent = "view_module"; // Show card icon (next state)
+                viewToggleText.textContent = "Dashboard";
+            }
+            this.dataset.viewMode = newView;
+
+            // Re-render tasks with new view mode
+            displayTasks(currentUser, currentUser.taskList, "", newView);
+        });
+    }
+}
+
+function resetViewToggle() {
+    const viewAllButton = document.querySelector(".view-all-button");
+    const viewToggleIcon = viewAllButton.querySelector('i');
+    const viewToggleText = viewAllButton.querySelector('span');
+
+    if (viewAllButton) {
+        // Reset to card view
+        viewAllButton.dataset.viewMode = "card";
+        viewToggleIcon.textContent = "view_list";
+        viewToggleText.textContent = "View All Tasks";
+    }
+}
+
 // Creating a global variable, so that we can use customize taskList for different purposes, like sorting, view all tasks and showing few something like.
 // let user_task_ls;
 // let user_task_ls = currentUser["taskList"];
@@ -848,107 +899,527 @@ const getPriorityEmoji = (priority) => {
 // *** No more need of user parameter as I am directly passing the current_task_ls based on needs. ***
 
 // Making displayTasks function async because we are using await in calling checkExistingNotification for hasReminder variable.
-async function displayTasks(user, current_task_ls, message = "") {
-    // console.log("User is ", user.username);
-    // console.log("User is ", currentUser.username);
+// async function displayTasks(user, current_task_ls, message = "") {
+//     // console.log("User is ", user.username);
+//     // console.log("User is ", currentUser.username);
+//     console.log("user_task_ls inside displayTasks func. ", current_task_ls);
+//     console.log("I am inside displayTasks function. ");
+//     const taskDisplay = document.querySelector("#task-display");
+//     taskDisplay.innerHTML = '<div class="task-container"></div>';
+//     const cardContainer = taskDisplay.querySelector('.task-container');
+//     // Not updating it inside function.
+//     // const user_task_ls = user["taskList"];
+//     // USING "LET" OVER "CONST" BECAUSE DEFINING THIS VARIABLE AT MULTIPLE PLACES.
+//     let user_task_ls = current_task_ls;
+//     // if(sorting){
+//     //     // Then use sorting userList.
+//     //     // user_task_ls = 
+//     // }
+
+
+
+//     // const tagModal = document.getElementById('tag-modal');
+
+//     // const openTagModal = document.querySelector('.tag-button');
+//     // const closeTagModal = document.getElementById('close-tag-modal');
+
+//     // closeTagModal.addEventListener("click", () => {
+//     //     tagModal.style.display = "none";
+//     // });
+
+//     console.log("got the message: ", message);
+
+//     // if (message) {
+//     //     // cardContainer.innerHTML = `<p class="no-tasks-message">${message}</p>`
+//     //     // taskCard.innerHTML = `<p class="no-tasks-message">${message}</p> `;
+//     // }
+
+//     if (message) {
+//         cardContainer.innerHTML = `<div class="no-tasks-container"><p class="no-tasks-message">${message}</p></div>`;
+//     }
+
+//     else {
+//         // *** Creating the task card ***
+
+//         for (const task of user_task_ls) {
+//             const taskCard = document.createElement("div");
+//             taskCard.className = "task-card";
+//             taskCard.dataset.taskId = task.task_id;
+//             // Adding the task id in this manner to highlight the task when notification is clicked.
+//             taskCard.id = `task-${task.task_id}`;
+//             // Convert the task's due date to a formatted string
+//             const dueDate = new Date(task.dueDate);
+//             // Defined in tooltip function because now using there.
+//             const formattedDate = dueDate.toLocaleDateString() + ' ' + dueDate.toLocaleTimeString();
+//             const hasReminder = await checkExistingNotification(task.task_id);
+//             console.log("hasReminder is ", hasReminder);
+//             // taskCard.innerHTML = `
+//             //     <div class="card-header">
+//             //         <h3 class="task-title">${task.task}</h3>
+//             //         <div class="status-priority>
+//             //             <div class="status-badge" data-status="${task.status.toLowerCase()}">${getStatusEmoji(task.status)}</div>
+//             //             <div class="priority-flag" data-priority="${task.priority.toLowerCase()}">
+//             //                 <span>${getPriorityEmoji(task.priority)}</span>
+//             //                 <span>${capitalize(task.priority)}</span>
+//             //             </div>
+//             //         </div>
+//             //     </div>
+
+//             //     <!-- For showing added tags later on(basically future add-ons) -->
+
+//             //     <!-- Container for showing tag modal when clicking on add tag button  -->
+//             //     <div class="tags-container">
+//             //     </div>
+
+//             //     <div class="card-footer">
+//             //         <button class="tag-button" data-task-id ="${task.task_id}">
+//             //             <span class="tag-icon">+</span>
+//             //             <span>Add Tag</span>
+//             //         </button>
+//             //         <button class="reminder-btn" title="${formattedDate}" date-has-reminder="true">
+//             //             <span>🔔</span>
+//             //         </button>
+//             //     </div> `;
+
+//             // Determine if the reminder is active (due date is in the future.)
+//             // ??? No more needed, handling with hasReminder variable which is actually checking in indexedDB over depending on bell state only. ???, don't know why bell state can't work as a whole.
+//             // const isActive = dueDate > new Date(); 
+
+//             // Dynamically creating the bell icon HTML with appropriate state (for adding in task card, which is also dynamically created.)
+//             const bellButtonHTML = `
+//                 <button class="reminder-button" id="reminder-btn-${task.task_id}" data-task-id="${task.task_id}" data-reminder-set="${hasReminder}">
+//                     ${getBellIconHTML(hasReminder, task.dueDate)}
+//                 </button>`;
+
+//             // <button class="reminder-button" id="reminder-btn-${task.task_id}" data-task-id="${task.task_id}" ${task.dueDate ? 'data-reminder="active"' : ''}>
+//             //     <span class="bell-icon">
+//             // <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+//             //     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+//             //     <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+//             // </svg>
+//             //     </span>
+//             //     <div class="reminder-tooltip">${task.dueDate ? 'Set reminder (' + formattedDate + ')' : 'Set date and time'}</div>
+//             // </button>`;
+
+//             taskCard.innerHTML = `
+//                 <div class="task-selection">
+//                     <div class="task-checkbox-wrapper">
+//                         <input type="checkbox" class="task-checkbox" data-task-id="${task.task_id}">
+//                         <div class="checkbox-custom"></div>
+//                     </div>
+//                     <i class="material-icons delete-icon" data-task-id="${task.task_id}">delete</i>
+//                 </div>
+
+//                 <div class="card-header">
+//                     <h3 class="task-title">${task.task}</h3>
+//                     <div class="status-priority">
+//                         <div class="status-badge" data-status="${task.status.toLowerCase()}">${getStatusEmoji(task.status)}</div>
+//                         <div class="priority-flag" data-priority="${task.priority.toLowerCase()}">
+//                             <span>${getPriorityEmoji(task.priority)}</span>
+//                             <span>${capitalize(task.priority)}</span>
+//                         </div>
+//                     </div>
+//                 </div>
+
+//                 <div class="tags-container"> </div>
+
+
+//                 <div class="card-footer">
+
+//                     <button class="tag-button" id="tag-btn-${task.task_id}" data-task-id="${task.task_id}">
+//                         <span>Add Tag</span>
+//                     </button>
+
+//                      ${bellButtonHTML}
+//                 </div> `;
+
+//             // <button class="reminder-button" id="reminder-btn-${task.task_id}" data-task-id="${task.task_id}" title="${formattedDate}" date-has-reminder="true">
+//             //     <span>🔔</span>
+//             // </button>
+
+//             //*** Clearing tags from all the tasks in one go ***
+
+//             // task.tagsSet.clear();
+//             // user.customTags.clear();
+//             // localStorage.setItem(userListKey, JSON.stringify(
+//             //     Array.from(userMap.values()).map(user => user.toData())
+//             // ));
+//             cardContainer.appendChild(taskCard);
+//             // updateTaskCardTags(task);
+//             updateTaskCardTags(task, userListKey, userMap);
+
+//             // Just clearing customTags from sudhanshu user, for testing or for proper data.
+//             //*** For clearing individual task tagsSet. ***
+//             // task.tagsSet.clear();
+//             // user.customTags.clear();
+
+//             // localStorage.setItem(userListKey, JSON.stringify(
+//             //     Array.from(userMap.values()).map(user => user.toData())
+//             // ));
+
+
+
+//             // console.log("customTags are ", customTags);
+
+//             // id="reminder-btn-${task.task_id}"
+//             // ******************************************
+//             /* <button class="tag-button" id="tag-btn" data-task-id="${task.task_id}" */
+//             // deletionManager = new DeletionManager();
+//             // deletionManager.setupTaskCheckboxes();
+//             // *******************************************************
+//             // // Selecting all the checkboxes
+//             // const checkboxes = document.querySelectorAll('.task-checkbox');
+//             // checkboxes.forEach(checkbox => {
+//             //     checkbox.addEventListener('change',function() {
+//             //         const taskId = this.dataset.task_id;
+//             //         if (this.checked) {
+//             //             selectedTasks.add(taskId);
+//             //         }
+//             //         else {
+//             //             // Set does nothing if taskId not exist in set.
+//             //             // if (selectedTasks.has(taskId)){
+//             //                 selectedTasks.delete(taskId);
+//             //             // }
+//             //         }
+
+//             //         // Update selection bar visibility and counter
+//             //         const selectionBar = document.querySelector('.selection-bar');
+//             //         // Basically means, if any task is selected.
+//             //         if (selectedTasks.size > 0) {
+//             //             selectionBar.style.display = 'flex';
+//             //             selectionBar.querySelector('.selected-count').textContent = 
+//             //             `${selectedTasks.size} selected`;
+//             //         }
+//             //         else {
+//             //             selectionBar.style.display = 'none';
+//             //         }
+//             //     });
+//             // });
+
+//             // *************************************
+
+//             // taskCard.querySelector('.tag-button').dataset.taskid = task.task_id;
+//             // Add click handler for editing(i.e. allow to edit only if it is not click at any button like add tag, notify or tags chip itself.)
+//             // taskCard.addEventListener("click", (e) => {
+//             //     console.log("e.target is ", e.target);
+
+//             //     if(e.target.matches('.tag-button') || e.target.closest('.tag-button') ){
+//             //         e.stopPropagation();
+//             //         // const button = e.target.matches('.tag-button') ? e.target: e.target.closest('tag-button');
+//             //         const taskId = task.task_id;
+//             //         console.log("tag button clicked for task: ", taskId);
+//             //         tagModal.dataset.taskid = taskId;
+//             //         tagModal.style.display = 'block';
+//             //         tagHandler(user, predefinedTags, tagModal);
+//             //         return;
+//             //     }
+
+//             //     if (e.target.matches('.reminder-button') || e.target.closest('.reminder-button')){
+//             //         e.stopPropagation();
+//             //         console.log("Reminder button clicked for task: ", task.task_id);
+//             //         return;
+//             //     }
+
+//             //     if (e.target.matches('.task-checkbox') || e.target.matches('.delete-icon')){
+//             //         console.log("Checkbox ro delete icon clicked");
+//             //         return;
+//             //     }
+
+//             //     console.log("Task card clicked, opening edit modal");
+//             //     document.getElementById("modal-title").textContent = "Update Task";
+//             //     isEditMode = true;
+//             //     editTaskId = task.task_id;
+//             //     populateModalForm(task);
+//             //     modal.style.display = "block";
+//             // });
+
+//             //         const tagButton = taskCard.querySelector('.tag-button');
+//             //         const reminderButton = taskCard.querySelector('.reminder-button');
+//             //         // const tagButton = document.getElementById("tag-btn-${task.task_id}");
+//             //         // const reminderButton = document.getElementById("reminder-btn-");
+
+//             //         console.log("tagButton is ", tagButton);
+//             //         console.log('reminderButton is ', reminderButton);
+
+
+//             //         tagButton.addEventListener('click', (e) => {
+//             //             console.log("tagButton is ", tagButton);
+//             //             e.stopPropagation();
+//             //             const taskId = task.task_id;
+//             //             console.log("Tag button clicked for task:", taskId);
+//             //             tagModal.dataset.taskid = taskId;
+//             //             tagModal.style.display = 'block';
+//             //             tagHandler(user,predefinedTags,tagModal);
+//             //         });
+
+//             //         reminderButton.addEventListener('click', (e) => {
+//             //             e.stopPropagation();
+//             //             console.log("Reminder button clicked for task:", task.task_id);
+//             //         });
+
+//             //         taskCard.addEventListener("click", (e) => {
+
+//             //             // Check if the click is on a checkbox or delete icon
+//             //             if (e.target.matches('.task-checkbox') ||
+//             //                 e.target.closest('.task-checkbox') ||
+//             //                 e.target.matches(".delete-icon") ||
+//             //                 e.target.closest(".delete-icon")){
+//             //             return;
+//             //         }
+
+//             //         console.log("Task card clicked, opening edit modal");
+//             //         document.getElementById("modal-title").textContent = "Update Task";
+//             //         isEditMode = true;
+//             //         editTaskId = task.task_id;
+//             //         populateModalForm(task);
+//             //         modal.style.display = "block";
+//             //         });
+
+//         }
+
+//     }
+
+//     // *** NOTE:- Need to add this code inside displayTasks function because we are dynamically creating this elements, so can't be found outside of this, in order to do anything with them, we have to do it here(where creation is happening.) ***
+//     // Code for not allowing delete icon and checkbox to show when hover or working with tag chip, reminder button or add tab button.
+
+//     document.querySelectorAll('.tag-button, .reminder-button, .task-tag').forEach(element => {
+//         element.addEventListener('mouseenter', function () {
+//             // Find the parent task card
+//             const taskCard = this.closest('.task-card');
+//             if (taskCard) {
+//                 // Add a class to indicate an interactive element is being hovered
+//                 taskCard.classList.add('interactive-hover');
+//             }
+//         });
+
+//         element.addEventListener('mouseleave', function () {
+//             // Find the parent task card
+//             const taskCard = this.closest('.task-card');
+//             if (taskCard) {
+//                 // Remove the class when hover ends
+//                 taskCard.classList.remove('interactive-hover');
+//             }
+//         });
+//     });
+
+//     function handleTaskDisplayClick(event) {
+
+//         // More detailed checks for tag button
+
+//         if (!event.target.closest('.task-card')) return;
+
+//         if (event.target.matches('.tag-button') || event.target.closest('.tag-button')) {
+
+//             console.log("user is ", userList.find(user => user.username === "marshian2511"));
+
+//             const predefinedTags = [
+//                 { value: uuidv4(), text: "Work" },
+//                 { value: uuidv4(), text: "Personal" },
+//                 { value: uuidv4(), text: "Urgent" }
+//             ];
+
+//             event.stopPropagation();
+//             const taskCard = event.target.closest('.task-card');
+//             const taskId = taskCard.dataset.taskId;
+//             console.log("Tag button clicked for task: ", taskId);
+//             const tagModal = document.getElementById('tag-modal');
+//             tagModal.dataset.taskid = taskId;
+//             tagModal.style.display = 'block';
+
+//             tagHandler(userListKey, userMap, currentUser, predefinedTags, tagModal);
+//             return;
+//         }
+
+//         // Handle reminder button clicks
+
+//         // if (event.target.matches('.reminder-button') || event.target.closest('.reminder-button')) {
+//         //     event.stopPropagation();
+//         //     const reminderButton = event.target.closest('.reminder-button');
+//         //     const taskId = event.target.closest('.task-card').dataset.taskId;
+//         //     console.log("Reminder button clicked for task: ", taskId);
+
+//         //     // Toggle the UI state for the reminder button
+//         //     reminderButton.classList.toggle('setting-reminder');
+
+//         //     // Update the bell icon based on state
+//         //     const bellIcon = reminderButton.querySelector('.bell-icon');
+//         //     if (reminderButton.classList.contains('setting-reminder')) {
+//         //         // Change to bell with sound waves
+//         //         bellIcon.innerHTML = `
+//         // <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+//         //     <path d="M2 8c0-2.2.7-4.3 2-6" stroke="currentColor" stroke-width="2"></path>
+//         //     <path d="M22 8a10 10 0 0 0-2-6" stroke="currentColor" stroke-width="2"></path>
+//         // </svg>
+//         //     `;
+
+//         //         // Hide tooltip when reminder/notification is set.
+//         //         const tooltip = reminderButton.querySelector('.reminder-tooltip');
+//         //         if (tooltip) tooltip.style.display = 'none';
+//         //     }
+
+//         //     else {
+//         //         // Revert to original or default bell when either no date and time is set, or date and time is set.
+//         //         // const isActive = reminderButton.hasAttribute('data-reminder') && 
+//         //         //                  reminderButton.getAttribute('data-reminder') ==="active";
+
+//         //         // bellIcon.innerHTML = `
+//         //         //     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="${isActive ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+//         //         //         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+//         //         //         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+//         //         //     </svg>`;
+
+//         //         bellIcon.innerHTML = `
+//         //         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+//         //             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+//         //             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+//         //         </svg>
+//         //     `;
+
+//         //         // Show tooltip again
+//         //         const tooltip = reminderButton.querySelector('.reminder-tooltip');
+//         //         if (tooltip) tooltip.style.display = '';
+//         //     }
+
+//         //     return;
+//         // }
+
+//         // Updated code for reminder button.
+//         if (event.target.matches('.reminder-button') || event.target.closest('.reminder-button')) {
+//             event.stopPropagation();
+//             const taskId = event.target.closest('.task-card').dataset.taskId;
+//             const task = currentUser.taskList.find(t => t.task_id === taskId);
+
+//             // This is redundant, because modal won't open if there is no due date. (It will open for set date and time.)
+//             // if (!task.dueDate) {
+//             //     showFormErrors(['Please set a due date for the task first'], 'task-form');
+//             //     return;
+//             // }
+
+//             // ### Previous code when there is no reminder remove button. ###
+
+//             // const reminderModal = document.getElementById('reminder-modal');
+//             // reminderModal.style.display = 'block';
+//             // clearReminderForm(); // Clear any previous selections
+
+//             // We need to explicitly check that whether the task have reminder or not, here using button click.
+
+//             // Don't show reminder modal if there is no due date.
+//             if (!task.dueDate) {
+//                 return;
+//             }
+//             currentReminderTaskId = taskId;
+//             showReminderModal(taskId);
+//             // *** It is wrong approach because it will add call the event lsitener every time the button is get clicked.
+//             // // Adding event listener for set reminder button.
+//             // const setReminderBtn = document.getElementById('set-reminder-btn');
+//             // setReminderBtn.addEventListener(() => {
+//             //     console.log("setReminderBtn is ", setReminderBtn);
+//             //     reminderButton.classList.add('setting-reminder');
+//             //     reminderButton.innerHTML = getBellIconHTML(true, task.dueDate);
+
+//             const setReminderBtn = document.getElementById('set-reminder-btn');
+//             if (setReminderBtn) {
+//                 // Remove any existing listeners to avoid duplicates
+//                 setReminderBtn.removeEventListener('click', handleSetReminderButtonClick);
+//                 // Add the listener
+//                 setReminderBtn.addEventListener('click', handleSetReminderButtonClick);
+//             }
+//             // });
+//             return;
+//         }
+
+//         // If it's a task card but not a button
+//         if (event.target.closest('.task-card') &&
+//             !event.target.matches('.task-checkbox') &&
+//             !event.target.closest('.task-checkbox') &&
+//             !event.target.matches('.delete-icon') &&
+//             !event.target.closest('.delete-icon')) {
+
+//             const taskCard = event.target.closest('.task-card');
+//             console.log("taskCard is ", taskCard);
+//             const taskId = taskCard.dataset.taskId;
+//             console.log("Task card clicked, opening edit modal", taskId);
+//             document.getElementById("modal-title").textContent = "Update Task";
+//             isEditMode = true;
+//             editTaskId = taskId;
+
+
+//             // *** Here because of rapid switching between users and then immediate action of trying to update the task, causing task not found, or its properties not found error. ***
+
+//             // Finding the task object
+//             // const task = current_task_ls.find(t => t.task_id === taskId);
+//             // console.log("task is ", task);
+//             // populateModalForm(task);
+//             // modal.style.display = "block";
+//             const storedUsers = localStorage.getItem(userListKey);
+//             if (storedUsers) {
+//                 const usersArray = JSON.parse(storedUsers);
+//                 const currentUserData = usersArray.find(u => u.username === currentUser.username);
+//                 if (currentUserData && currentUserData.taskList) {
+//                     const task = currentUserData.taskList.find(t => t.task_id === taskId);
+//                     console.log("Task for edit (user switch):", task);
+//                     populateModalForm(task);
+//                     modal.style.display = "block";
+//                 } else {
+//                     console.error("Error: Could not find current user or their tasks.");
+//                 }
+//             } else {
+//                 console.error("Error: Could not retrieve user list.");
+//             }
+
+//         }
+//     }
+
+//     // Add a single event listener to handle all task card interactions.
+//     taskDisplay.removeEventListener("click", handleTaskDisplayClick);
+//     taskDisplay.addEventListener("click", handleTaskDisplayClick);
+
+// }
+
+// #################################################################################################
+// A version of displayTasks including list view mode.
+
+async function displayTasks(user, current_task_ls, message = "", viewMode = "card", focusedTaskId = null) {
     console.log("user_task_ls inside displayTasks func. ", current_task_ls);
-    console.log("I am inside displayTasks function. ");
+    console.log("I am inside displayTasks function. View mode: ", viewMode);
     const taskDisplay = document.querySelector("#task-display");
-    taskDisplay.innerHTML = '<div class="task-container"></div>';
-    const cardContainer = taskDisplay.querySelector('.task-container');
-    // Not updating it inside function.
-    // const user_task_ls = user["taskList"];
-    // USING "LET" OVER "CONST" BECAUSE DEFINING THIS VARIABLE AT MULTIPLE PLACES.
-    let user_task_ls = current_task_ls;
-    // if(sorting){
-    //     // Then use sorting userList.
-    //     // user_task_ls = 
-    // }
 
+    // Creating a shallow copy is a good practice, earlier we are directly assigning it to user_task_ls
+    let user_task_ls = [...current_task_ls];
+    // console.log("currentUser task list is ", current_task_ls);
+    // Reversing the list either shallow or the original list without condition for checking whether any sort applied or not will give weird results, like not sorting by oldest first or at some other places maybe.
+    // user_task_ls.reverse();
+    // here we were reversing the original list that we got from the function.
+    // let user_task_ls = current_task_ls.reverse();
+    // console.log("userTask list after reversing is ", user_task_ls);
 
-
-    // const tagModal = document.getElementById('tag-modal');
-
-    // const openTagModal = document.querySelector('.tag-button');
-    // const closeTagModal = document.getElementById('close-tag-modal');
-
-    // closeTagModal.addEventListener("click", () => {
-    //     tagModal.style.display = "none";
-    // });
-
-    console.log("got the message: ", message);
-
-    // if (message) {
-    //     // cardContainer.innerHTML = `<p class="no-tasks-message">${message}</p>`
-    //     // taskCard.innerHTML = `<p class="no-tasks-message">${message}</p> `;
-    // }
+    console.log('UserTask list is ', user_task_ls);
 
     if (message) {
-        cardContainer.innerHTML = `<div class="no-tasks-container"><p class="no-tasks-message">${message}</p></div>`;
+        taskDisplay.innerHTML = `<div class="no-tasks-container"><p class="no-tasks-message">${message}</p></div>`;
+        return;
     }
 
-    else {
-        // *** Creating the task card ***
+    // Clear the display area based on the view mode
+    if (viewMode === "card") {
+        taskDisplay.innerHTML = '<div class="task-container"></div>';
+        const cardContainer = taskDisplay.querySelector('.task-container');
 
         for (const task of user_task_ls) {
             const taskCard = document.createElement("div");
             taskCard.className = "task-card";
             taskCard.dataset.taskId = task.task_id;
-            // Adding the task id in this manner to highlight the task when notification is clicked.
             taskCard.id = `task-${task.task_id}`;
-            // Convert the task's due date to a formatted string
+
             const dueDate = new Date(task.dueDate);
-            // Defined in tooltip function because now using there.
             const formattedDate = dueDate.toLocaleDateString() + ' ' + dueDate.toLocaleTimeString();
             const hasReminder = await checkExistingNotification(task.task_id);
             console.log("hasReminder is ", hasReminder);
-            // taskCard.innerHTML = `
-            //     <div class="card-header">
-            //         <h3 class="task-title">${task.task}</h3>
-            //         <div class="status-priority>
-            //             <div class="status-badge" data-status="${task.status.toLowerCase()}">${getStatusEmoji(task.status)}</div>
-            //             <div class="priority-flag" data-priority="${task.priority.toLowerCase()}">
-            //                 <span>${getPriorityEmoji(task.priority)}</span>
-            //                 <span>${capitalize(task.priority)}</span>
-            //             </div>
-            //         </div>
-            //     </div>
 
-            //     <!-- For showing added tags later on(basically future add-ons) -->
-
-            //     <!-- Container for showing tag modal when clicking on add tag button  -->
-            //     <div class="tags-container">
-            //     </div>
-
-            //     <div class="card-footer">
-            //         <button class="tag-button" data-task-id ="${task.task_id}">
-            //             <span class="tag-icon">+</span>
-            //             <span>Add Tag</span>
-            //         </button>
-            //         <button class="reminder-btn" title="${formattedDate}" date-has-reminder="true">
-            //             <span>🔔</span>
-            //         </button>
-            //     </div> `;
-
-            // Determine if the reminder is active (due date is in the future.)
-            // ??? No more needed, handling with hasReminder variable which is actually checking in indexedDB over depending on bell state only. ???, don't know why bell state can't work as a whole.
-            // const isActive = dueDate > new Date(); 
-
-            // Dynamically creating the bell icon HTML with appropriate state (for adding in task card, which is also dynamically created.)
             const bellButtonHTML = `
                 <button class="reminder-button" id="reminder-btn-${task.task_id}" data-task-id="${task.task_id}" data-reminder-set="${hasReminder}">
                     ${getBellIconHTML(hasReminder, task.dueDate)}
                 </button>`;
-
-            // <button class="reminder-button" id="reminder-btn-${task.task_id}" data-task-id="${task.task_id}" ${task.dueDate ? 'data-reminder="active"' : ''}>
-            //     <span class="bell-icon">
-            // <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            //     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            //     <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-            // </svg>
-            //     </span>
-            //     <div class="reminder-tooltip">${task.dueDate ? 'Set reminder (' + formattedDate + ')' : 'Set date and time'}</div>
-            // </button>`;
 
             taskCard.innerHTML = `
                 <div class="task-selection">
@@ -958,7 +1429,6 @@ async function displayTasks(user, current_task_ls, message = "") {
                     </div>
                     <i class="material-icons delete-icon" data-task-id="${task.task_id}">delete</i>
                 </div>
-    
                 <div class="card-header">
                     <h3 class="task-title">${task.task}</h3>
                     <div class="status-priority">
@@ -969,362 +1439,306 @@ async function displayTasks(user, current_task_ls, message = "") {
                         </div>
                     </div>
                 </div>
-    
                 <div class="tags-container"> </div>
-         
-    
                 <div class="card-footer">
-
                     <button class="tag-button" id="tag-btn-${task.task_id}" data-task-id="${task.task_id}">
                         <span>Add Tag</span>
                     </button>
-
                      ${bellButtonHTML}
                 </div> `;
 
-            // <button class="reminder-button" id="reminder-btn-${task.task_id}" data-task-id="${task.task_id}" title="${formattedDate}" date-has-reminder="true">
-            //     <span>🔔</span>
-            // </button>
-
-            //*** Clearing tags from all the tasks in one go ***
-
-            // task.tagsSet.clear();
-            // user.customTags.clear();
-            // localStorage.setItem(userListKey, JSON.stringify(
-            //     Array.from(userMap.values()).map(user => user.toData())
-            // ));
             cardContainer.appendChild(taskCard);
-            // updateTaskCardTags(task);
             updateTaskCardTags(task, userListKey, userMap);
 
-            // Just clearing customTags from sudhanshu user, for testing or for proper data.
-            //*** For clearing individual task tagsSet. ***
-            // task.tagsSet.clear();
-            // user.customTags.clear();
-
-            // localStorage.setItem(userListKey, JSON.stringify(
-            //     Array.from(userMap.values()).map(user => user.toData())
-            // ));
-
-
-
-            // console.log("customTags are ", customTags);
-
-            // id="reminder-btn-${task.task_id}"
-            // ******************************************
-            /* <button class="tag-button" id="tag-btn" data-task-id="${task.task_id}" */
-            // deletionManager = new DeletionManager();
-            // deletionManager.setupTaskCheckboxes();
-            // *******************************************************
-            // // Selecting all the checkboxes
-            // const checkboxes = document.querySelectorAll('.task-checkbox');
-            // checkboxes.forEach(checkbox => {
-            //     checkbox.addEventListener('change',function() {
-            //         const taskId = this.dataset.task_id;
-            //         if (this.checked) {
-            //             selectedTasks.add(taskId);
-            //         }
-            //         else {
-            //             // Set does nothing if taskId not exist in set.
-            //             // if (selectedTasks.has(taskId)){
-            //                 selectedTasks.delete(taskId);
-            //             // }
-            //         }
-
-            //         // Update selection bar visibility and counter
-            //         const selectionBar = document.querySelector('.selection-bar');
-            //         // Basically means, if any task is selected.
-            //         if (selectedTasks.size > 0) {
-            //             selectionBar.style.display = 'flex';
-            //             selectionBar.querySelector('.selected-count').textContent = 
-            //             `${selectedTasks.size} selected`;
-            //         }
-            //         else {
-            //             selectionBar.style.display = 'none';
-            //         }
-            //     });
-            // });
-
-            // *************************************
-
-            // taskCard.querySelector('.tag-button').dataset.taskid = task.task_id;
-            // Add click handler for editing(i.e. allow to edit only if it is not click at any button like add tag, notify or tags chip itself.)
-            // taskCard.addEventListener("click", (e) => {
-            //     console.log("e.target is ", e.target);
-
-            //     if(e.target.matches('.tag-button') || e.target.closest('.tag-button') ){
-            //         e.stopPropagation();
-            //         // const button = e.target.matches('.tag-button') ? e.target: e.target.closest('tag-button');
-            //         const taskId = task.task_id;
-            //         console.log("tag button clicked for task: ", taskId);
-            //         tagModal.dataset.taskid = taskId;
-            //         tagModal.style.display = 'block';
-            //         tagHandler(user, predefinedTags, tagModal);
-            //         return;
-            //     }
-
-            //     if (e.target.matches('.reminder-button') || e.target.closest('.reminder-button')){
-            //         e.stopPropagation();
-            //         console.log("Reminder button clicked for task: ", task.task_id);
-            //         return;
-            //     }
-
-            //     if (e.target.matches('.task-checkbox') || e.target.matches('.delete-icon')){
-            //         console.log("Checkbox ro delete icon clicked");
-            //         return;
-            //     }
-
-            //     console.log("Task card clicked, opening edit modal");
-            //     document.getElementById("modal-title").textContent = "Update Task";
-            //     isEditMode = true;
-            //     editTaskId = task.task_id;
-            //     populateModalForm(task);
-            //     modal.style.display = "block";
-            // });
-
-            //         const tagButton = taskCard.querySelector('.tag-button');
-            //         const reminderButton = taskCard.querySelector('.reminder-button');
-            //         // const tagButton = document.getElementById("tag-btn-${task.task_id}");
-            //         // const reminderButton = document.getElementById("reminder-btn-");
-
-            //         console.log("tagButton is ", tagButton);
-            //         console.log('reminderButton is ', reminderButton);
-
-
-            //         tagButton.addEventListener('click', (e) => {
-            //             console.log("tagButton is ", tagButton);
-            //             e.stopPropagation();
-            //             const taskId = task.task_id;
-            //             console.log("Tag button clicked for task:", taskId);
-            //             tagModal.dataset.taskid = taskId;
-            //             tagModal.style.display = 'block';
-            //             tagHandler(user,predefinedTags,tagModal);
-            //         });
-
-            //         reminderButton.addEventListener('click', (e) => {
-            //             e.stopPropagation();
-            //             console.log("Reminder button clicked for task:", task.task_id);
-            //         });
-
-            //         taskCard.addEventListener("click", (e) => {
-
-            //             // Check if the click is on a checkbox or delete icon
-            //             if (e.target.matches('.task-checkbox') ||
-            //                 e.target.closest('.task-checkbox') ||
-            //                 e.target.matches(".delete-icon") ||
-            //                 e.target.closest(".delete-icon")){
-            //             return;
-            //         }
-
-            //         console.log("Task card clicked, opening edit modal");
-            //         document.getElementById("modal-title").textContent = "Update Task";
-            //         isEditMode = true;
-            //         editTaskId = task.task_id;
-            //         populateModalForm(task);
-            //         modal.style.display = "block";
-            //         });
-
+            // If this is the focused task, highlight it
+            if (focusedTaskId && task.task_id === focusedTaskId) {
+                setTimeout(() => {
+                    focusTaskInUI(task);
+                    highlightTask(focusedTaskId);
+                }, 200); // Delay to ensure DOM is updated
+            }
         }
+    } else {
+        // LIST VIEW - new implementation
+        taskDisplay.innerHTML = '<div class="task-list-container"></div>';
+        const listContainer = taskDisplay.querySelector('.task-list-container');
 
+        // Render each task as a list item
+        for (const task of user_task_ls) {
+            const taskListItem = document.createElement("div");
+            taskListItem.className = "task-list-item";
+            taskListItem.dataset.taskId = task.task_id;
+            taskListItem.id = `task-list-${task.task_id}`;
+
+            const dueDate = new Date(task.dueDate);
+            const formattedDate = dueDate.toLocaleDateString() + ' ' + dueDate.toLocaleTimeString();
+
+            // Making sure checkbox and delete icon structure matches card view
+            taskListItem.innerHTML = `
+                <div class="task-selection">
+                    <div class="task-checkbox-wrapper">
+                        <input type="checkbox" class="task-checkbox" data-task-id="${task.task_id}">
+                        <div class="checkbox-custom"></div>
+                    </div>
+                    <i class="material-icons delete-icon" data-task-id="${task.task_id}">delete</i>
+                </div>
+                <div class="list-item-content" data-task-id="${task.task_id}">
+                    <div class="list-item-main">
+                        <span class="list-item-title">${task.task}</span>
+                        <div class="list-item-indicators">
+                            <div class="status-badge" data-status="${task.status.toLowerCase()}">${getStatusEmoji(task.status)}</div>
+                            <div class="priority-flag" data-priority="${task.priority.toLowerCase()}">
+                                <span>${getPriorityEmoji(task.priority)}</span>
+                                <span>${capitalize(task.priority)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-item-details">
+                        <span class="list-item-date">${formattedDate}</span>
+                    </div>
+                </div>
+            `;
+
+            listContainer.appendChild(taskListItem);
+        }
     }
 
-    // *** NOTE:- Need to add this code inside displayTasks function because we are dynamically creating this elements, so can't be found outside of this, in order to do anything with them, we have to do it here(where creation is happening.) ***
-    // Code for not allowing delete icon and checkbox to show when hover or working with tag chip, reminder button or add tab button.
+    // Set up shared event listeners for both views
+    // document.querySelectorAll('.tag-button, .reminder-button, .task-tag').forEach(element => {
+    //     element.addEventListener('mouseenter', function () {
+    //         const taskCard = this.closest('.task-card');
+    //         const taskListItem = this.closest('.task-list-item'); // Fixed variable name
+    //         if (taskCard) {
+    //             console.log('adding interactive hover to task card');
+    //             taskCard.classList.add('interactive-hover');
+    //         }
+    //         else if (taskListItem) { // Fixed variable name
+    //             taskListItem.classList.add('interactive-hover');
+    //             console.log("adding interactive hover to task list.");
+    //         }
+    //     });
+    //     element.addEventListener('mouseleave', function () {
+    //         const taskCard = this.closest('.task-card');
+    //         const taskListItem = this.closest('.task-list-item'); // Fixed variable name
+    //         if (taskCard) {
+    //             console.log("removing interactive hover from tsk card.");
+    //             taskCard.classList.remove('interactive-hover');
+    //         }
+    //         else if (taskListItem) { // Fixed variable name
+    //             console.log("removing interactive hover from task list.");
+    //             taskListItem.classList.remove('interactive-hover');
+    //         }
+    //     });
+    // });
 
-    document.querySelectorAll('.tag-button, .reminder-button, .task-tag').forEach(element => {
-        element.addEventListener('mouseenter', function () {
-            // Find the parent task card
-            const taskCard = this.closest('.task-card');
-            if (taskCard) {
-                // Add a class to indicate an interactive element is being hovered
-                taskCard.classList.add('interactive-hover');
-            }
+    // Set up interactive-hover event listeners only for card view because it only have interactive elements
+    // if (viewMode === "card") {
+    //     document.querySelectorAll('.tag-button, .reminder-button, .task-tag').forEach(element => {
+    //         element.addEventListener('mouseenter', function () {
+    //             const taskCard = this.closest('.task-card');
+    //             if (taskCard) {
+    //                 console.log('Adding interactive-hover to task card');
+    //                 taskCard.classList.add('interactive-hover');
+    //             }
+    //         });
+    //         element.addEventListener('mouseleave', function () {
+    //             const taskCard = this.closest('.task-card');
+    //             if (taskCard) {
+    //                 console.log('Removing interactive-hover from task card');
+    //                 taskCard.classList.remove('interactive-hover');
+    //             }
+    //         });
+    //     });
+    // }
+
+    // Newest version
+    document.querySelectorAll('.task-card').forEach(taskCard => {
+        taskCard.addEventListener('mouseenter', function () {
+            this.classList.add('interactive-hover');
         });
-
-        element.addEventListener('mouseleave', function () {
-            // Find the parent task card
-            const taskCard = this.closest('.task-card');
-            if (taskCard) {
-                // Remove the class when hover ends
-                taskCard.classList.remove('interactive-hover');
-            }
+        taskCard.addEventListener('mouseleave', function () {
+            this.classList.remove('interactive-hover');
         });
     });
 
+    // Trying this earlier version of code from display tasks when only card view was there because thinking what's the point of checking the view, as we know that interactive elements like tag or reminder-button only exist there.
+
+    // document.querySelectorAll('.tag-button, .reminder-button, .task-tag').forEach(element => {
+    //     element.addEventListener('mouseenter', function () {
+    //         // Find the parent task card
+    //         const taskCard = this.closest('.task-card');
+    //         if (taskCard) {
+    //             // Add a class to indicate an interactive element is being hovered
+    //             taskCard.classList.add('interactive-hover');
+    //         }
+    //     });
+
+    //     element.addEventListener('mouseleave', function () {
+    //         // Find the parent task card
+    //         const taskCard = this.closest('.task-card');
+    //         if (taskCard) {
+    //             // Remove the class when hover ends
+    //             taskCard.classList.remove('interactive-hover');
+    //         }
+    //     });
+    // });
+    // Set up task item click handlers
     function handleTaskDisplayClick(event) {
+        // Your existing card click handlers
+        if (viewMode === "card") {
+            console.log("event.target is ", event.target);
+            if (!event.target.closest('.task-card')) return;
 
-        // More detailed checks for tag button
+            // Tag button handler
+            if (event.target.matches('.tag-button') || event.target.closest('.tag-button')) {
+                // Your existing tag button handler
+                console.log("user is ", userList.find(user => user.username === "marshian2511"));
 
-        if (!event.target.closest('.task-card')) return;
-
-        if (event.target.matches('.tag-button') || event.target.closest('.tag-button')) {
-
-            console.log("user is ", userList.find(user => user.username === "marshian2511"));
-
-            const predefinedTags = [
-                { value: uuidv4(), text: "Work" },
-                { value: uuidv4(), text: "Personal" },
-                { value: uuidv4(), text: "Urgent" }
-            ];
-
-            event.stopPropagation();
-            const taskCard = event.target.closest('.task-card');
-            const taskId = taskCard.dataset.taskId;
-            console.log("Tag button clicked for task: ", taskId);
-            const tagModal = document.getElementById('tag-modal');
-            tagModal.dataset.taskid = taskId;
-            tagModal.style.display = 'block';
-
-            tagHandler(userListKey, userMap, currentUser, predefinedTags, tagModal);
-            return;
-        }
-
-        // Handle reminder button clicks
-
-        // if (event.target.matches('.reminder-button') || event.target.closest('.reminder-button')) {
-        //     event.stopPropagation();
-        //     const reminderButton = event.target.closest('.reminder-button');
-        //     const taskId = event.target.closest('.task-card').dataset.taskId;
-        //     console.log("Reminder button clicked for task: ", taskId);
-
-        //     // Toggle the UI state for the reminder button
-        //     reminderButton.classList.toggle('setting-reminder');
-
-        //     // Update the bell icon based on state
-        //     const bellIcon = reminderButton.querySelector('.bell-icon');
-        //     if (reminderButton.classList.contains('setting-reminder')) {
-        //         // Change to bell with sound waves
-        //         bellIcon.innerHTML = `
-        // <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        //     <path d="M2 8c0-2.2.7-4.3 2-6" stroke="currentColor" stroke-width="2"></path>
-        //     <path d="M22 8a10 10 0 0 0-2-6" stroke="currentColor" stroke-width="2"></path>
-        // </svg>
-        //     `;
-
-        //         // Hide tooltip when reminder/notification is set.
-        //         const tooltip = reminderButton.querySelector('.reminder-tooltip');
-        //         if (tooltip) tooltip.style.display = 'none';
-        //     }
-
-        //     else {
-        //         // Revert to original or default bell when either no date and time is set, or date and time is set.
-        //         // const isActive = reminderButton.hasAttribute('data-reminder') && 
-        //         //                  reminderButton.getAttribute('data-reminder') ==="active";
-
-        //         // bellIcon.innerHTML = `
-        //         //     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="${isActive ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        //         //         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-        //         //         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        //         //     </svg>`;
-
-        //         bellIcon.innerHTML = `
-        //         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        //             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-        //             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        //         </svg>
-        //     `;
-
-        //         // Show tooltip again
-        //         const tooltip = reminderButton.querySelector('.reminder-tooltip');
-        //         if (tooltip) tooltip.style.display = '';
-        //     }
-
-        //     return;
-        // }
-
-        // Updated code for reminder button.
-        if (event.target.matches('.reminder-button') || event.target.closest('.reminder-button')) {
-            event.stopPropagation();
-            const taskId = event.target.closest('.task-card').dataset.taskId;
-            const task = currentUser.taskList.find(t => t.task_id === taskId);
-
-            // This is redundant, because modal won't open if there is no due date. (It will open for set date and time.)
-            // if (!task.dueDate) {
-            //     showFormErrors(['Please set a due date for the task first'], 'task-form');
-            //     return;
-            // }
-
-            // ### Previous code when there is no reminder remove button. ###
-
-            // const reminderModal = document.getElementById('reminder-modal');
-            // reminderModal.style.display = 'block';
-            // clearReminderForm(); // Clear any previous selections
-
-            // We need to explicitly check that whether the task have reminder or not, here using button click.
-
-            // Don't show reminder modal if there is no due date.
-            if (!task.dueDate) {
+                const predefinedTags = [
+                    { value: uuidv4(), text: "Work" },
+                    { value: uuidv4(), text: "Personal" },
+                    { value: uuidv4(), text: "Urgent" }
+                ];
+                event.stopPropagation();
+                const taskCard = event.target.closest('.task-card');
+                const taskId = taskCard.dataset.taskId;
+                console.log("Tag button clicked for task: ", taskId);
+                const tagModal = document.getElementById('tag-modal');
+                tagModal.dataset.taskid = taskId;
+                tagModal.style.display = 'block';
+                tagHandler(userListKey, userMap, currentUser, predefinedTags, tagModal);
                 return;
             }
-            currentReminderTaskId = taskId;
-            showReminderModal(taskId);
-            // *** It is wrong approach because it will add call the event lsitener every time the button is get clicked.
-            // // Adding event listener for set reminder button.
-            // const setReminderBtn = document.getElementById('set-reminder-btn');
-            // setReminderBtn.addEventListener(() => {
-            //     console.log("setReminderBtn is ", setReminderBtn);
-            //     reminderButton.classList.add('setting-reminder');
-            //     reminderButton.innerHTML = getBellIconHTML(true, task.dueDate);
 
-            const setReminderBtn = document.getElementById('set-reminder-btn');
-            if (setReminderBtn) {
-                // Remove any existing listeners to avoid duplicates
-                setReminderBtn.removeEventListener('click', handleSetReminderButtonClick);
-                // Add the listener
-                setReminderBtn.addEventListener('click', handleSetReminderButtonClick);
-            }
-            // });
-            return;
-        }
-
-        // If it's a task card but not a button
-        if (event.target.closest('.task-card') &&
-            !event.target.matches('task-checkbox') &&
-            !event.target.closest('.task-checkbox') &&
-            !event.target.matches('.delete-icon') &&
-            !event.target.closest('.delete-icon')) {
-
-            const taskCard = event.target.closest('.task-card');
-            console.log("taskCard is ", taskCard);
-            const taskId = taskCard.dataset.taskId;
-            console.log("Task card clicked, opening edit modal", taskId);
-            document.getElementById("modal-title").textContent = "Update Task";
-            isEditMode = true;
-            editTaskId = taskId;
-
-
-            // *** Here because of rapid switching between users and then immediate action of trying to update the task, causing task not found, or its properties not found error. ***
-
-            // Finding the task object
-            // const task = current_task_ls.find(t => t.task_id === taskId);
-            // console.log("task is ", task);
-            // populateModalForm(task);
-            // modal.style.display = "block";
-            const storedUsers = localStorage.getItem(userListKey);
-            if (storedUsers) {
-                const usersArray = JSON.parse(storedUsers);
-                const currentUserData = usersArray.find(u => u.username === currentUser.username);
-                if (currentUserData && currentUserData.taskList) {
-                    const task = currentUserData.taskList.find(t => t.task_id === taskId);
-                    console.log("Task for edit (user switch):", task);
-                    populateModalForm(task);
-                    modal.style.display = "block";
-                } else {
-                    console.error("Error: Could not find current user or their tasks.");
+            // Reminder button handler
+            if (event.target.matches('.reminder-button') || event.target.closest('.reminder-button')) {
+                // Your existing reminder button handler
+                event.stopPropagation();
+                const taskId = event.target.closest('.task-card').dataset.taskId;
+                const task = currentUser.taskList.find(t => t.task_id === taskId);
+                if (!task.dueDate) {
+                    return;
                 }
-            } else {
-                console.error("Error: Could not retrieve user list.");
+                currentReminderTaskId = taskId;
+                showReminderModal(taskId);
+                const setReminderBtn = document.getElementById('set-reminder-btn');
+                if (setReminderBtn) {
+                    setReminderBtn.removeEventListener('click', handleSetReminderButtonClick);
+                    setReminderBtn.addEventListener('click', handleSetReminderButtonClick);
+                }
+                return;
             }
 
+            // Task card click handler (open edit modal)
+            if (event.target.closest('.task-card') &&
+                !event.target.matches('.task-checkbox') &&
+                !event.target.closest('.task-checkbox-wrapper') &&
+                !event.target.matches('.delete-icon') &&
+                !event.target.closest('.delete-icon')) {
+                // if (event.target.closest('.task-card') &&
+                //     !event.target.matches('.task-checkbox') &&
+                //     !event.target.closest('.task-checkbox-wrapper') &&
+                //     !event.target.matches('.delete-icon') &&
+                //     !event.target.closest('.delete-icon') &&
+                //     !event.target.matches('.tag-button') &&
+                //     !event.target.closest('.tag-button') &&
+                //     !event.target.matches('.reminder-button') &&
+                //     !event.target.closest('.reminder-button') &&
+                //     !event.target.matches('.task-tag') &&
+                //     !event.target.closest('.task-tag')) {
+                const taskCard = event.target.closest('.task-card');
+                console.log("taskCard is ", taskCard);
+                const taskId = taskCard.dataset.taskId;
+                console.log("Task card clicked, opening edit modal", taskId);
+                document.getElementById("modal-title").textContent = "Update Task";
+                isEditMode = true;
+                editTaskId = taskId;
+
+                const storedUsers = localStorage.getItem(userListKey);
+                if (storedUsers) {
+                    const usersArray = JSON.parse(storedUsers);
+                    const currentUserData = usersArray.find(u => u.username === currentUser.username);
+                    if (currentUserData && currentUserData.taskList) {
+                        const task = currentUserData.taskList.find(t => t.task_id === taskId);
+                        console.log("Task for edit (user switch):", task);
+                        populateModalForm(task);
+                        modal.style.display = "block";
+                    } else {
+                        console.error("Error: Could not find current user or their tasks.");
+                    }
+                } else {
+                    console.error("Error: Could not retrieve user list.");
+                }
+            }
+        } else {
+            // List item click handlers
+
+            // Click on task checkbox or delete icon - don't open the modal
+            if (event.target.matches('.task-checkbox') ||
+                event.target.closest('.task-checkbox-wrapper') ||
+                event.target.matches('.delete-icon') ||
+                event.target.closest('.delete-icon')) {
+                return;
+            }
+
+            // Click on list item content - open edit modal
+            if (event.target.closest('.list-item-content')) {
+                const listItem = event.target.closest('.task-list-item');
+                const taskId = listItem.dataset.taskId;
+                // console.log("List item clicked, opening edit modal", taskId);
+                // document.getElementById("modal-title").textContent = "Update Task";
+                // isEditMode = true;
+                // editTaskId = taskId;
+
+                // const storedUsers = localStorage.getItem(userListKey);
+                // if (storedUsers) {
+                //     const usersArray = JSON.parse(storedUsers);
+                //     const currentUserData = usersArray.find(u => u.username === currentUser.username);
+                //     if (currentUserData && currentUserData.taskList) {
+                //         const task = currentUserData.taskList.find(t => t.task_id === taskId);
+                //         console.log("Task for edit (list view):", task);
+                //         populateModalForm(task);
+                //         modal.style.display = "block";
+                //     } else {
+                //         console.error("Error: Could not find current user or their tasks.");
+                //     }
+                // } else {
+                //     console.error("Error: Could not retrieve user list.");
+                // }
+                // resetViewToggle();
+
+
+                // let task = currentUser.taskList.find(task => task.task_id === taskId);
+                // focusTaskInUI(task);
+                // highlightTask(taskId);
+                console.log("List item clicked, switching to card view for task:", taskId);
+
+                // Update the view-all-button state
+                const viewAllButton = document.querySelector(".view-all-button");
+                if (viewAllButton) {
+                    viewAllButton.dataset.viewMode = "card";
+                    viewAllButton.querySelector('i').textContent = "view_list";
+                    viewAllButton.querySelector('span').textContent = "View All Tasks";
+                }
+
+                // Switch to card view and focus the task
+                displayTasks(currentUser, currentUser.taskList, "", "card", taskId);
+            }
         }
     }
 
-    // Add a single event listener to handle all task card interactions.
+    // Remove existing and add new event listener
     taskDisplay.removeEventListener("click", handleTaskDisplayClick);
     taskDisplay.addEventListener("click", handleTaskDisplayClick);
 
+    // Call the setupTaskCheckboxes method from deletionManager to reattach checkbox handlers
+    // if (typeof deletionManagerInstance !== 'undefined') {
+    //     console.log("deletionManagerInstance was undefined, therefore defining it manually.");
+    //     setTimeout(() => deletionManagerInstance.setupTaskCheckboxes(), 0);
+    // }
 }
 
+// #############################################################################################################
 // function getReminderTooltipText(dueDate, hasReminder) {
 //     if (!dueDate) {
 //         return 'Set date and time';
@@ -2159,36 +2573,36 @@ function setupReminderModal() {
 //         console.log('dueDate in update reminder is ', dueDate);
 //         console.log("offsetMs in update reminder is ", offsetMs);
 
-        // if (customInputTouched) {
-        //     // Populate custom inputs based on offsetMs, don't select presets
-        //     if (offsetMs > 0) {
-        //         const days = Math.floor(offsetMs / (24 * 60 * 60 * 1000));
-        //         const hours = Math.floor((offsetMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-        //         const minutes = Math.floor((offsetMs % (60 * 60 * 1000)) / (60 * 1000));
+// if (customInputTouched) {
+//     // Populate custom inputs based on offsetMs, don't select presets
+//     if (offsetMs > 0) {
+//         const days = Math.floor(offsetMs / (24 * 60 * 60 * 1000));
+//         const hours = Math.floor((offsetMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+//         const minutes = Math.floor((offsetMs % (60 * 60 * 1000)) / (60 * 1000));
 
-        //         daysInput.value = days;
-        //         hoursInput.value = hours;
-        //         minutesInput.value = minutes;
-        //     }
-        // } else {
-        //     // Select the appropriate preset chip if it matches, otherwise populate custom inputs
-        //     presetChips.forEach(chip => chip.classList.remove('selected'));
-        //     if (offsetMs === (15 * 60 * 1000)) {
-        //         document.querySelector(`.preset-chip[data-value="15min"]`)?.classList.add('selected');
-        //     } else if (offsetMs === (60 * 60 * 1000)) {
-        //         document.querySelector(`.preset-chip[data-value="1hour"]`)?.classList.add('selected');
-        //     } else if (offsetMs === (24 * 60 * 60 * 1000)) {
-        //         document.querySelector(`.preset-chip[data-value="1day"]`)?.classList.add('selected');
-        //     } else if (offsetMs > 0) {
-        //         const days = Math.floor(offsetMs / (24 * 60 * 60 * 1000));
-        //         const hours = Math.floor((offsetMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-        //         const minutes = Math.floor((offsetMs % (60 * 60 * 1000)) / (60 * 1000));
+//         daysInput.value = days;
+//         hoursInput.value = hours;
+//         minutesInput.value = minutes;
+//     }
+// } else {
+//     // Select the appropriate preset chip if it matches, otherwise populate custom inputs
+//     presetChips.forEach(chip => chip.classList.remove('selected'));
+//     if (offsetMs === (15 * 60 * 1000)) {
+//         document.querySelector(`.preset-chip[data-value="15min"]`)?.classList.add('selected');
+//     } else if (offsetMs === (60 * 60 * 1000)) {
+//         document.querySelector(`.preset-chip[data-value="1hour"]`)?.classList.add('selected');
+//     } else if (offsetMs === (24 * 60 * 60 * 1000)) {
+//         document.querySelector(`.preset-chip[data-value="1day"]`)?.classList.add('selected');
+//     } else if (offsetMs > 0) {
+//         const days = Math.floor(offsetMs / (24 * 60 * 60 * 1000));
+//         const hours = Math.floor((offsetMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+//         const minutes = Math.floor((offsetMs % (60 * 60 * 1000)) / (60 * 1000));
 
-        //         daysInput.value = days;
-        //         hoursInput.value = hours;
-        //         minutesInput.value = minutes;
-        //     }
-        // }
+//         daysInput.value = days;
+//         hoursInput.value = hours;
+//         minutesInput.value = minutes;
+//     }
+// }
 
 //     } else {
 //         removeReminderBtn.style.display = 'none';
@@ -2227,7 +2641,7 @@ async function showReminderModal(taskId) {
         const minutes = Math.floor((offsetMs % (60 * 1000)) / (60 * 1000));
 
         // Check if custom values were ever explicitly set (even if they match a preset)
-        if ( days > 0 || hours > 0 || ( minutes > 0 || minutes === 15 ) ){
+        if (days > 0 || hours > 0 || (minutes > 0 || minutes === 15)) {
             console.log("customInputTouched... ", customInputTouched);
             daysInput.value = days;
             hoursInput.value = hours;
@@ -2569,6 +2983,49 @@ const notificationListContainer = document.querySelector('.notification-list');
 notificationListContainer.addEventListener('click', handleNotificationClick);
 
 
+// function highlightTask(taskId) {
+//     console.log("highlightTask called with taskId:", taskId);
+//     let taskElement = document.getElementById(`task-${taskId}`);
+//     const taskListElement = document.getElementById(`task-list-${taskId}`);
+//     let viewAllBtn = document.querySelector(".view-all-button");
+//     let handleClick = function() {
+//         initViewToggle();
+//         console.log("We clicked viewAllBtn programmatically!");
+//         // Add the rest of your button's click logic here
+//     };
+
+//     // Assign the function to the onclick handler
+//     viewAllBtn.onclick = handleClick;
+
+//     if (taskElement || taskListElement) {
+
+//         if (taskElement) {
+//             taskElement.classList.add('highlighted-task');
+//             console.log("Task element found and class added:", taskElement);            
+//         }
+//         else {
+//             // let viewAllBtn = document.querySelector(".view-all-button");
+//             // viewAllBtn.onclick = function() {
+//             //     console.log("We clicked viewAllBtn manually");
+//             // };
+
+//             // This will allow us to switch to task card view and then there i can find that taskElement and can highlight.But it didn't happened.
+//             handleClick();
+//             taskElement = document.getElementById(`task-${taskId}`);
+//             taskElement.classList.add('highlighted-task');
+//             console.log("Tasklist element found and class added:", taskElement);
+//         }
+//         // Optionally, remove the highlight after a duration
+
+//         setTimeout(() => {
+//             taskElement.classList.remove('highlighted-task');
+//         }, 6000); // Example: Remove after 3 seconds
+//     }
+//     else {
+//         console.log("Task element NOT found for taskId:", taskId);
+//     }
+// }
+
 function highlightTask(taskId) {
     console.log("highlightTask called with taskId:", taskId);
     const taskElement = document.getElementById(`task-${taskId}`);
@@ -2612,7 +3069,7 @@ async function handleNotificationClick(event) {
             const modalWrapper = document.querySelector('.notification-modal-wrapper');
             modalWrapper.style.display = 'none';
             let task = currentUser.taskList.find(task => task.task_id === taskId);
-            focusTaskInUI(task)
+            focusTaskInUI(task);
             highlightTask(taskId);
 
             // navigateToTask(notification.taskId);
@@ -2986,8 +3443,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // And if filter panel is active or open, then close it
             filterPanel.classList.contains('active')) {
 
-            // closeFilterPanel();
-            clearFilterBtn.click();
+            //  *** We will use closeFilterPanel over clicking the clearFitlerBtn because I want filterPanel to close but retain its filter settings/chosen options, and clearFilterBtn was suppose to clear Filter and then closing the filter panel, so we comment that out. ***
+            // *** Note:- But doing this will creating an issue like when i switch to different user it is retaining that filter options, so better options will be really handling this by appStates. ***
+            closeFilterPanel();
+
+            // clearFilterBtn.click();
         }
     }
     // Updated code, now using checkboxes over radio buttons and multiselect for all the filters.
@@ -3009,6 +3469,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function updateFilters() {
+        // Collet selected filters
         const statusFilters = Array.from(document.querySelectorAll('input[name="status"]:checked')).map(cb => cb.value) || [];
         const priorityFilters = Array.from(document.querySelectorAll('input[name="priority"]:checked')).map(cb => cb.value) || [];
         const timeFilters = Array.from(document.querySelectorAll('input[name="time"]:checked')).map(cb => cb.value) || [];
@@ -3037,29 +3498,84 @@ document.addEventListener('DOMContentLoaded', () => {
         // displayTasks(currentUser, filteredTasks);
     }
 
-    // Filter Tasks Function
+    // Filter Tasks Function (Earlier functional one)
+
+    // function filterTasks(tasks, filters) {
+    //     return tasks.filter(task => {
+
+    //         const normalizedTaskStatus = task.status.toLowerCase().trim()
+    //         const normalizedTaskPriority = task.priority.toLowerCase().trim()
+
+    //         const normalizedStatusFilters = filters.status.map(status => status.toLowerCase().trim());
+    //         const normalizedPriorityFilters = filters.priority.map(priority => priority.toLowerCase().trim());
+
+    //         const statusMatch = normalizedStatusFilters.length === 0 || normalizedStatusFilters.includes(normalizedTaskStatus);
+    //         console.log("Task status:", task.status, "Normalized Task Status:", normalizedTaskStatus, "Filter statuses:", filters.status, "Normalized Filter Statuses:", normalizedStatusFilters, "statusMatch is ", statusMatch);
+
+    //         const priorityMatch = normalizedPriorityFilters.length === 0 || normalizedPriorityFilters.includes(normalizedTaskPriority);
+    //         console.log("Task priority:", task.priority, "Normalized Task priority:", normalizedTaskPriority, "Filter priority:", filters.priority, "Normalized Filter priority:", normalizedPriorityFilters, "priorityMatch is ", priorityMatch);
+
+    //         const timeMatch = filters.time.length === 0 || checktimeFilter(task.dueDate, filters.time);
+    //         console.log("timeMatch is ", timeMatch);
+
+    //         return statusMatch && priorityMatch && timeMatch;
+    //     });
+    // }
+
+    // *** Updated code for including no priority and no due date options ***
     function filterTasks(tasks, filters) {
         return tasks.filter(task => {
-
-            const normalizedTaskStatus = task.status.toLowerCase().trim()
-            const normalizedTaskPriority = task.priority.toLowerCase().trim()
-
+            // Handle status filter
+            const normalizedTaskStatus = (task.status || '').toLowerCase().trim();
             const normalizedStatusFilters = filters.status.map(status => status.toLowerCase().trim());
+            const statusMatch = normalizedStatusFilters.length === 0 || 
+                                 normalizedStatusFilters.includes(normalizedTaskStatus);
+
+            // Handle priority filter
+            const normalizedTaskPriority = (task.priority || '').toLowerCase().trim();
             const normalizedPriorityFilters = filters.priority.map(priority => priority.toLowerCase().trim());
+            const priorityMatch = normalizedPriorityFilters.length === 0 || 
+                                   normalizedPriorityFilters.includes(normalizedTaskPriority);
 
-            const statusMatch = normalizedStatusFilters.length === 0 || normalizedStatusFilters.includes(normalizedTaskStatus);
-            console.log("Task status:", task.status, "Normalized Task Status:", normalizedTaskStatus, "Filter statuses:", filters.status, "Normalized Filter Statuses:", normalizedStatusFilters, "statusMatch is ", statusMatch);
+            // Handle time filter
+            const timeMatch = filters.time.length === 0 || 
+                filters.time.some(timeFilter => {
+                    // Special case for no due date
+                    if (timeFilter === '') {
+                        return task.dueDate === null;
+                    }
+                    
+                    // *** If no due date, skip other time filters (below line of code is redundant as it will never match to other time filters and will say no tasks matching this filter, so working fine.) ***
+                    // if (task.dueDate === null) return false;
 
-            const priorityMatch = normalizedPriorityFilters.length === 0 || normalizedPriorityFilters.includes(normalizedTaskPriority);
-            console.log("Task priority:", task.priority, "Normalized Task priority:", normalizedTaskPriority, "Filter priority:", filters.priority, "Normalized Filter priority:", normalizedPriorityFilters, "priorityMatch is ", priorityMatch);
+                    // Convert to Date object if it's a string
+                    let dateObj = task.dueDate;
+                    if (typeof task.dueDate === 'string') {
+                        dateObj = new Date(task.dueDate);
+                    }
 
-            const timeMatch = filters.time.length === 0 || checktimeFilter(task.dueDate, filters.time);
-            console.log("timeMatch is ", timeMatch);
+                    // If date is invalid, return false
+                    if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) return false;
+
+                    const today = new Date();
+                    const startOfWeek = new Date(today);
+                    startOfWeek.setDate(today.getDate() + 1 - today.getDay());
+                    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+                    switch(timeFilter) {
+                        case 'overdue': return dateObj < today;
+                        case 'today': return isToday(dateObj);
+                        case 'this-week': return isThisWeek(dateObj, startOfWeek);
+                        case 'this-month': return isThisMonth(dateObj, startOfMonth);
+                        default: return false;
+                    }
+                });
 
             return statusMatch && priorityMatch && timeMatch;
         });
     }
 
+// Non functional code(commented out from before.)
     // function filterTasks(tasks, filters) {
     //     return tasks.filter(task => {
     //         const statusMatch = filters.status.length === 0 || filters.status.includes(task.status);
@@ -3076,33 +3592,42 @@ document.addEventListener('DOMContentLoaded', () => {
     //     });
     // }
 
-    function checktimeFilter(dueDate, timeFilters) {
-        console.log("dueDate is ", dueDate);
-        // Convert string dueDate to Date object if it's a string
-        let dateObj = dueDate;
-        if (typeof dueDate === 'string') {
-            dateObj = new Date(dueDate);
-        }
-        if (isNaN(dateObj.getTime())) return false; // Handle invalid dates
 
-        console.log("Converted dueDate is ", dateObj);
-        const today = new Date();
-        console.log("today is ", today);
-        const startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() + 1 - today.getDay());
-        console.log("startOfWeek ", startOfWeek);
-        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        console.log("startOfMonth ", startOfMonth);
+    // *** Now handling this checktimeFilter code in the filterTasks function itself, there we are also handling the no dueDate case. So this function is no more of use. ***
+    // function checktimeFilter(dueDate, timeFilters) {
+        
+    //     // If timeFilters is empty, return true
+    //     if (timeFilters.length === 0) return true;
+    //     console.log("dueDate is ", dueDate);
+    //     // Convert string dueDate to Date object if it's a string
+    //     let dateObj = dueDate;
+    //     if (typeof dueDate === 'string') {
+    //         dateObj = new Date(dueDate);
+    //     }
 
-        for (const timeFilter of timeFilters) {
-            if (timeFilter === 'overdue' && dateObj < today) return true;
-            if (timeFilter === 'today' && isToday(dateObj)) return true;
-            if (timeFilter === 'this-week' && isThisWeek(dateObj, startOfWeek)) return true;
-            if (timeFilter === 'this-month' && isThisMonth(dateObj, startOfMonth)) return true;
-        }
-        return false;
+    //     // If date is invalid, return false
+    //     if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) return false;
 
-    }
+    //     // if (isNaN(dateObj.getTime())) return false; // Handle invalid dates
+
+    //     console.log("Converted dueDate is ", dateObj);
+    //     const today = new Date();
+    //     console.log("today is ", today);
+    //     const startOfWeek = new Date(today);
+    //     startOfWeek.setDate(today.getDate() + 1 - today.getDay());
+    //     console.log("startOfWeek ", startOfWeek);
+    //     const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    //     console.log("startOfMonth ", startOfMonth);
+
+    //     for (const timeFilter of timeFilters) {
+    //         if (timeFilter === 'overdue' && dateObj < today) return true;
+    //         if (timeFilter === 'today' && isToday(dateObj)) return true;
+    //         if (timeFilter === 'this-week' && isThisWeek(dateObj, startOfWeek)) return true;
+    //         if (timeFilter === 'this-month' && isThisMonth(dateObj, startOfMonth)) return true;
+    //     }
+    //     return false;
+
+    // }
 
     function isToday(date) {
         console.log("date is ", date);
@@ -3134,14 +3659,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // closeFilterBtn.addEventListener('click', closeFilterPanel);
 });
 
+// *** End of Filter related code/ functions ***
+
+// *** Sorting functionality ***
+
 // I can change the function name.
 function sorting() {
+    console.log("I am inside sorting function, rockin...");
     const sortContainer = document.querySelector('.sort-container select');
     const sortBy = sortContainer.value;
 
     // Sort function code
     let sortFunc;
     switch (sortBy) {
+        case "newestFirst":
+            sortFunc = (taskA, taskB) => {
+                const dateA = new Date(taskA.createdAt);
+                const dateB = new Date(taskB.createdAt);
+                return dateB - dateA;
+            };
+            break;
+
+        case "oldestFirst":
+            sortFunc = (taskA, taskB) => {
+                const dateA = new Date(taskA.createdAt);
+                const dateB = new Date(taskB.createdAt);
+                return dateA - dateB;
+            };
+            break;
+
         case "dueDateAsc":
             sortFunc = (taskA, taskB) => {
                 const dateA = new Date(taskA.dueDate);
@@ -3163,7 +3709,8 @@ function sorting() {
                 const priorityOrder = {
                     "high": 0,
                     "medium": 1,
-                    "low": 2
+                    "low": 2,
+                    "": 3
                 };
                 const orderA = priorityOrder[taskA.priority];
                 const orderB = priorityOrder[taskB.priority];
@@ -3187,11 +3734,15 @@ function sorting() {
             break;
 
         default:
-            // sortFunc = "";
-            sortFunc = (a, b) => 0;
+            sortFunc = (taskA, taskB) => {
+                const dateA = new Date(taskA.createdAt);
+                const dateB = new Date(taskB.createdAt);
+                return dateB - dateA;
+            };
+        // sortFunc = (a, b) => 0;
+
     }
-    // Current user is globally defined.
-    // const user = currentUser;
+
     console.log("Current user is ", currentUser);
     // Creating a copy of the taskList(More specifically shallow copy.).
     const temp_taskList = [...currentUser["taskList"]];
@@ -3200,6 +3751,9 @@ function sorting() {
     console.log("Task list inside sorting function without apply sorting is ", currentUser["taskList"]);
     // Updating the temp_taskList.
     temp_taskList.sort(sortFunc);
+    // *** no need to apply reversing here as we will display the task list without reversing using reverse() whenever we will display task list. ***
+
+    // temp_taskList.reverse();
     // let user_task_ls = temp_taskList;
     console.log("Default task list is ", currentUser["taskList"]);
 
@@ -3259,7 +3813,7 @@ async function handleTaskSubmit(event) {
     const formData = handleModalFormData();
 
     const errors = FormValidator.validateTaskForm(formData);
-    console.log("eRRORS OF TASK FROM IS ", errors);
+    console.log("ERRORS OF TASK FROM IS ", errors);
     if (errors.length > 0) {
         showFormErrors(errors, 'task-form');
         return;
@@ -3322,6 +3876,8 @@ async function handleTaskSubmit(event) {
                 let user_task_ls = currentUser["taskList"];
                 // alert("Task updated successfully!");
                 // showSuccess('Task updated successfully');
+                console.log("Calling the sorting function when updating a task.");
+                sorting();
                 displayTasks(currentUser, user_task_ls);
 
 
@@ -3368,6 +3924,8 @@ async function handleTaskSubmit(event) {
         }
         modal.style.display = "none";
         clearModalForm();
+        console.log("Calling the sorting function when adding a new task.");
+        sorting();
         displayTasks(currentUser, user_task_ls);
         // displayTasks(currentUser, currentUser.taskList);
         // addCheckboxListeners();
@@ -3631,6 +4189,7 @@ function setupEventListeners() {
 // Initialize the application
 function initializeApp() {
     populateUserList();
+    initViewToggle();
     setupEventListeners();
     setupModalHandlers();
     setupUserModal();
