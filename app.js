@@ -1,561 +1,3 @@
-// // // export function sum(a,b){
-// // //     return a+b;
-// // // }
-
-// // // document.getElementById("demo").innerHTML = sum(5,6);
-// // import { handleFormSubmit } from "./ui.js";
-// // import {User } from "./data.js";
-
-// // const userList = [];
-// // document.getElementById("submitBtn").addEventListener("click",()=>{
-// //     // const userList = []; // It needed to create outside of the function, otherwise it will get created again and again.
-// //     const {name, email} = handleFormSubmit();
-
-// //     let newUser = None;
-// //     if (userList.length){
-// //         userList.forEach((user_obj) => {
-
-// //             if(user_obj["email"] != email){
-// //                 // Create user only if it doesn't exist.
-// //                 newUser = new User(name, email);
-// //                 // userList.push(newUser);
-// //                 const list = JSON.parse(localStorage.getItem("userList"));
-// //                 list.push(newUser);
-// //             }
-// //         });
-// //     }
-// //     else{
-// //         // For the case when there is zero users exist.
-// //         newUser = new User(name, email);
-
-// //         // Instead of adding it in the array, we should add it in the browser array.
-// //         // converting the string into an array
-// //         const list = JSON.parse(localStorage.getItem("userList") );
-// //         list.push(newUser);
-
-// //         // userList.push(newUser);
-// //     }
-
-
-// //     // I need to find the right place for userList variable, so that things won't repeated or get cluttered.
-
-// //     // This is for the case when userList array is not added to the local storage.
-
-// //     if(! localStorage.getItem("userList")){
-// //         console.log("I am inside if statment for adding users.")
-// //         localStorage.setItem("userList",JSON.stringify(userList));
-// //     }
-
-// //     // just for checking
-// //     console.log(newUser);
-// // });
-
-// // // displaying the user from the local storage (userList) and adding the constraint of not adding the user if it is already exist, basically will check the email of the existing object, if exist then we will say no, you can't take it.
-// // // and we will also have to prevent userList in local storage if already exist.
-
-// // // This is for showing dropdown only if any user exist in userList.
-// // // It basically return null if no user exist, which is equal to 0(maybe), so no need to check the length of the array, in order to verify whether user exists or not.
-// // if (! JSON.parse(localStorage.getItem("userList"))){
-// //     dropdown_options = document.getElementById("choose-user");
-// //     dropdown_options.addEventListener("change", ()=> {
-// //         const select_options = JSON.parse(localStorage.getItem("userList"));
-
-// //     });
-// // }
-// // else{
-// //     document.getElementById("user-dropdown").style.display = "none";
-// // }
-
-
-// // ##############################
-
-
-// // import { handleFormSubmit, handleTaskData } from "./ui.js";    
-// // import {User} from "./data.js";
-
-// // const userList = JSON.parse(localStorage.getItem("userList")) || [];
-
-// // document.getElementById("submitBtn").addEventListener("click" , (event)=>{
-// //     // Prevent automatic submission on loading.
-// //     event.preventDefault();
-// //     const {name, email} = handleFormSubmit();
-
-// //     if( !name || !email){
-// //         alert("Please fill out all required fields.");
-// //         return;
-// //     }
-// //     const existingUser = userList.find(user => user.email === email);
-
-// //     if(!existingUser){
-
-// //         // Create the user
-// //         const newUser = new User(name, email);
-// //         userList.push(newUser);
-// //         localStorage.setItem("userList", JSON.stringify(userList));
-// //         alert("New user added: ", newUser);
-// //         // Clearing the form fields.
-// //         document.getElementById("user-data").reset();
-// //     }
-
-// //     else{
-// //         alert("User with this email already exists: ", email);
-// //     }
-// // })
-
-// // // Allowing the user choose option to display, only if any user exist, otherwise hide this option.
-// // let currentUser = null;
-// // // Hide the choose option
-// // if(!userList.length){
-// //     document.getElementById("user-dropdown").style.display = "none";
-// // }
-// // // Display the user choose option
-// // else{
-// //     const dropdown = document.getElementById("choose-user");
-// //     userList.forEach((user, index ) => {
-
-// //         // Its for displaying the options 
-// //         const optionElement = document.createElement('option');
-// //         optionElement.value = index
-// //         optionElement.textContent = user["username"];
-
-// //         dropdown.appendChild(optionElement);
-
-// //     } );
-// //         //  A trigger for allowing the chosen user to create tasks.
-// //         dropdown.addEventListener("change",() => {
-// //             // currentUser = user;
-// //             // console.log("userr is ", user);
-// //             // console.log("currentUser is ", currentUser + "is instance of User: ", currentUser instanceof User);
-// //             // Hiding the user creation form.
-// //             // document.getElementById("user-data").style.display = "none";
-// //             // Hiding the user-selection dropdown container
-// //             // document.getElementById("user-dropdown").style.display = "none";
-
-// //             // Hiding the home page itself and showing user profile
-// //             // document.getElementById("home-page").style.display = "none";
-// //             // // showing the profile page
-// //             // document.getElementById("user-profile").style.display = "block";
-
-// //             // const element = document.getElementById("user-profile");
-// //             // const para = element.querySelector("p");
-// //             // const user_obj = document.createElement("h1");
-// //             // user_obj.textContent = `Hi ${user["username"]}!`;
-// //             // para.appendChild(user_obj);
-
-// //             const selectedIndex = dropdown.value;
-// //             currentUser = userList[selectedIndex];
-
-// //             document.getElementById("home-page").style.display = "none";
-// //             document.getElementById("user-profile").style.display = "block";
-
-// //             const element = document.getElementById("user-profile");
-// //             const para = element.querySelector("p");
-
-// //             para.innerHTML = '';
-// //             const user_obj = document.createElement("h1");
-// //             user_obj.textContent = `Hi ${currentUser["username"]}!`;
-// //             para.append(user_obj);
-// //         }
-// //     );
-
-// // }
-
-// // // Handling task addition
-
-
-// // document.getElementById("add-task").addEventListener("click", (event) => {
-// //     event.preventDefault();
-// //     const {task} = handleTaskData();
-
-// //     if (!task){
-// //         alert("Please add a task.");
-// //         return;
-// //     }
-
-
-// //     // const existingTask = task_list.find(existing_task => existing_task === task ); // Wrong code
-// //     // Here currentUser.taskList basically access the taskList array, and then existingTask represents task objects, so from existingTask, we are trying to get the task by using existingTask.task.
-// //     currentUser = User.fromJSON(currentUser); // Rehydration
-// //     const existingTask = currentUser.taskList.find(existingTask => existingTask.task === task);
-// //     console.log("existingTask: " + existingTask);
-
-// //     if(!existingTask){
-// //         // const current_user = User.fromJSON(currentUser);
-// //         console.log("currentUser is ", currentUser + "is instance of User: ", currentUser instanceof User);
-// //         console.log("task is ", task);
-// //         currentUser.addTasks(task);
-// //         alert("Task created successfully.");
-
-// //     }
-// //     else{
-// //         alert("Task already exist.Try adding another task!");
-// //     }
-
-// // });
-
-// // // For displaying the tasks
-// // document.getElementById("view-task").addEventListener("click",()=>{
-
-// // });
-
-// // document.getElementById("back-to-home").addEventListener("click",()=>{
-// //     document.getElementById("home-page").style.display = "block";
-// //     document.getElementById("user-profile").style.display = "none";
-// // });
-
-
-// // ################################################################
-// import { handleFormSubmit,handleTaskData } from "./ui.js";
-// import {User} from "./data.js";
-// // import {User, StorageProxy } from "./data.js";
-// import { PageManager } from "./navigation.js";
-
-// const userListKey = 'userList';
-// const userMap = new Map();
-
-// // Load from local storage and populate the userMap
-// const storedUsers = JSON.parse(localStorage.getItem(userListKey)) || [];
-// storedUsers.forEach(userData => {
-//     const user = User.fromData(userData);
-//     userMap.set(user.email, user);
-// });
-// let userList = Array.from(userMap.values()); // Create userList from userMap
-
-// let currentUser = null;
-// const pageManager = new PageManager();
-
-// // Updating user dropdown
-// function updateUserDropdown(){
-//     const dropdown = document.getElementById("choose-user");
-//     const userDropdownContainer = document.getElementById("user-dropdown");
-
-//     // If no user exist, then don't show the dropdwon.
-//     if(!userList.length){
-//         userDropdownContainer.style.display = "none";
-//         return;
-//     }
-
-//     dropdown.innerHTML = '<option value="" disabled selected> Choose an option</option>';
-//     userDropdownContainer.style.display = "block";
-//     userList.forEach((user, index) => {
-//         const optionElement = document.createElement('option');
-//         optionElement.value = index;
-//         optionElement.textContent = user.username;
-//         dropdown.appendChild(optionElement);
-//     }
-// );
-
-// }
-
-// // Choosing user from user selection dropdown.
-// function handleUserSelection(event){
-//     const selectedIndex = event.target.value;
-//     console.log("selectedIndex is", selectedIndex);
-//     currentUser = userList[selectedIndex];
-
-//     updateProfileView(currentUser);
-//     const task_dropdown = document.getElementById("view-task");
-//     pageManager.showPage('profile');
-//     displayTasks(currentUser);
-// }
-
-// // Basically updating the profile data after showing the profile page.
-// function updateProfileView(user){
-//     const para = document.querySelector("#user-profile p");
-//     para.innerHTML = '';
-//     const user_obj = document.createElement("h1");
-//     user_obj.textContent = `Hi ${user.username}!`;
-//     para.appendChild(user_obj);
-// }
-
-// function displayTasks(user){
-//     const ele = document.querySelector("#task-display ol");
-//     const user_task_ls = user["taskList"];
-//     ele.innerHTML = '';
-//     for(const task of user_task_ls){
-//         const li = document.createElement("li");
-//         for(const prop in task){
-//             if(prop == "task"){
-//                 li.textContent = task[prop];
-//                 break;
-//             }
-//         }
-//         ele.appendChild(li);
-//     }
-// }
-
-// function handleBackToHome(){
-//     pageManager.showPage('home');
-//     currentUser = null;
-//     updateUserDropdown();
-
-// }
-
-
-
-// function setupEventListeners(){
-//     document.getElementById("submitBtn").addEventListener("click", (event) => {
-//         event.preventDefault();
-//         const {name, email } = handleFormSubmit();
-
-//         if (!name || !email){
-//             alert("Please fill out all required fields.");
-//             return;
-//         }
-
-//         // Checking that user exists or not, if not then we will add one.
-//         if(!userMap.has(email)){
-//             const newUser = new User(name, email);
-//             userMap.set(email,newUser);
-//             updateUserDropdown();
-//             localStorage.setItem(userListKey, JSON.stringify(Array.from(userMap.values()).map(user => user.toData())));
-//             updateUserDropdown();
-//             alert("New user added successfully");
-//             document.getElementById("user-data").reset();
-//         }
-//         else{
-//             alert(`User with email ${email} already exists.`);
-//         }
-//     });
-
-
-
-//     // User selection
-//     document.getElementById("choose-user").addEventListener("change", handleUserSelection);
-
-//     // Task addition
-//     document.getElementById("add-task").addEventListener("click",(event) => {
-//         event.preventDefault();
-//         const {task, description, priority , status, dueDate} = handleTaskData();
-
-//         if (!task){
-//             alert("Please add a task");
-//             return;
-//         }
-
-//         if(!dueDate){
-//             alert("Please add a due Date");
-//             return;
-//         }
-
-//         console.log("task is ",task, "<br> description is ", description, "<br> priority is ", priority, "<br> status is ",status,"<br> dueDate is ",dueDate )
-//         const existingTask = currentUser.taskList.find(existingTask =>
-//             existingTask.task === task );
-
-//         if (!existingTask){
-
-//             // currentUser.addTasks(task);
-//             currentUser.addTasks(task,description,status,priority,dueDate);
-
-//             localStorage.setItem(userListKey, JSON.stringify(Array.from(userMap.values()).map(user => user.toData())));
-//             displayTasks();
-//             alert("Task created successfully.");
-//             document.getElementById("task-creation").reset();
-//         }
-//         else{
-//             alert("Task already exists. Try adding another task!");
-//         }
-//     });
-
-
-//     document.getElementById("back-to-home").addEventListener("click", handleBackToHome);
-// }
-
-
-
-// // Initialize the application
-// function initializeApp(){
-//     updateUserDropdown();
-//     setupEventListeners();
-//     pageManager.showPage('home');
-// }
-
-// initializeApp();
-
-// // ##################################################
-// // import { handleFormSubmit,handleTaskData } from "./ui.js";
-// // import {User, StorageProxy } from "./data.js";
-// // import { PageManager } from "./navigation.js";
-
-// // const userList = new StorageProxy([], 'userList');
-// // let currentUser = null;
-// // const pageManager = new PageManager();
-
-// // // Updating user dropdown
-// // function updateUserDropdown(){
-// //     const dropdown = document.getElementById("choose-user");
-// //     const userDropdownContainer = document.getElementById("user-dropdown");
-
-// //     // If no user exist, then don't show the dropdwon.
-// //     if(!userList.length){
-// //         userDropdownContainer.style.display = "none";
-// //         return;
-// //     }
-
-// //     dropdown.innerHTML = '<option value="" disabled selected> Choose an option</option>';
-// //     userDropdownContainer.style.display = "block";
-// //     userList.forEach((user, index) => {
-// //         const optionElement = document.createElement('option');
-// //         optionElement.value = index;
-// //         optionElement.textContent = user.username;
-// //         dropdown.appendChild(optionElement);
-// //     }
-// // );
-
-// // }
-
-// // // Choosing user from user selection dropdown.
-// // function handleUserSelection(event){
-// //     const selectedIndex = event.target.value;
-// //     currentUser = userList[selectedIndex];
-
-// //     updateProfileView(currentUser);
-// //     pageManager.showPage('profile');
-// // }
-
-// // // Basically updating the profile data after showing the profile page.
-// // function updateProfileView(user){
-// //     const para = document.querySelector("#user-profile p");
-// //     para.innerHTML = '';
-// //     const user_obj = document.createElement("h1");
-// //     user_obj.textContent = `Hi ${user.username}!`;
-// //     para.appendChild(user_obj);
-// // }
-
-// // function handleBackToHome(){
-// //     pageManager.showPage('home');
-// //     currentUser = null;
-// //     updateUserDropdown();
-
-// // }
-
-// // function setupEventListeners(){
-// //     document.getElementById("submitBtn").addEventListener("click", (event) => {
-// //         event.preventDefault();
-// //         const {name, email } = handleFormSubmit();
-
-// //         if (!name || !email){
-// //             alert("Please fill out all required fields.");
-// //             return;
-// //         }
-
-// //         const existingUser = userList.find(user => user.email === email);
-
-// //         if(!existingUser){
-// //             const newUser = new User(name, email);
-// //             userList.push(newUser);
-// //             alert("New user added successfully");
-// //             document.getElementById("user-data").reset();
-
-// //             updateUserDropdown();
-// //         }else{
-// //             alert(`User with email ${email} already exists.`);
-// //         }
-// //     });
-
-// //     // User selection
-// //     document.getElementById("choose-user").addEventListener("change", handleUserSelection);
-
-// //     // Task addition
-// //     document.getElementById("add-task").addEventListener("click",(event) => {
-// //         event.preventDefault();
-// //         const {task} = handleTaskData();
-
-// //         if (!task){
-// //             alert("Please add a task");
-// //             return;
-// //         }
-
-// //         const existingTask = currentUser.taskList.find(existingTask =>
-// //             existingTask.task === task );
-
-// //         if (!existingTask){
-// //             currentUser.addTasks(task);
-// //             alert("Task created successfully");
-// //             document.getElementById("task-creation").reset();
-// //         }
-// //         else{
-// //             alert("Task already exists. Try adding another task!");
-// //         }
-// //     });
-
-// //     document.getElementById("back-to-home").addEventListener("click", handleBackToHome);
-// // }
-
-
-
-// // // Initialize the application
-// // function initializeApp(){
-// //     updateUserDropdown();
-// //     setupEventListeners();
-// //     pageManager.showPage('home');
-// // }
-
-// // initializeApp();
-
-// // #################################################
-// // import { handleFormSubmit, handleTaskData } from "./ui.js";
-// // import { User,Task } from "./data.js";
-// // import { PageManager } from "./navigation.js";
-
-// // const userList = []; // Replace with StorageProxy for future enhancements
-// // let currentUser = null;
-// // const pageManager = new PageManager();
-
-// // // Choosing user from user selection dropdown (modify based on your implementation)
-// // function handleUserSelection(event) {
-// //   // Implement logic to choose user from dropdown and update currentUser
-// // }
-
-// // function updateProfileView(user) {
-// //   // Update profile view based on user data
-// // }
-
-// // function handleBackToHome() {
-// //   // Handle going back to home page
-// // }
-
-// // function setupEventListeners() {
-// //   document.getElementById("submitBtn").addEventListener("click", (event) => {
-// //     event.preventDefault();
-// //     const { name, email } = handleFormSubmit();
-
-// //     if (!name || !email) {
-// //       alert("Please fill out all required fields.");
-// //       return;
-// //     }
-
-// //     const existingUser = userList.find(user => user.email === email);
-
-// //     if (!existingUser) {
-// //       const newUser = new User(name, email);
-// //       userList.push(newUser);
-// //       alert("New user added successfully");
-// //       document.getElementById("user-data").reset();
-
-// //       // Update user list for dropdown (if applicable)
-// //     } else {
-// //       alert(`User with email ${email} already exists.`);
-// //     }
-// //   });
-
-// //   // User selection
-// //   // document.getElementById("choose-user").addEventListener("change", handleUserSelection);
-
-// //   // Task addition (not implemented yet)
-
-// //   document.getElementById("back-to-home").addEventListener("click", handleBackToHome);
-// // }
-
-// // function initializeApp() {
-// //   // Load user data from local storage (if using StorageProxy in the future)
-// //   // updateUserDropdown(); // Update user list for dropdown (if applicable)
-// //   setupEventListeners();
-// //   PageManager.showPage('home');
-// // }
-
-// // initializeApp();
-
 import {
     clearModalForm, handleFormSubmit, handleModalFormData, populateModalForm, showFormErrors, showSuccess, handleReminderFormData,
     clearReminderForm, updateReminderPreview, calculateReminderOffset
@@ -587,6 +29,46 @@ import { NotificationManager } from "./notification-manager.js";
 //         }
 //     });
 // });
+
+
+// Application state object to track UI preferences
+const appState = {
+    // View preferences
+    currentView: "card", // Default view mode (card or list)
+
+    // Sorting preferences
+    currentSort: "newestFirst", // Default sort option
+
+    // Filter state
+    activeFilters: {
+        status: [], // Array of active status filters
+        priority: [], // Array of active priority filters
+        time: [] // Array of active time filters
+    },
+
+    // Search state
+    searchTerm: "", // Current search term
+
+    // Current user
+    currentUser: null, // Reference to current user object
+
+    // Reset all preferences when switching users
+    resetForUserSwitch() {
+        this.currentView = "card"; // Reset to card view
+        this.currentSort = "newestFirst"; // Reset to default sort
+        this.activeFilters = { status: [], priority: [], time: [] }; // Clear all filters
+        this.searchTerm = ""; // Clear search term
+    },
+
+    // Reset search only (when switching views)
+    resetSearch() {
+        this.searchTerm = "";
+    }
+};
+
+// Export the application state
+// This will be available globally as appState
+window.appState = appState;
 
 // Show the global overlay
 // export function showGlobalOverlay(){
@@ -654,7 +136,7 @@ let notificationManagerInstance;
 
 const pageManager = new PageManager();
 
-// Populate user list and also handling switching of user.
+// Populate user list and also handling switching of user and handling resetting of states when switching users.
 
 function populateUserList() {
 
@@ -701,19 +183,43 @@ function populateUserList() {
 
         // Add click handler
         userItem.addEventListener('click', () => {
+            // Reset app state for user switch
+            appState.resetForUserSwitch();
+
+            // Update current user reference
             currentUser = userList[index];
+            appState.currentUser = currentUser;
+
+            // Reset UI states
+            resetViewToggle();
+            resetFilterUI();
+
+            // Clear search input
+            const searchInput = document.querySelector(".search-container input");
+            if (searchInput) {
+                searchInput.value = "";
+            }
+
+            // Reset sort dropdown to default
+            const sortDropdown = document.querySelector('.sort-container select');
+            if (sortDropdown) {
+                sortDropdown.value = appState.currentSort;
+            }
+
             // Initializing all the modules that use currentUser or injecting currenUser to the modules that depend on it.(Applying dependency injection design pattern.)
             // Call a function to initialize dependent modules
             initializeModules(currentUser);
 
             updateProfileView(currentUser);
-            // Reset the view toggle to see the correct name either dashboard or view all tasks
-            resetViewToggle();
             pageManager.showPage('profile');
             // const func = setupModalHandlers();
             // func.displayTasks(currentUser);
-            sorting();
-            displayTasks(currentUser, currentUser["taskList"]);
+
+            // Display tasks with default settings
+            refreshTaskDisplay();
+            // displayTasks(currentUser, currentUser["taskList"]);
+
+            // Close the user modal
             userModal.classList.remove('active');
         });
         userListElement.appendChild(userItem);
@@ -851,17 +357,27 @@ function initViewToggle() {
     const viewToggleText = viewAllButton.querySelector('span');
 
     if (viewAllButton) {
-        // Set initial state
-        viewAllButton.dataset.viewMode = "card";
-        viewToggleIcon.textContent = "view_list"; // Initial icon for switching to list view
-        viewToggleText.textContent = "View All Tasks";
+        // Set initial state based on app state
+        viewAllButton.dataset.viewMode = appState.currentView;
+        if (appState.currentView === "card") {
+            viewToggleIcon.textContent = "view_list"; // Show icon for switching to list view
+            viewToggleText.textContent = "View All Tasks";
+        }
+        else {
+            viewToggleIcon.textContent = "view_module";  // Show icon for switching to card view
+            viewToggleText.textContent = "Dashboard";
+        }
+
 
         viewAllButton.addEventListener("click", function () {
-            const currentView = this.dataset.viewMode;
-            const newView = currentView === "card" ? "list" : "card";
+            // Toggle between views
+            const newView = appState.currentView === "card" ? "list" : "card";
 
-            // Update button text
-            // this.textContent = newView === "card" ? "View All Tasks" : "Dashboard";
+            // Update app state
+            appState.currentView = newView;
+
+            // Update button state
+            this.dataset.viewMode = newView;
 
             // Update button text and icon
             if (newView === "card") {
@@ -871,21 +387,30 @@ function initViewToggle() {
                 viewToggleIcon.textContent = "view_module"; // Show card icon (next state)
                 viewToggleText.textContent = "Dashboard";
             }
-            this.dataset.viewMode = newView;
 
+            // Reset search when switching views (but keep filters and sorting)
+            const { clearSearch } = setupSearch();
+            clearSearch();
+            appState.resetSearch();
+
+            // Refresh task display with new view mode
+            refreshTaskDisplay();
             // Re-render tasks with new view mode
-            displayTasks(currentUser, currentUser.taskList, "", newView);
+            // displayTasks(currentUser, currentUser.taskList, "", newView);
         });
     }
 }
 
 function resetViewToggle() {
     const viewAllButton = document.querySelector(".view-all-button");
-    const viewToggleIcon = viewAllButton.querySelector('i');
-    const viewToggleText = viewAllButton.querySelector('span');
+
 
     if (viewAllButton) {
-        // Reset to card view
+        const viewToggleIcon = viewAllButton.querySelector('i');
+        const viewToggleText = viewAllButton.querySelector('span');
+        // Reset to card view in app state
+        appState.currentView = "card";
+
         viewAllButton.dataset.viewMode = "card";
         viewToggleIcon.textContent = "view_list";
         viewToggleText.textContent = "View All Tasks";
@@ -3241,6 +2766,8 @@ function setupModalHandlers() {
 
 // *** Search functionality
 
+// Created by me...
+
 // const searchInput = document.querySelector(".search-container input");
 // let searchTaskList = [];
 
@@ -3304,34 +2831,108 @@ function setupModalHandlers() {
 //     }
 // });
 
+// **************************************************************************************
+
+// const searchInput = document.querySelector(".search-container input");
+// const debouncedSearch = _.debounce(() => {
+//     const inputValue = searchInput.value.trim();
+//     if (inputValue === "") {
+//         displayTasks(currentUser, currentUser.taskList);
+//         return; // Exit early to avoid unnecessary filtering
+//     }
+
+//     const escapedInput = inputValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+//     const regex = new RegExp(escapedInput, "i");
+//     // const regex = new RegExp(inputValue, "i");
+//     const searchTaskList = currentUser.taskList.filter(task =>
+//         regex.test(task.task) || regex.test(task.description)
+//     );
 
 
-const searchInput = document.querySelector(".search-container input");
-const debouncedSearch = _.debounce(() => {
-    const inputValue = searchInput.value.trim();
-    if (inputValue === "") {
-        displayTasks(currentUser, currentUser.taskList);
-        return; // Exit early to avoid unnecessary filtering
-    }
+//     if (inputValue !== "" && searchTaskList.length === 0) {
+//         displayTasks(currentUser, [], "No tasks match your search.")
+//     } else {
+//         displayTasks(currentUser, searchTaskList);
+//     }
 
-    const escapedInput = inputValue.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+// }, 200);
+
+// searchInput.addEventListener("input", debouncedSearch);
+
+// *************************************************************
+// Updated code
+
+function applySearch(taskList, searchTerm) {
+    if (!searchTerm) return taskList;
+    const escapedInput = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(escapedInput, "i");
-    // const regex = new RegExp(inputValue, "i");
-    const searchTaskList = currentUser.taskList.filter(task =>
+    return taskList.filter(task =>
         regex.test(task.task) || regex.test(task.description)
     );
+}
 
+function setupSearch() {
+    const searchInput = document.querySelector(".search-container input");
 
-    if (inputValue !== "" && searchTaskList.length === 0) {
-        displayTasks(currentUser, [], "No tasks match your search.")
-    } else {
-        displayTasks(currentUser, searchTaskList);
+    // Clear the search input field
+    const clearSearch = () => {
+        if (searchInput) {
+            searchInput.value = "";
+            appState.searchTerm = "";
+        }
+    };
+
+    // Function to handle search
+    const handleSearch = _.debounce(() => {
+        if (!searchInput) return;
+
+        const inputValue = searchInput.value.trim();
+
+        // Update app state with search term
+        appState.searchTerm = inputValue;
+
+        // Refresh the task display
+        refreshTaskDisplay();
+    }, 200);
+
+    if (searchInput) {
+        searchInput.addEventListener("input", handleSearch);
+
     }
 
-}, 200);
+    // Return the clearSearch function to be used when switching views
+    return { clearSearch };
+}
 
-searchInput.addEventListener("input", debouncedSearch);
+// For refreshing the task display
+function refreshTaskDisplay() {
+    if (!currentUser || !currentUser.taskList) {
+        console.error("No current user or task list available");
+        return;
+    }
 
+    // Get sorted and filtered tasks
+    const sortedAndFilteredTasks = sorting();
+
+    // Display tasks with the current view mode
+    if (sortedAndFilteredTasks.length === 0) {
+        // Determine the appropriate message
+        let message = "";
+        if (appState.searchTerm) {
+            message = "No tasks match your search.";
+        } else if (Object.values(appState.activeFilters).some(filters => filters.length > 0)) {
+            message = "No tasks match your filters.";
+        } else {
+            message = "No tasks available.";
+        }
+
+        displayTasks(currentUser, [], message, appState.currentView);
+    } else {
+        displayTasks(currentUser, sortedAndFilteredTasks, "", appState.currentView);
+    }
+}
+
+// ############################################################
 // searchInput.addEventListener("input", () => {
 //     const inputValue = searchInput.value.trim();
 // //     const searchTaskList = [];
@@ -3383,7 +2984,117 @@ searchInput.addEventListener("input", debouncedSearch);
 //     filterPanel.classList.remove('active');
 // });
 
+
+// #######################################################
+// Function to reset filter UI elements
+function resetFilterUI() {
+    document.querySelectorAll('.filter-panel input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // Clear app state filters
+    appState.activeFilters = {
+        status: [],
+        priority: [],
+        time: []
+    };
+}
+
+function filterTasks(tasks, filterOptions = null) {
+
+    // Use provided filter options or get from app state
+    const filters = filterOptions || appState.activeFilters;
+
+    return tasks.filter(task => {
+        // Handle status filter
+        const normalizedTaskStatus = (task.status || '').toLowerCase().trim();
+        const normalizedStatusFilters = filters.status.map(status => status.toLowerCase().trim());
+        const statusMatch = normalizedStatusFilters.length === 0 ||
+            normalizedStatusFilters.includes(normalizedTaskStatus);
+
+        // Handle priority filter
+        const normalizedTaskPriority = (task.priority || '').toLowerCase().trim();
+        const normalizedPriorityFilters = filters.priority.map(priority => priority.toLowerCase().trim());
+        const priorityMatch = normalizedPriorityFilters.length === 0 ||
+            normalizedPriorityFilters.includes(normalizedTaskPriority);
+
+        // Handle time filter
+        const timeMatch = filters.time.length === 0 ||
+            filters.time.some(timeFilter => {
+                // Special case for no due date
+                if (timeFilter === '') {
+                    return task.dueDate === null;
+                }
+
+                // *** If no due date, skip other time filters (below line of code is redundant as it will never match to other time filters and will say no tasks matching this filter, so working fine.) ***
+                if (task.dueDate === null) return false;
+
+                // Convert to Date object if it's a string
+                let dateObj = task.dueDate;
+                if (typeof task.dueDate === 'string') {
+                    dateObj = new Date(task.dueDate);
+                }
+
+                // If date is invalid, return false
+                if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) return false;
+
+                const today = new Date();
+                const startOfWeek = new Date(today);
+                // Below code is to get start of week as sunday
+                // startOfWeek.setDate(today.getDate() - today.getDay());
+
+                // Below code is to get start of week as Monday
+                startOfWeek.setDate(today.getDate() + 1 - today.getDay());
+                const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+                switch (timeFilter) {
+                    case 'overdue':
+                        return dateObj < today;
+                    case 'today':
+                        return isToday(dateObj);
+                    case 'this-week':
+                        return isThisWeek(dateObj, startOfWeek);
+                    case 'this-month':
+                        return isThisMonth(dateObj, startOfMonth);
+                    default:
+                        return false;
+                }
+            });
+
+        return statusMatch && priorityMatch && timeMatch;
+    });
+}
+
+// Helper functions for date comparison
+
+function isToday(date) {
+    console.log("date is ", date);
+    const today = new Date();
+    return date.toDateString() === today.toDateString();
+}
+
+function isThisWeek(date, startOfWeek) {
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // End of week sunday as our week is starting from Monday.
+    console.log("endOfWeek is ", endOfWeek);
+    return date >= startOfWeek && date <= endOfWeek;
+}
+
+function isThisMonth(date, startOfMonth) {
+    const endOfMonth = new Date(startOfMonth.getFullYear(), startOfMonth.getMonth() + 1, 0);
+    // console.log("endOfMonth is ", endOfMonth);
+    // return date >= startOfMonth && date <= endOfMonth;
+
+    console.log("Checking date: ", date, "startOfMonth: ", startOfMonth, "endOfMonth: ", endOfMonth);
+
+    const normalizedDate = new Date(date.setHours(0, 0, 0, 0));
+    const normalizedStart = new Date(startOfMonth.setHours(0, 0, 0, 0));
+    const normalizedEnd = new Date(endOfMonth.setHours(0, 0, 0, 0));
+    return normalizedDate >= normalizedStart && normalizedDate <= normalizedEnd;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Set up filter panel events
     const appContainer = document.querySelector('.app-container');
     const filterPanel = document.querySelector('.filter-panel');
     const filterBtn = document.getElementById('open-filter-panel');
@@ -3402,18 +3113,6 @@ document.addEventListener('DOMContentLoaded', () => {
     //     }
     //     closeFilterPanel();
     // });
-
-    clearFilterBtn.addEventListener("click", () => {
-        document.querySelectorAll('.filter-panel input[type="checkbox"]').forEach(checkbox => {
-            checkbox.checked = false;
-        });
-
-        updateFilters();
-        closeFilterPanel();
-
-    });
-
-
 
     // Function to handle panel opening.
     function openFilterPanel() {
@@ -3450,6 +3149,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // clearFilterBtn.click();
         }
     }
+
+    // Clear filters button handler
+    clearFilterBtn.addEventListener("click", () => {
+        document.querySelectorAll('.filter-panel input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        updateFilters();
+        closeFilterPanel();
+
+    });
     // Updated code, now using checkboxes over radio buttons and multiselect for all the filters.
 
     // Adding event listener to the entire filter panel for handling checkbox selection
@@ -3469,34 +3179,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function updateFilters() {
-        // Collet selected filters
+        // Collect selected filters
         const statusFilters = Array.from(document.querySelectorAll('input[name="status"]:checked')).map(cb => cb.value) || [];
         const priorityFilters = Array.from(document.querySelectorAll('input[name="priority"]:checked')).map(cb => cb.value) || [];
         const timeFilters = Array.from(document.querySelectorAll('input[name="time"]:checked')).map(cb => cb.value) || [];
 
         console.log('Active filters:', { status: statusFilters, priority: priorityFilters, time: timeFilters });
+
         console.log("currentUser taskList ", currentUser.taskList);
-        const filteredTasks = filterTasks(currentUser.taskList, { status: statusFilters, priority: priorityFilters, time: timeFilters });
-        console.log("Filtered tasks is ", filteredTasks);
 
-        if (statusFilters.length === 0 && priorityFilters.length === 0 && timeFilters.length === 0) {
-            // No filters selected, show all tasks
-            displayTasks(currentUser, currentUser.taskList);
-        }
-        else if (filteredTasks.length === 0) {
-            displayTasks(currentUser, [], "No tasks match your filters.");
-            // return;
-        }
-        else {
-            displayTasks(currentUser, filteredTasks);
-        }
+        // Instead of passing the filter options directly in the filterTasks function we are updating it in the appState.
 
+        // const filteredTasks = filterTasks(currentUser.taskList, { status: statusFilters, priority: priorityFilters, time: timeFilters });
+        // console.log("Filtered tasks is ", filteredTasks);
+
+        appState.activeFilters = {
+            status: statusFilters,
+            priority: priorityFilters,
+            time: timeFilters
+        };
+
+        // Apply sorting and filtering and update display (A function to update task display both card and list view when sorting or filtering.)
+        refreshTaskDisplay();
+
+        // ################### Part of the working and newer version of code ###########################
+        // if (statusFilters.length === 0 && priorityFilters.length === 0 && timeFilters.length === 0) {
+        //     // No filters selected, show all tasks
+        //     displayTasks(currentUser, currentUser.taskList);
+        // }
+        // else if (filteredTasks.length === 0) {
+        //     displayTasks(currentUser, [], "No tasks match your filters.");
+        //     // return;
+        // }
+        // else {
+        //     displayTasks(currentUser, filteredTasks);
+        // }
+
+        // ###################################################################
         // if (filteredTasks.length === 0){
         //     displayTasks(currentUser, currentUser.taskList);
         //     return;
         // }
         // displayTasks(currentUser, filteredTasks);
     }
+
+    // // Function to reset filter UI elements
+    // function resetFilterUI() {
+    //     document.querySelectorAll('.filter-panel input[type="checkbox"]').forEach(checkbox => {
+    //         checkbox.checked = false;
+    //     });
+
+    //     // Clear app state filters
+    //     appState.activeFilters = {
+    //         status: [],
+    //         priority: [],
+    //         time: []
+    //     };
+    // }
 
     // Filter Tasks Function (Earlier functional one)
 
@@ -3522,141 +3261,105 @@ document.addEventListener('DOMContentLoaded', () => {
     //     });
     // }
 
-    // *** Updated code for including no priority and no due date options ***
-    function filterTasks(tasks, filters) {
-        return tasks.filter(task => {
-            // Handle status filter
-            const normalizedTaskStatus = (task.status || '').toLowerCase().trim();
-            const normalizedStatusFilters = filters.status.map(status => status.toLowerCase().trim());
-            const statusMatch = normalizedStatusFilters.length === 0 || 
-                                 normalizedStatusFilters.includes(normalizedTaskStatus);
-
-            // Handle priority filter
-            const normalizedTaskPriority = (task.priority || '').toLowerCase().trim();
-            const normalizedPriorityFilters = filters.priority.map(priority => priority.toLowerCase().trim());
-            const priorityMatch = normalizedPriorityFilters.length === 0 || 
-                                   normalizedPriorityFilters.includes(normalizedTaskPriority);
-
-            // Handle time filter
-            const timeMatch = filters.time.length === 0 || 
-                filters.time.some(timeFilter => {
-                    // Special case for no due date
-                    if (timeFilter === '') {
-                        return task.dueDate === null;
-                    }
-                    
-                    // *** If no due date, skip other time filters (below line of code is redundant as it will never match to other time filters and will say no tasks matching this filter, so working fine.) ***
-                    // if (task.dueDate === null) return false;
-
-                    // Convert to Date object if it's a string
-                    let dateObj = task.dueDate;
-                    if (typeof task.dueDate === 'string') {
-                        dateObj = new Date(task.dueDate);
-                    }
-
-                    // If date is invalid, return false
-                    if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) return false;
-
-                    const today = new Date();
-                    const startOfWeek = new Date(today);
-                    startOfWeek.setDate(today.getDate() + 1 - today.getDay());
-                    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-
-                    switch(timeFilter) {
-                        case 'overdue': return dateObj < today;
-                        case 'today': return isToday(dateObj);
-                        case 'this-week': return isThisWeek(dateObj, startOfWeek);
-                        case 'this-month': return isThisMonth(dateObj, startOfMonth);
-                        default: return false;
-                    }
-                });
-
-            return statusMatch && priorityMatch && timeMatch;
-        });
-    }
-
-// Non functional code(commented out from before.)
+    // *** Updated code for including no priority and no due date options and now using app state(not much modifiications just using filteroptions as null or chosen one.) ***
     // function filterTasks(tasks, filters) {
+    // function filterTasks(tasks, filterOptions = null) {
+
+    //     // Use provided filter options or get from app state
+    //     const filters = filterOptions || appState.activeFilters;
+
     //     return tasks.filter(task => {
-    //         const statusMatch = filters.status.length === 0 || filters.status.includes(task.status);
-    //         console.log("statusMatch is ", statusMatch);
-    //         console.log("status which are included: ", filters.status.includes(task.status));
-    //         const priorityMatch = filters.priority.length === 0 || filters.priority.includes(task.priority);
+    //         // Handle status filter
+    //         const normalizedTaskStatus = (task.status || '').toLowerCase().trim();
+    //         const normalizedStatusFilters = filters.status.map(status => status.toLowerCase().trim());
+    //         const statusMatch = normalizedStatusFilters.length === 0 ||
+    //             normalizedStatusFilters.includes(normalizedTaskStatus);
 
-    //         console.log("priorityMatch is ", priorityMatch);
-    //         console.log("Filters which are included: ", filters.priority.includes(task.priority));
+    //         // Handle priority filter
+    //         const normalizedTaskPriority = (task.priority || '').toLowerCase().trim();
+    //         const normalizedPriorityFilters = filters.priority.map(priority => priority.toLowerCase().trim());
+    //         const priorityMatch = normalizedPriorityFilters.length === 0 ||
+    //             normalizedPriorityFilters.includes(normalizedTaskPriority);
 
-    //         const timeMatch = filters.time === 0 || checktimeFilter(task.dueDate, filters.time);
-    //         console.log("timeMatch is ", timeMatch);
+    //         // Handle time filter
+    //         const timeMatch = filters.time.length === 0 ||
+    //             filters.time.some(timeFilter => {
+    //                 // Special case for no due date
+    //                 if (timeFilter === '') {
+    //                     return task.dueDate === null;
+    //                 }
+
+    //                 // *** If no due date, skip other time filters (below line of code is redundant as it will never match to other time filters and will say no tasks matching this filter, so working fine.) ***
+    //                 if (task.dueDate === null) return false;
+
+    //                 // Convert to Date object if it's a string
+    //                 let dateObj = task.dueDate;
+    //                 if (typeof task.dueDate === 'string') {
+    //                     dateObj = new Date(task.dueDate);
+    //                 }
+
+    //                 // If date is invalid, return false
+    //                 if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) return false;
+
+    //                 const today = new Date();
+    //                 const startOfWeek = new Date(today);
+    //                 // Below code is to get start of week as sunday
+    //                 // startOfWeek.setDate(today.getDate() - today.getDay());
+
+    //                 // Below code is to get start of week as Monday
+    //                 startOfWeek.setDate(today.getDate() + 1 - today.getDay());
+    //                 const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    //                 switch (timeFilter) {
+    //                     case 'overdue':
+    //                         return dateObj < today;
+    //                     case 'today':
+    //                         return isToday(dateObj);
+    //                     case 'this-week':
+    //                         return isThisWeek(dateObj, startOfWeek);
+    //                     case 'this-month':
+    //                         return isThisMonth(dateObj, startOfMonth);
+    //                     default:
+    //                         return false;
+    //                 }
+    //             });
+
     //         return statusMatch && priorityMatch && timeMatch;
     //     });
     // }
 
+    // // Helper functions for date comparison
 
-    // *** Now handling this checktimeFilter code in the filterTasks function itself, there we are also handling the no dueDate case. So this function is no more of use. ***
-    // function checktimeFilter(dueDate, timeFilters) {
-        
-    //     // If timeFilters is empty, return true
-    //     if (timeFilters.length === 0) return true;
-    //     console.log("dueDate is ", dueDate);
-    //     // Convert string dueDate to Date object if it's a string
-    //     let dateObj = dueDate;
-    //     if (typeof dueDate === 'string') {
-    //         dateObj = new Date(dueDate);
-    //     }
-
-    //     // If date is invalid, return false
-    //     if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) return false;
-
-    //     // if (isNaN(dateObj.getTime())) return false; // Handle invalid dates
-
-    //     console.log("Converted dueDate is ", dateObj);
+    // function isToday(date) {
+    //     console.log("date is ", date);
     //     const today = new Date();
-    //     console.log("today is ", today);
-    //     const startOfWeek = new Date(today);
-    //     startOfWeek.setDate(today.getDate() + 1 - today.getDay());
-    //     console.log("startOfWeek ", startOfWeek);
-    //     const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    //     console.log("startOfMonth ", startOfMonth);
-
-    //     for (const timeFilter of timeFilters) {
-    //         if (timeFilter === 'overdue' && dateObj < today) return true;
-    //         if (timeFilter === 'today' && isToday(dateObj)) return true;
-    //         if (timeFilter === 'this-week' && isThisWeek(dateObj, startOfWeek)) return true;
-    //         if (timeFilter === 'this-month' && isThisMonth(dateObj, startOfMonth)) return true;
-    //     }
-    //     return false;
-
+    //     return date.toDateString() === today.toDateString();
     // }
 
-    function isToday(date) {
-        console.log("date is ", date);
-        const today = new Date();
-        return date.toDateString() === today.toDateString();
-    }
+    // function isThisWeek(date, startOfWeek) {
+    //     const endOfWeek = new Date(startOfWeek);
+    //     endOfWeek.setDate(startOfWeek.getDate() + 6); // End of week sunday as our week is starting from Monday.
+    //     console.log("endOfWeek is ", endOfWeek);
+    //     return date >= startOfWeek && date <= endOfWeek;
+    // }
 
-    function isThisWeek(date, startOfWeek) {
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        console.log("endOfWeek is ", endOfWeek);
-        return date >= startOfWeek && date <= endOfWeek;
-    }
+    // function isThisMonth(date, startOfMonth) {
+    //     const endOfMonth = new Date(startOfMonth.getFullYear(), startOfMonth.getMonth() + 1, 0);
+    //     // console.log("endOfMonth is ", endOfMonth);
+    //     // return date >= startOfMonth && date <= endOfMonth;
 
-    function isThisMonth(date, startOfMonth) {
-        const endOfMonth = new Date(startOfMonth.getFullYear(), startOfMonth.getMonth() + 1, 0);
-        // console.log("endOfMonth is ", endOfMonth);
-        // return date >= startOfMonth && date <= endOfMonth;
+    //     console.log("Checking date: ", date, "startOfMonth: ", startOfMonth, "endOfMonth: ", endOfMonth);
 
-        console.log("Checking date: ", date, "startOfMonth: ", startOfMonth, "endOfMonth: ", endOfMonth);
-
-        const normalizedDate = new Date(date.setHours(0, 0, 0, 0));
-        const normalizedStart = new Date(startOfMonth.setHours(0, 0, 0, 0));
-        const normalizedEnd = new Date(endOfMonth.setHours(0, 0, 0, 0));
-        return normalizedDate >= normalizedStart && normalizedDate <= normalizedEnd;
-    }
+    //     const normalizedDate = new Date(date.setHours(0, 0, 0, 0));
+    //     const normalizedStart = new Date(startOfMonth.setHours(0, 0, 0, 0));
+    //     const normalizedEnd = new Date(endOfMonth.setHours(0, 0, 0, 0));
+    //     return normalizedDate >= normalizedStart && normalizedDate <= normalizedEnd;
+    // }
 
     // filterBtn.addEventListener('click', openFilterPanel);
     // closeFilterBtn.addEventListener('click', closeFilterPanel);
+    // Initializing the app in DOM attached event listener because it will make sure that every element of DOM is loaded before we will do anything.
+    initializeApp();
 });
 
 // *** End of Filter related code/ functions ***
@@ -3664,45 +3367,120 @@ document.addEventListener('DOMContentLoaded', () => {
 // *** Sorting functionality ***
 
 // I can change the function name.
-function sorting() {
+// Updated sorting function
+function sorting(forceSortBy = null) {
     console.log("I am inside sorting function, rockin...");
-    const sortContainer = document.querySelector('.sort-container select');
-    const sortBy = sortContainer.value;
+
+    // Use the provided sort option or get from app state
+    const sortBy = forceSortBy || appState.currentSort;
+    console.log('sortBy is ', sortBy);
+
+    // Update the sort dropdown to reflect the current sort
+    const sortDropdown = document.querySelector('.sort-container select');
+    if (sortDropdown && sortDropdown.value !== sortBy) {
+        sortDropdown.value = sortBy;
+    }
+
+    // Store the sort preference in app state
+    appState.currentSort = sortBy;
 
     // Sort function code
     let sortFunc;
     switch (sortBy) {
         case "newestFirst":
             sortFunc = (taskA, taskB) => {
-                const dateA = new Date(taskA.createdAt);
-                const dateB = new Date(taskB.createdAt);
+                console.log("taskA createdAt date is ", taskA.created_at);
+                console.log("taskB createdAt date is ", taskB.created_at);
+                // Defensive check for createdAt
+                const dateA = taskA.created_at ? new Date(taskA.created_at) : new Date(0);
+                const dateB = taskB.created_at ? new Date(taskB.created_at) : new Date(0);
+                console.log("dateA inside newest first is ", dateA);
+                console.log("dateB inside newest first is ", dateB);
                 return dateB - dateA;
             };
             break;
 
         case "oldestFirst":
             sortFunc = (taskA, taskB) => {
-                const dateA = new Date(taskA.createdAt);
-                const dateB = new Date(taskB.createdAt);
+                // Defensive check for created_at
+                const dateA = taskA.created_at ? new Date(taskA.created_at) : new Date(0);
+                const dateB = taskB.created_at ? new Date(taskB.created_at) : new Date(0);
+                console.log("dateA inside oldest first is ", dateA);
+                console.log("dateB inside oldest first is ", dateB);
                 return dateA - dateB;
             };
             break;
+
+            // ##########################################################################################
+        // case "dueDateAsc":
+        //     sortFunc = (taskA, taskB) => {
+        //         if (!taskA.dueDate && !taskB.dueDate) return 0;
+        //         if (!taskA.dueDate) return 1; // Tasks with no due date last
+        //         if (!taskB.dueDate) return -1;
+        //         console.log("dueDate is of ",taskA.task, "in asc order ", taskA.dueDate);
+        //         console.log("dueDate is of ",taskB.task, "in asc order ", taskB.dueDate);
+          
+        //         return new Date(taskB.dueDate) - new Date(taskA.dueDate);
+        //         // return new Date(taskA.dueDate) - new Date(taskB.dueDate);
+        //     };
+        //     break;
+
+        // case "dueDateDesc":
+        //     sortFunc = (taskA, taskB) => {
+        //         if (!taskA.dueDate && !taskB.dueDate) return 0;
+        //         if (!taskA.dueDate) return -1; // Tasks with no due date first
+        //         if (!taskB.dueDate) return 1;
+        //         console.log("dueDate is of ",taskA.task, "in desc order ", taskA.dueDate);
+        //         console.log("dueDate is of ",taskB.task, "in desc order ", taskB.dueDate);
+        //         return new Date(taskA.dueDate) - new Date(taskB.dueDate);
+        //         // return new Date(taskB.dueDate) - new Date(taskA.dueDate);
+        //     };
+        //     break;
+
+        // ###################################################################################
 
         case "dueDateAsc":
             sortFunc = (taskA, taskB) => {
-                const dateA = new Date(taskA.dueDate);
-                const dateB = new Date(taskB.dueDate);
-                return dateA - dateB;
+                if (!taskA.dueDate && !taskB.dueDate) return 0;
+                if (!taskA.dueDate) return 1; // No due date last
+                if (!taskB.dueDate) return -1;
+                return new Date(taskA.dueDate) - new Date(taskB.dueDate);
             };
             break;
-
+        
         case "dueDateDesc":
             sortFunc = (taskA, taskB) => {
-                const dateA = new Date(taskA.dueDate);
-                const dateB = new Date(taskB.dueDate);
-                return dateB - dateA;
+                if (!taskA.dueDate && !taskB.dueDate) return 0;
+                if (!taskA.dueDate) return 1; // No due date first
+                if (!taskB.dueDate) return -1;
+                return new Date(taskB.dueDate) - new Date(taskA.dueDate);
             };
             break;
+            //############################################################################
+
+        // case "dueDateAsc":
+        //     sortFunc = (taskA, taskB) => {
+        //         if (!taskA.dueDate && !taskB.dueDate) return 0;
+        //         if (!taskA.dueDate) return 1;
+        //         if (!taskB.dueDate) return -1;
+        //         const dateA = new Date(taskA.dueDate);
+        //         const dateB = new Date(taskB.dueDate);
+        //         console.log(`Comparing (Asc): ${taskA.task} (${dateA}) vs ${taskB.task} (${dateB}) -> ${dateA - dateB}`);
+        //         return dateA - dateB;
+        //     };
+        //     break;
+        
+        // case "dueDateDesc":
+        //     sortFunc = (taskA, taskB) => {
+        //         if (!taskA.dueDate && !taskB.dueDate) return 0;
+        //         if (!taskA.dueDate) return -1;
+        //         if (!taskB.dueDate) return 1;
+        //         const dateA = new Date(taskA.dueDate);
+        //         const dateB = new Date(taskB.dueDate);
+        //         console.log(`Comparing (Desc): ${taskA.task} (${dateA}) vs ${taskB.task} (${dateB}) -> ${dateB - dateA}`);
+        //         return dateB - dateA;
+        //     };
+        //     break;
 
         case "priority":
             sortFunc = (taskA, taskB) => {
@@ -3712,10 +3490,9 @@ function sorting() {
                     "low": 2,
                     "": 3
                 };
-                const orderA = priorityOrder[taskA.priority];
-                const orderB = priorityOrder[taskB.priority];
+                const orderA = priorityOrder[taskA.priority || ""];
+                const orderB = priorityOrder[taskB.priority || ""];
                 return orderA - orderB;
-
             };
             break;
 
@@ -3727,47 +3504,40 @@ function sorting() {
                     "not started": 2
                 };
 
-                const orderA = statusOrder[taskA.status];
-                const orderB = statusOrder[taskB.status];
+                const orderA = statusOrder[taskA.status || "not started"];
+                const orderB = statusOrder[taskB.status || "not started"];
                 return orderA - orderB;
             };
             break;
 
         default:
+            // Default to newest first for unknown values
             sortFunc = (taskA, taskB) => {
-                const dateA = new Date(taskA.createdAt);
-                const dateB = new Date(taskB.createdAt);
+                const dateA = taskA.created_at ? new Date(taskA.created_at) : new Date(0);
+                const dateB = taskB.created_at ? new Date(taskB.created_at) : new Date(0);
                 return dateB - dateA;
             };
-        // sortFunc = (a, b) => 0;
-
     }
 
-    console.log("Current user is ", currentUser);
-    // Creating a copy of the taskList(More specifically shallow copy.).
-    const temp_taskList = [...currentUser["taskList"]];
-    // or we can directly use.
-    // const temp_taskList = currentuser["taskList"];
-    console.log("Task list inside sorting function without apply sorting is ", currentUser["taskList"]);
-    // Updating the temp_taskList.
-    temp_taskList.sort(sortFunc);
-    // *** no need to apply reversing here as we will display the task list without reversing using reverse() whenever we will display task list. ***
+    // No need to run displayTasks here - this function just returns the sorted list
+    // The calling function will handle displaying tasks
+    if (!currentUser || !currentUser.taskList) {
+        console.error("No current user or task list available");
+        return [];
+    }
 
-    // temp_taskList.reverse();
-    // let user_task_ls = temp_taskList;
-    console.log("Default task list is ", currentUser["taskList"]);
+    // Apply all active filters first
+    let filteredList = filterTasks(currentUser.taskList, appState.activeFilters);
 
-    console.log("Sorted tasklist after applying sorting ", temp_taskList);
-    console.log("I am inside sorting, about to call displayTasks function.");
-    displayTasks(currentUser, temp_taskList);
-    console.log("Called display task function.");
+    // Apply search if there's a search term
+    filteredList = applySearch(filteredList, appState.searchTerm);
+
+    // Then sort the filtered list
+    // return filteredList;
+    return [...filteredList].sort(sortFunc);
 }
 
-
-// Event listener for sorting
-const sortDropdown = document.querySelector('.sort-container select');
-sortDropdown.addEventListener('change', sorting);
-// user_task_ls = currentUser["taskList"];
+// End of sorting function 
 
 // Form submission handler
 
@@ -3847,6 +3617,7 @@ async function handleTaskSubmit(event) {
             if (currentUser.updateTask(editTaskId, formData)) {
 
                 localStorage.setItem(userListKey, JSON.stringify(Array.from(userMap.values().map(user => user.toData()))));
+                refreshTaskDisplay();
                 showSuccess('Task updated successfully');
                 modal.style.display = "none";
                 const notification = await dbStorageInstance.getNotificationByTaskId(editTaskId);
@@ -3877,8 +3648,10 @@ async function handleTaskSubmit(event) {
                 // alert("Task updated successfully!");
                 // showSuccess('Task updated successfully');
                 console.log("Calling the sorting function when updating a task.");
-                sorting();
-                displayTasks(currentUser, user_task_ls);
+                // sorting(); -> No more needed as we are integrating everything properly
+
+                // displayTasks(currentUser, user_task_ls);
+                // refreshTaskDisplay();
 
 
                 // localStorage.setItem(userListKey, JSON.stringify(Array.from(userMap.values().map(user => user.toData()))));
@@ -3919,14 +3692,18 @@ async function handleTaskSubmit(event) {
             }
             currentUser.addTasks(formData.task, formData.description, formData.status, formData.priority, formData.dueDate);
             localStorage.setItem(userListKey, JSON.stringify(Array.from(userMap.values()).map(user => user.toData())));
+            refreshTaskDisplay();
             showSuccess('Task created successfully');
+
             // alert("Task created successfully!");
         }
         modal.style.display = "none";
         clearModalForm();
         console.log("Calling the sorting function when adding a new task.");
-        sorting();
-        displayTasks(currentUser, user_task_ls);
+        // sorting();
+        // displayTasks(currentUser, user_task_ls);
+        refreshTaskDisplay();
+        // ###########################################################
         // displayTasks(currentUser, currentUser.taskList);
         // addCheckboxListeners();
     }
@@ -4031,8 +3808,9 @@ function initializeDeletion() {
                     }
                 }
 
-                let user_task_ls = currentUser["taskList"];
-                displayTasks(currentUser, user_task_ls);
+                // let user_task_ls = currentUser["taskList"];
+                refreshTaskDisplay();
+                // displayTasks(currentUser, user_task_ls);
 
 
                 // Clear selection and hide modal directly
@@ -4182,14 +3960,60 @@ function setupEventListeners() {
             document.getElementById("user-data").reset();
         }
     });
-
+    
     document.getElementById("back-to-home").addEventListener("click", handleBackToHome);
 }
 
+// Attaching event listener to DOM for sorting related code.
+// document.addEventListener('DOMContentLoaded', () => {
+//         // Add event listeners to the sort dropdown
+//         const sortDropdown = document.querySelector('.sort-container select');
+//         if (sortDropdown) {
+//             // Remove any existing event listeners
+//             sortDropdown.removeEventListener('change', onSortChange);
+            
+//             // Add our new event listener
+//             sortDropdown.addEventListener('change', onSortChange);
+//         }
+// });
+
+function setupTaskOperationHandlers() {
+   
+    // Add event listeners to the sort dropdown
+    const sortDropdown = document.querySelector('.sort-container select');
+    if (sortDropdown) {
+        // Remove any existing event listeners
+        sortDropdown.removeEventListener('change', onSortChange);
+        
+        // Add our new event listener
+        sortDropdown.addEventListener('change', onSortChange);
+    }
+}
+
+// Handler for sort dropdown changes
+function onSortChange(e) {
+    // Update app state with the new sort preference
+    appState.currentSort = e.target.value;
+    
+    // Refresh task display
+    refreshTaskDisplay();
+}
+
+// // Function to call after submitting the task form (add/edit) -> NOT NEEDED DIRECTLY CALLING IT WHEREVER NEEDED
+// function onTaskFormSubmit() {
+//     // This should be called after successfully saving a task
+//     window.onTaskModified();
+// }
+
 // Initialize the application
 function initializeApp() {
-    populateUserList();
+    setupSearch();
     initViewToggle();
+
+    setupTaskOperationHandlers()    
+    // Initialize user list
+    populateUserList();
+
     setupEventListeners();
     setupModalHandlers();
     setupUserModal();
@@ -4200,4 +4024,4 @@ function initializeApp() {
     pageManager.showPage('home');
 }
 
-initializeApp();
+// initializeApp();
