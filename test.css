@@ -3088,13 +3088,6 @@
     bottom: 32px;
 }
 
-/* Visible state */
-.jump-button.visible {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
 /* Hover effects */
 .jump-button:hover {
     background-color: #1d4ed8;
