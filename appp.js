@@ -334,16 +334,8 @@ function setupFloatingButtonsScrollHandler() {
         const scrollHeight = taskDisplay.scrollHeight;
         const clientHeight = taskDisplay.clientHeight;
 
-        console.log("Scroll info:", {
-            scrollTop,
-            scrollHeight,
-            clientHeight,
-            shouldShowTop: scrollTop > 500,
-            shouldShowBottom: scrollHeight - scrollTop - clientHeight > 100
-        });
-
-        // Show/hide "Jump to Top" button
-        if (scrollTop > 500) {
+        // Changed threshold from 500 to 100 for better visibility
+        if (scrollTop > 100) {
             jumpToTopBtn.classList.add('visible');
             console.log("Top button should be visible");
         } else {
@@ -351,9 +343,9 @@ function setupFloatingButtonsScrollHandler() {
             console.log("Top button should be hidden");
         }
 
-        // Show/hide "Jump to Bottom" button
+        // Changed threshold to show bottom button when there's any scrollable content
         const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-        if (distanceFromBottom > 100) {
+        if (distanceFromBottom > 50 && scrollHeight > clientHeight) {
             jumpToBottomBtn.classList.add('visible');
             console.log("Bottom button should be visible");
         } else {
@@ -364,11 +356,9 @@ function setupFloatingButtonsScrollHandler() {
 
     // Add scroll event listener
     taskDisplay.addEventListener('scroll', toggleButtonsVisibility);
-    console.log("Added scroll listener");
 
-    // Add click handlers
+    // Add click handlers with smooth scroll
     jumpToTopBtn.addEventListener('click', () => {
-        console.log("Scrolling to top");
         taskDisplay.scrollTo({
             top: 0,
             behavior: 'smooth'
@@ -376,16 +366,16 @@ function setupFloatingButtonsScrollHandler() {
     });
 
     jumpToBottomBtn.addEventListener('click', () => {
-        console.log("Scrolling to bottom");
         taskDisplay.scrollTo({
             top: taskDisplay.scrollHeight,
             behavior: 'smooth'
         });
     });
 
-    // Initial check for button visibility
-    toggleButtonsVisibility();
-    console.log("Initial visibility check complete");
+    // Force an initial visibility check
+    setTimeout(() => {
+        toggleButtonsVisibility();
+    }, 100);
 }
 
 function initializeApp() {
