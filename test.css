@@ -64,22 +64,6 @@
      width: 100%;
  }
 
- /* Main content area */
- /* .content-area {
-   flex: 1;
-   padding: 20px;
-} */
-
- /* ################################### */
- /* Updated code for task selection */
- /* .content-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 1.5rem;
-    transition: width 0.3s ease;
-} */
-
  .content-area {
      flex: 1;
      height: 100vh;
@@ -98,42 +82,6 @@
 
  /* Search related CSS */
 
- /* Search bar styling */
- /* .search-container {
-    position: relative;
-    width: 100%;
-} */
-
- /* .search-container {
-    position: relative;
-    margin-bottom: 16px;
-    width: 100%;
-} */
-
- /* .search-input {
-    width: 100%;
-    padding: 10px 10px 10px 36px;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    background-color: #f8fafc;
-    font-size: 0.9rem;
-} */
-
- /* .search-input:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
-} */
-
- /* .search-icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #94a3b8;
-} */
-
- /* new updated search container css code */
  /* Search Container Styles */
  .search-container {
      position: relative;
@@ -160,15 +108,6 @@
  }
 
  .search-icon {
-     /* position: absolute;
-   left: 10px;
-   top: 50%;
-   transform: translateY(-50%);
-   color: #94a3b8;
-   z-index: 10;
-   pointer-events: none;
-   transition: opacity 0.2s; */
-
      position: absolute;
      left: 10px;
      top: 50%;
@@ -208,96 +147,12 @@
 
  /* end of new updated search container css code */
 
- /* .search-container input {
-   width: 100%;
-   padding: 8px 12px;
-   border: 1px solid #ddd;
-   border-radius: 4px;
-   font-size: 14px;
-} */
-
- /* .search-container input {
-    width: 100%;
-    padding: 10px 16px;
-    padding-left: 40px;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    background-color: #f8fafc;
-    font-size: 14px;
-    color: #334155;
-    transition: all 0.2s ease;
-}
-
-.search-container::before {
-    content: '🔍';
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    color: #64748b;
-    pointer-events: none;
-}
-
-.search-container input:focus {
-    outline: none;
-    border-color: #2563eb;
-    background-color: white;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-} */
-
- /* .search-container input[type="text"] {
-   width: 100%;
-   padding: 0.75rem 1rem 0.75rem 40px;
-   background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%232563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="11" cy="11" r="8"%3E%3C/circle%3E%3Cline x1="21" y1="21" x2="16.65" y2="16.65"%3E%3C/line%3E%3C/svg%3E') no-repeat 12px center;
-   background-size: 20px 20px;
-   background-color: #fff;
-   border: 2px solid #e2e8f0;
-   border-radius: 8px;
-   font-size: 1rem;
-   transition: all 0.2s;
-} */
- /* 
-.search-container input[type="text"]:focus {
-   border-color: #3b82f6;
-   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-   outline: none;
-} */
-
- /* .search-container input[type="text"] {
-   background: url('https://fonts.gstatic.com/s/i/materialicons/search/v15/24px.svg') no-repeat 10px center;
-} */
-
  /* Sort dropdown styling */
 
  .sort-container {
      position: relative;
      width: 100%;
  }
-
- /* .sort-container select {
-   width: 100%;
-   padding: 8px;
-   border: 1px solid #ddd;
-   border-radius: 4px;
-   font-size: 14px;
-   background-color: white;
-} */
-
- /* .sort-container select {
-   width: 100%;
-   padding: 10px 12px;
-   border: 1px solid #e2e8f0;
-   border-radius: 6px;
-   font-size: 14px;
-   background-color: white;
-   appearance: none;
-   cursor: pointer;
-   color: #475569;
-   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-   transition: all 0.2s ease;
-} */
-
 
  .sort-container select {
      appearance: none;
@@ -354,7 +209,6 @@
  }
 
  /* Filter related css */
-
 
  /* both filter btn css */
 
@@ -503,44 +357,12 @@
      /* display: block; */
  }
 
- /* .checkbox-custom {
-   width: 18px;
-   height: 18px;
-   border: 2px solid #ddd;
-   border-radius:4px;
-   position: relative;
-   transition: all 0.2s ease;
-} */
-
- /* .checkbox-label input[type="checkbox"]:checked + .checkbox-custom { */
  .checkbox-label input[type="checkbox"]:checked {
-     /* border-color: #007bff;
+   
    background-color: #007bff; */
      accent-color: #007bff;
 
  }
-
- /* .checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
-   content: '';
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   transform: translate(-50%, -50%);
-   width: 10px;
-   height: 10px;
-   background: #007bff;
-   border-radius: 50%;
-} */
-
- /* .checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
-   content: '✓';
-   color: #fff;
-   font-size: 12px;
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   transform: translate(-50%, -50%);
-} */
 
  /* Filter Actions */
  .filter-actions {
@@ -1194,14 +1016,6 @@
  }
 
  .task-checkbox {
-     /* position: absolute;
-   opacity: 0;
-   cursor: pointer;
-   width: 100%;
-   height: 100%;
-   z-index: 12; */
-     /* Make sure it's clickable */
-
      position: absolute;
      width: 100%;
      height: 100%;
@@ -1570,23 +1384,6 @@
  }
 
  /* Status & Priority Badge Improvements */
- /* .status-badge,
-.priority-flag {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1;
-    margin-right: 8px;
-} */
-
- /* .status-badge {
-   display: flex;
-   align-items: center;
-   font-size: 18px;
-} */
 
  .status-badge[data-status="completed"] {
      color: #166534;
@@ -1611,40 +1408,16 @@
      transition: none;
  }
 
- /* .priority-indicator {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    margin-left: 8px;
-} */
-
- /* .priority-indicator[data-priority="high"] {
-   background: #fee2e2;
-   color: #991b1b;
-} */
-
  .priority-indicator.high {
      background-color: rgba(239, 68, 68, 0.15);
      color: #ef4444;
  }
-
- /* .priority-indicator[data-priority="medium"] {
-   background: #fef3c7;
-   color: #92400e;
-} */
 
  .priority-indicator.medium {
      background-color: rgba(245, 158, 11, 0.15);
      color: #f59e0b;
  }
 
- /* .priority-indicator[data-priority="low"] {
-   background: #dbeafe;
-   color: #1e40af;
-} */
  .priority-indicator.low {
      background-color: rgba(59, 130, 246, 0.15);
      color: #3b82f6;
@@ -2076,16 +1849,6 @@
 
  /* LIST ITEM */
  .task-list-item {
-     /* display: flex;
-   align-items: center;
-   padding: 10px 12px;
-   border-radius: 8px;
-   background-color: white;
-   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-   transition: box-shadow 0.2s, transform 0.2s;
-   margin-bottom: 4px;
-   position: relative;    */
-
      position: relative;
      display: flex;
      align-items: center;
@@ -2103,21 +1866,6 @@
 
  /* Task selection styling */
  /* Commented out this selection code because it is doing nothing, maybe this selection code is meant for showing the selection bar which i am already handling in my deletionManager. */
-
- /* .task-list-item .task-selection {
-   visibility: hidden;
-   opacity: 0;
-   transition: opacity 0.2s;
-   margin-right: 10px;
-   display: flex;
-   align-items: center;
-   width: 60px;
-}
-
-.task-list-item:hover .task-selection {
-   visibility: visible;
-   opacity: 1;
-} */
 
  /* Task Selection Container */
  .task-list-item .task-selection {
@@ -2667,9 +2415,6 @@
      /* margin-top: 120px; */
      top: 110px;
      right: 75px;
-     /* Position below the header */
-     /* margin-right: 60px; */
-     /* Margin from the right edge */
      animation: slideIn 0.2s ease-out;
  }
 
@@ -3324,7 +3069,15 @@
     pointer-events: none;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
     z-index: 1050; /* Higher than filter panel */
+    padding: 0 !important;
 }
+
+.jump-button.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
 
 /* Individual button positions */
 .jump-to-top {
@@ -3352,6 +3105,7 @@
 /* Material icon sizing */
 .jump-button .material-icons {
     font-size: 20px;
+    line-height: 1;
 }
 
 /* Filter panel adjustments */
@@ -3385,29 +3139,7 @@
     }     
  }
 
- /* @media (max-width: 768px) {
-    .jump-button {
-        right: 16px;
-        height: 36px;
-        width: 36px;
-    }
-
-    .jump-to-top {
-        bottom: 80px;
-    }
-
-    .jump-to-bottom {
-        bottom: 28px;
-    }
-}  */
-
 /* Adjust for filter panel open state */
 .app-container.filter-active .jump-button {
     right: 344px; /* 320px (filter panel width) + 24px (original right spacing) */
 }
-
-/* @media (max-width: 768px) {
-    .app-container.filter-active .jump-button {
-        right: 336px; 
-    }
-} */
