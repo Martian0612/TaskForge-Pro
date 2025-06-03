@@ -18,13 +18,13 @@ const appState = {
     // Current user
     currentUser: null, // Reference to current user object
 
-    floatingButtons: {
-        isEnabled: true,
-        visible: {
-            top: false,
-            bottom: false
-        }
-    },
+    // floatingButtons: {
+    //     isEnabled: true,
+    //     visible: {
+    //         top: false,
+    //         bottom: false
+    //     }
+    // },
 
     // Reset all preferences when switching users
     resetForUserSwitch() {
@@ -318,6 +318,7 @@ function setupFloatingButtonsScrollHandler() {
     const jumpToTopBtn = document.getElementById('jump-to-top-btn');
     const jumpToBottomBtn = document.getElementById('jump-to-bottom-btn');
 
+    // Keep your original error checking
     if (!taskDisplay || !jumpToTopBtn || !jumpToBottomBtn) {
         console.log("Missing elements:", {
             taskDisplay: !!taskDisplay,
@@ -333,32 +334,50 @@ function setupFloatingButtonsScrollHandler() {
         const scrollTop = taskDisplay.scrollTop;
         const scrollHeight = taskDisplay.scrollHeight;
         const clientHeight = taskDisplay.clientHeight;
+        
+        // Only proceed if content is actually scrollable
+        if (scrollHeight > clientHeight) {
+            const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
-        // Changed threshold from 500 to 100 for better visibility
-        if (scrollTop > 100) {
-            jumpToTopBtn.classList.add('visible');
-            console.log("Top button should be visible");
+            console.log("Scroll info:", {
+                scrollTop,
+                scrollHeight,
+                clientHeight,
+                scrollPercentage,
+                isScrollable: true
+            });
+
+            // Show top button after scrolling down 20% of the content
+            if (scrollPercentage > 20) {
+                jumpToTopBtn.classList.add('visible');
+                console.log("Top button should be visible");
+            } else {
+                jumpToTopBtn.classList.remove('visible');
+                console.log("Top button should be hidden");
+            }
+
+            // Show bottom button when not near the bottom (less than 80% scrolled)
+            if (scrollPercentage < 80) {
+                jumpToBottomBtn.classList.add('visible');
+                console.log("Bottom button should be visible");
+            } else {
+                jumpToBottomBtn.classList.remove('visible');
+                console.log("Bottom button should be hidden");
+            }
         } else {
+            // If content isn't scrollable, hide both buttons
             jumpToTopBtn.classList.remove('visible');
-            console.log("Top button should be hidden");
-        }
-
-        // Changed threshold to show bottom button when there's any scrollable content
-        const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-        if (distanceFromBottom > 50 && scrollHeight > clientHeight) {
-            jumpToBottomBtn.classList.add('visible');
-            console.log("Bottom button should be visible");
-        } else {
             jumpToBottomBtn.classList.remove('visible');
-            console.log("Bottom button should be hidden");
+            console.log("Content not scrollable, hiding both buttons");
         }
     }, 100);
 
-    // Add scroll event listener
+    // Keep your original event listeners
     taskDisplay.addEventListener('scroll', toggleButtonsVisibility);
 
-    // Add click handlers with smooth scroll
+    // Keep your original click handlers
     jumpToTopBtn.addEventListener('click', () => {
+        console.log("Scrolling to top");
         taskDisplay.scrollTo({
             top: 0,
             behavior: 'smooth'
@@ -366,18 +385,19 @@ function setupFloatingButtonsScrollHandler() {
     });
 
     jumpToBottomBtn.addEventListener('click', () => {
+        console.log("Scrolling to bottom");
         taskDisplay.scrollTo({
             top: taskDisplay.scrollHeight,
             behavior: 'smooth'
         });
     });
 
-    // Force an initial visibility check
+    // Keep your original initial visibility check with timeout
     setTimeout(() => {
         toggleButtonsVisibility();
+        console.log("Initial visibility check complete");
     }, 100);
 }
-
 function initializeApp() {
     setupSearch();
     initViewToggle();
