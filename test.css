@@ -690,21 +690,6 @@
      display: none;
  }
 
- @media (max-width: 640px) {
-     .title {
-         font-size: 2rem;
-     }
-
-     .auth-container {
-         padding: 1.5rem;
-     }
-
-     .user-modal-content {
-         width: 95%;
-         padding: 1.5rem;
-     }
- }
-
  /* Modal base styling */
  #task-modal {
      display: none;
@@ -1845,6 +1830,8 @@
      display: flex;
      flex-direction: column;
      gap: 8px;
+     /* Added for jump buttons */
+     padding-right: 60px; /* Add space for buttons */
  }
 
  /* LIST ITEM */
@@ -2087,33 +2074,6 @@
  .list-item-date {
      font-size: 11px;
      color: #666;
- }
-
- /* Responsive Adjustments */
- @media (max-width: 768px) {
-     .task-list-item {
-         padding: 7px 9px;
-     }
-
-     .task-list-item .task-checkbox-wrapper {
-         margin-right: 6px;
-     }
-
-     .task-list-item .delete-icon {
-         right: 0.4rem;
-         top: 0.4rem;
-     }
-
-     .list-item-indicators {
-         flex-direction: column;
-         align-items: flex-end;
-         padding-right: 1rem;
-     }
-
-     .list-item-details {
-         flex-direction: column;
-         align-items: flex-start;
-     }
  }
 
  /* End of task list css for list view */
@@ -3052,7 +3012,7 @@
  /* Floating Button Core Styles */
 .jump-button {
     position: fixed;
-    right: 24px;
+    right:calc(24px + 2rem); /* Base spacing from right + extra space from scrollbar */
     height: 40px;
     width: 40px;
     border-radius: 50%;
@@ -3063,20 +3023,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    /* transition: opacity 0.3s ease, transform 0.3s ease; */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0; /* Start hidden */
     visibility: hidden; /* Ensure completely hidden initially */
     pointer-events: none;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
     z-index: 1050; /* Higher than filter panel */
-    padding: 0 !important;
+    /* padding: 0 !important; */
+    /* transform: translateZ(0); */
+  
 }
 
 .jump-button.visible {
-    opacity: 1;
+    animation: fadeIn 0.3s ease;
+    opacity: 0.9;
     visibility: visible;
     pointer-events: auto;
 }
+
+/* Hover effect */
+/* .jump-button.visible:hover {
+    opacity: 1;
+    transform: scale(1.1);
+} */
+
 
 
 /* Individual button positions */
@@ -3088,12 +3059,31 @@
     bottom: 32px;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+}
+
+/* Hover States */
+.jump-button.visible:hover {
+    opacity: 1;
+    transform: scale(1.05); /* Reduced from 1.1 for subtler effect */
+    background-color: #1d4ed8;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
 /* Hover effects */
-.jump-button:hover {
+/* .jump-button:hover {
     background-color: #1d4ed8;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-}
+} */
 
 /* Material icon sizing */
 .jump-button .material-icons {
@@ -3108,13 +3098,27 @@
 
  /* Responsive adjustments */
  @media (max-width: 768px) {
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .auth-container {
+        padding: 1.5rem;
+    }
+
+    .user-modal-content {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
      .task-container {
          grid-template-columns: 1fr;
          /* Single column on mobile */
      }
 
      .jump-button {
-        right: 16px;
+        right: calc(16px + 0.75rem); /* Smaller base spacing + extra space on mobile */
         height: 36px;
         width: 36px;
     }
@@ -3130,9 +3134,37 @@
     .app-container.filter-active .jump-button {
         right: 336px; /* 320px + 16px */
     }     
+
+    .task-list-item {
+        padding: 7px 9px;
+    }
+
+    .task-list-item .task-checkbox-wrapper {
+        margin-right: 6px;
+    }
+
+    .task-list-item .delete-icon {
+        right: 0.4rem;
+        top: 0.4rem;
+    }
+
+    .list-item-indicators {
+        flex-direction: column;
+        align-items: flex-end;
+        padding-right: 1rem;
+    }
+
+    .list-item-details {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .task-list-container {
+       padding-right: 40px;
+    }
  }
 
 /* Adjust for filter panel open state */
 .app-container.filter-active .jump-button {
-    right: 344px; /* 320px (filter panel width) + 24px (original right spacing) */
+    right: calc(344px + 2rem); /* 320px (filter width) + 24px (base spacing) + extra space */
 }
