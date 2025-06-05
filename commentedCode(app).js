@@ -38,6 +38,8 @@ const appState = {
         this.currentSort = "newestFirst"; // Reset to default sort
         this.activeFilters = { status: [], priority: [], time: [] }; // Clear all filters
         this.searchTerm = ""; // Clear search term
+
+        this.floatingButtons.visible = { top: false, bottom: false };
     },
 
     // Reset search only (when switching views)
@@ -356,6 +358,9 @@ async function displayTasks(user, current_task_ls, message = "", viewMode = "car
         taskDisplay.innerHTML = '<div class="task-container"></div>';
         const cardContainer = taskDisplay.querySelector('.task-container');
 
+        // Setup floating buttons for card view
+        setupFloatingButtonsScrollHandler("card");
+        
         for (const task of user_task_ls) {
             const taskCard = document.createElement("div");
             taskCard.className = "task-card";
@@ -414,6 +419,10 @@ async function displayTasks(user, current_task_ls, message = "", viewMode = "car
         taskDisplay.innerHTML = '<div class="task-list-container"></div>';
         const listContainer = taskDisplay.querySelector('.task-list-container');
 
+        // **** Using same jump buttons for both list and card view by creating the buttons at one place ***
+        // Setup floating buttons for list view
+        setupFloatingButtonsScrollHandler("list");  
+        
         // Render each task as a list item
         for (const task of user_task_ls) {
             const taskListItem = document.createElement("div");
@@ -451,6 +460,14 @@ async function displayTasks(user, current_task_ls, message = "", viewMode = "car
             `;
 
             listContainer.appendChild(taskListItem);
+            // Debug logging
+            console.log("Buttons created:", {
+                topButton: document.getElementById('jump-to-top-btn'),
+                bottomButton: document.getElementById('jump-to-bottom-btn'),
+                container: taskDisplay,
+                scrollHeight: taskDisplay.scrollHeight,
+                clientHeight: taskDisplay.clientHeight
+            });            
         }
     }
 
@@ -576,6 +593,117 @@ async function displayTasks(user, current_task_ls, message = "", viewMode = "car
     taskDisplay.removeEventListener("click", handleTaskDisplayClick);
     taskDisplay.addEventListener("click", handleTaskDisplayClick);
 
+}
+function createFloatingButtons(container) {
+    // Remove any existing buttons first
+    const existingButtons = container.querySelectorAll('.jump-button');
+    existingButtons.forEach(button => button.remove());
+
+    // Create buttons HTML
+    const buttonsHTML = `
+        <button id="jump-to-top-btn" class="jump-button jump-to-top" aria-label="Jump to top of task list">
+            <span class="material-icons">arrow_upward</span>
+        </button>
+        <button id="jump-to-bottom-btn" class="jump-button jump-to-bottom" aria-label="Jump to bottom of task list">
+            <span class="material-icons">arrow_downward</span>
+        </button>
+    `;
+    container.insertAdjacentHTML('beforeend', buttonsHTML);
+
+    // Get button references
+    const jumpToTopBtn = document.getElementById('jump-to-top-btn');
+    const jumpToBottomBtn = document.getElementById('jump-to-bottom-btn');
+
+    return { jumpToTopBtn, jumpToBottomBtn };
+}
+
+function setupFloatingButtonsScrollHandler(viewMode = "list") {
+    const taskDisplay = document.querySelector("#task-display");
+    const { jumpToTopBtn, jumpToBottomBtn } = createFloatingButtons(taskDisplay);
+
+    if (!taskDisplay || !jumpToTopBtn || (viewMode === "list" && !jumpToBottomBtn)) {
+        console.log("Missing elements:", {
+            taskDisplay: !!taskDisplay,
+            jumpToTopBtn: !!jumpToTopBtn,
+            jumpToBottomBtn: viewMode === "list" ? !!jumpToBottomBtn : "not required"
+        });
+        return;
+    }
+
+    console.log("Setting up floating buttons for", viewMode, "view");
+
+    // Hide bottom button in card view
+    if (viewMode === "card" && jumpToBottomBtn) {
+        jumpToBottomBtn.style.display = "none";
+    }
+
+    const toggleButtonsVisibility = _.throttle(() => {
+        if (!appState.floatingButtons.isEnabled) {
+            jumpToTopBtn.classList.remove('visible');
+            if (jumpToBottomBtn) jumpToBottomBtn.classList.remove('visible');
+            return;
+        }
+
+        const scrollTop = taskDisplay.scrollTop;
+        const scrollHeight = taskDisplay.scrollHeight;
+        const clientHeight = taskDisplay.clientHeight;
+
+        if (scrollHeight > clientHeight) {
+            const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+
+            // Update appState and button visibility for top button
+            appState.floatingButtons.visible.top = scrollPercentage > 20;
+            if (appState.floatingButtons.visible.top) {
+                jumpToTopBtn.classList.add('visible');
+            } else {
+                jumpToTopBtn.classList.remove('visible');
+            }
+
+            // Only handle bottom button in list view
+            if (viewMode === "list" && jumpToBottomBtn) {
+                appState.floatingButtons.visible.bottom = scrollPercentage < 80;
+                if (appState.floatingButtons.visible.bottom) {
+                    jumpToBottomBtn.classList.add('visible');
+                } else {
+                    jumpToBottomBtn.classList.remove('visible');
+                }
+            }
+        } else {
+            // Reset visibility in appState and UI when content isn't scrollable
+            appState.floatingButtons.visible.top = false;
+            appState.floatingButtons.visible.bottom = false;
+            jumpToTopBtn.classList.remove('visible');
+            if (jumpToBottomBtn) jumpToBottomBtn.classList.remove('visible');
+        }
+    }, 100);
+
+    // Scroll event listener
+    taskDisplay.addEventListener('scroll', toggleButtonsVisibility);
+
+    // Click handlers
+    jumpToTopBtn.addEventListener('click', () => {
+        console.log("Scrolling to top");
+        taskDisplay.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    if (viewMode === "list" && jumpToBottomBtn) {
+        jumpToBottomBtn.addEventListener('click', () => {
+            console.log("Scrolling to bottom");
+            taskDisplay.scrollTo({
+                top: taskDisplay.scrollHeight,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // Initial visibility check
+    setTimeout(() => {
+        toggleButtonsVisibility();
+        console.log("Initial visibility check complete");
+    }, 100);
 }
     
 function getBellIconHTML(hasReminder, hasDueDate) {
