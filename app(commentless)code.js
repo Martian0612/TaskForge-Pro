@@ -182,8 +182,6 @@ function populateUserList() {
     });
 }
 
-
-
 async function initializeModules(currentUser) {
     try {
         dbStorageInstance = new IndexedDBStorage('TaskforgeDB', 1, currentUser);
