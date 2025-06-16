@@ -97,15 +97,26 @@ async function displayTasks(user, current_task_ls, message = "", viewMode = "car
             cardContainer.appendChild(taskCard);
             updateTaskCardTags(task, userListKey, userMap);
 
-            // If this is the focused task, highlight it
-            if (focusedTaskId && task.task_id === focusedTaskId) {
-                setTimeout(() => {
-                    focusTaskInUI(task);
-                    highlightTask(focusedTaskId);
-                }, 200); // Delay to ensure DOM is updated
-            }
+
         }
 
+        console.log("focusedTaskId is ", focusedTaskId);
+        const focusedTask = current_task_ls.find(task => task.task_id === focusedTaskId);
+        if (focusedTask) {
+            console.log("focusedTask is ", focusedTask.task);
+        }
+        else {
+            console.log("No focused task found.");
+        }
+
+        // If this is the focused task, highlight it
+        if (focusedTaskId && focusedTask.task_id === focusedTaskId) {
+            setTimeout(() => {
+                focusTaskInUI(focusedTask);
+                highlightTask(focusedTaskId);
+            }, 200); // Delay to ensure DOM is updated
+        }
+        
         // Setup Load More button
         if (loadMoreBtn) {
             loadMoreBtn.style.display = appState.pagination.allTasksLoaded ? 'none' : 'block';
@@ -348,7 +359,7 @@ async function displayTasks(user, current_task_ls, message = "", viewMode = "car
                 }
               
                 // Switch to card view and focus the task
-                displayTasks(currentUser, currentUser.taskList, "", "card", taskId);
+               refreshTaskDisplay(taskId);
               
             }
         }
