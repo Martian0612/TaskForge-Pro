@@ -1,3 +1,54 @@
+const appState = {
+    // View preferences
+    currentView: "card", // Default view mode (card or list)
+
+    // Sorting preferences
+    currentSort: "newestFirst", // Default sort option
+
+    // Filter state
+    activeFilters: {
+        status: [], // Array of active status filters
+        priority: [], // Array of active priority filters
+        time: [] // Array of active time filters
+    },
+
+    // Search state
+    searchTerm: "", // Current search term
+
+    // Current user
+    currentUser: null, // Reference to current user object
+
+    floatingButtons: {
+        isEnabled: true,
+        visible: {
+            top: false,
+            bottom: false
+        }
+    },
+
+    pagination: {
+        tasksPerPage: 10,
+        currentPage: 1,
+        isLoading: false,
+        allTasksLoaded: false
+    },
+
+    // Reset all preferences when switching users
+    resetForUserSwitch() {
+        this.currentView = "card"; // Reset to card view
+        this.currentSort = "newestFirst"; // Reset to default sort
+        this.activeFilters = { status: [], priority: [], time: [] }; // Clear all filters
+        this.searchTerm = ""; // Clear search term
+
+        this.floatingButtons.visible = { top: false, bottom: false };
+    },
+
+    // Reset search only (when switching views)
+    resetSearch() {
+        this.searchTerm = "";
+    }
+};
+
 async function displayTasks(user, current_task_ls, message = "", viewMode = "card", focusedTaskId = null) {
     console.log("user_task_ls inside displayTasks func. ", current_task_ls);
     console.log("I am inside displayTasks function. View mode: ", viewMode);
@@ -100,6 +151,7 @@ async function displayTasks(user, current_task_ls, message = "", viewMode = "car
 
         }
 
+        // For testing purpose
         console.log("focusedTaskId is ", focusedTaskId);
         const focusedTask = current_task_ls.find(task => task.task_id === focusedTaskId);
         if (focusedTask) {
@@ -357,8 +409,10 @@ async function displayTasks(user, current_task_ls, message = "", viewMode = "car
                     viewAllButton.querySelector('i').textContent = "view_list";
                     viewAllButton.querySelector('span').textContent = "View All Tasks";
                 }
-              
-                // Switch to card view and focus the task
+
+                appState.currentView = "card";
+                
+                // Switch to card view and focus on the task
                refreshTaskDisplay(taskId);
               
             }
@@ -368,4 +422,36 @@ async function displayTasks(user, current_task_ls, message = "", viewMode = "car
     // Remove existing and add new event listener
     taskDisplay.removeEventListener("click", handleTaskDisplayClick);
     taskDisplay.addEventListener("click", handleTaskDisplayClick);
+}
+
+function refreshTaskDisplay(focusedTaskId = null) {
+    if (!currentUser || !currentUser.taskList) {
+        console.error("No current user or task list available");
+        return;
+    }
+
+    // Get sorted and filtered tasks
+    const sortedAndFilteredTasks = sorting();
+
+    // Display tasks with the current view mode
+    if (sortedAndFilteredTasks.length === 0) {
+
+        // Reset pagination when no results
+        appState.pagination.currentPage = 1;
+        appState.pagination.allTasksLoaded = true;
+
+        // Determine the appropriate message
+        let message = "";
+        if (appState.searchTerm) {
+            message = "No tasks match your search.";
+        } else if (Object.values(appState.activeFilters).some(filters => filters.length > 0)) {
+            message = "No tasks match your filters.";
+        } else {
+            message = "No tasks available.";
+        }
+
+        displayTasks(currentUser, [], message, appState.currentView, focusedTaskId);
+    } else {
+        displayTasks(currentUser, sortedAndFilteredTasks, "", appState.currentView, focusedTaskId);
+    }
 }
