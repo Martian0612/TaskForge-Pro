@@ -1,0 +1,4320 @@
+ /* For blurring and disabling all the things in background when any modal is opened? */
+
+ .global-overlay {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.5);
+     z-index: 999;
+     display: none;
+     backdrop-filter: blur(8px);
+ }
+
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+ }
+
+ /* Container for sidebar and main content */
+ .main-container {
+     display: flex;
+     min-height: 100vh;
+     background-color: #f8f9fa;
+ }
+
+ /* Sidebar styles */
+
+ .sidebar {
+     width: 280px;
+     height: 100vh;
+     position: sticky;
+     top: 0;
+     flex-shrink: 0;
+     background-color: white;
+     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+     padding: 24px 20px;
+     display: flex;
+     flex-direction: column;
+     border-right: 1px solid #f1f5f9;
+     overflow-y: hidden;
+ }
+
+ .sidebar-section {
+     margin-bottom: 16px;
+ }
+
+ .sidebar-section-title {
+     font-size: 0.9rem;
+     font-weight: 600;
+     color: #64748b;
+     margin-bottom: 14px;
+     letter-spacing: 0.05em;
+     text-transform: uppercase;
+ }
+
+ /* Divider for sidebar sections */
+ .sidebar-divider {
+     height: 1px;
+     background-color: #fbffff;
+     margin: 8px 0;
+     width: 100%;
+ }
+
+ /* Main content area */
+ /* .content-area {
+   flex: 1;
+   padding: 20px;
+} */
+
+ /* ################################### */
+ /* Updated code for task selection */
+ /* .content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    transition: width 0.3s ease;
+} */
+
+ .content-area {
+     flex: 1;
+     height: 100vh;
+     overflow-y: auto;
+     display: flex;
+     flex-direction: column;
+     padding: 1.5rem;
+ }
+
+ /* Greet user*/
+ #greet_user {
+     margin-bottom: 1.5rem;
+ }
+
+ /* ################################### */
+
+ /* Search related CSS */
+
+ /* Search bar styling */
+ /* .search-container {
+    position: relative;
+    width: 100%;
+} */
+
+ /* .search-container {
+    position: relative;
+    margin-bottom: 16px;
+    width: 100%;
+} */
+
+ /* .search-input {
+    width: 100%;
+    padding: 10px 10px 10px 36px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    font-size: 0.9rem;
+} */
+
+ /* .search-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+} */
+
+ /* .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+} */
+
+ /* new updated search container css code */
+ /* Search Container Styles */
+ .search-container {
+     position: relative;
+     margin-bottom: 12px;
+     width: 100%;
+ }
+
+ .search-wrapper {
+     position: relative;
+     display: flex;
+     align-items: center;
+ }
+
+ /* Search Input Styles */
+ .search-container .search-input {
+     /* More specific selector */
+     width: 100%;
+     padding: 10px 10px 10px 40px;
+     /* Add left padding for the icon */
+     border-radius: 8px;
+     border: 1px solid #e2e8f0;
+     background-color: #f8fafc;
+     font-size: 0.9rem;
+ }
+
+ .search-icon {
+     /* position: absolute;
+   left: 10px;
+   top: 50%;
+   transform: translateY(-50%);
+   color: #94a3b8;
+   z-index: 10;
+   pointer-events: none;
+   transition: opacity 0.2s; */
+
+     position: absolute;
+     left: 10px;
+     top: 50%;
+     transform: translateY(-50%);
+     color: #64748b;
+     /* Slightly darker color */
+     font-size: 18px;
+     /* Increased size */
+     /* background-color: rgba(255, 255, 255, 0.8); */
+     /* Subtle background */
+     padding: 4px;
+     /* Add some padding around the icon */
+     border-radius: 4px;
+     /* Optional: Add rounded corners */
+     z-index: 10;
+     pointer-events: none;
+     transition: all 0.2s ease;
+     /* Add a transition for smooth hover effect */
+ }
+
+ .search-icon:hover {
+     color: #334155;
+     /* Darker color on hover */
+     transform: translateY(-50%) scale(1.1);
+     /* Slightly larger on hover */
+ }
+
+ .search-input:focus {
+     outline: none;
+     border-color: #3b82f6;
+ }
+
+ .search-input:focus::placeholder {
+     color: transparent;
+     /* Hide the placeholder text on focus */
+ }
+
+ /* end of new updated search container css code */
+
+ /* .search-container input {
+   width: 100%;
+   padding: 8px 12px;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   font-size: 14px;
+} */
+
+ /* .search-container input {
+    width: 100%;
+    padding: 10px 16px;
+    padding-left: 40px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    font-size: 14px;
+    color: #334155;
+    transition: all 0.2s ease;
+}
+
+.search-container::before {
+    content: '🔍';
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #64748b;
+    pointer-events: none;
+}
+
+.search-container input:focus {
+    outline: none;
+    border-color: #2563eb;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+} */
+
+ /* .search-container input[type="text"] {
+   width: 100%;
+   padding: 0.75rem 1rem 0.75rem 40px;
+   background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%232563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Ccircle cx="11" cy="11" r="8"%3E%3C/circle%3E%3Cline x1="21" y1="21" x2="16.65" y2="16.65"%3E%3C/line%3E%3C/svg%3E') no-repeat 12px center;
+   background-size: 20px 20px;
+   background-color: #fff;
+   border: 2px solid #e2e8f0;
+   border-radius: 8px;
+   font-size: 1rem;
+   transition: all 0.2s;
+} */
+ /* 
+.search-container input[type="text"]:focus {
+   border-color: #3b82f6;
+   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+   outline: none;
+} */
+
+ /* .search-container input[type="text"] {
+   background: url('https://fonts.gstatic.com/s/i/materialicons/search/v15/24px.svg') no-repeat 10px center;
+} */
+
+ /* Sort dropdown styling */
+
+ .sort-container {
+     position: relative;
+     width: 100%;
+ }
+
+ /* .sort-container select {
+   width: 100%;
+   padding: 8px;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   font-size: 14px;
+   background-color: white;
+} */
+
+ /* .sort-container select {
+   width: 100%;
+   padding: 10px 12px;
+   border: 1px solid #e2e8f0;
+   border-radius: 6px;
+   font-size: 14px;
+   background-color: white;
+   appearance: none;
+   cursor: pointer;
+   color: #475569;
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+   transition: all 0.2s ease;
+} */
+
+
+ .sort-container select {
+     appearance: none;
+     width: 100%;
+     padding: 10px 16px;
+     border-radius: 8px;
+     border: 1px solid #e2e8f0;
+     background-color: #f8fafc;
+     font-size: 14px;
+     color: #334155;
+     cursor: pointer;
+     transition: all 0.2s ease;
+ }
+
+ .sort-container::after {
+     content: '▼';
+     position: absolute;
+     right: 16px;
+     top: 50%;
+     transform: translateY(-50%);
+     font-size: 10px;
+     color: #64748b;
+     pointer-events: none;
+ }
+
+ .sort-container select:focus {
+     outline: none;
+     border-color: #2563eb;
+     background-color: white;
+     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+ }
+
+ /* sidebar tag button */
+
+ /* New css */
+ body {
+     font-family: 'Inter', sans-serif;
+ }
+
+ .app-container {
+     display: flex;
+     position: relative;
+     width: 100%;
+     height: 100vh;
+     transition: margin-right 0.3s ease;
+     overflow: hidden;
+ }
+
+ .app-container.filter-active {
+     /* margin-right: 320px; */
+     padding-right: 320px;
+ }
+
+ .app-container.filter-active .task-container {
+     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+ }
+
+ /* Filter related css */
+
+
+ /* both filter btn css */
+
+ .sidebar-filter-btn,
+ .filter-tag-button {
+     display: flex;
+     align-items: center;
+     width: 100%;
+     padding: 10px 16px;
+     border-radius: 8px;
+     background-color: #f8fafc;
+     border: 1px solid #e2e8f0;
+     font-weight: 500;
+     color: #334155;
+     font-size: 0.95rem;
+     transition: all 0.2s ease;
+     margin-bottom: 12px;
+     /* Reduce space between buttons */
+ }
+
+ .sidebar-filter-btn:hover,
+ .filter-tag-button:hover {
+     background-color: #f0f7ff;
+     border-color: #2563eb;
+     color: #2563eb;
+ }
+
+ /* Tag icon for Filter by Tag button */
+ .filter-tag-button::before {
+     content: "local_offer";
+     font-family: 'Material Icons';
+     margin-right: 10px;
+     font-size: 16px;
+     color: #2563eb;
+     /* Match button hover color */
+ }
+
+ .filter-icon {
+     margin-right: 10px;
+     font-size: 16px;
+ }
+
+ /* end of filter btn css */
+ /* Filter Panel */
+ .filter-panel {
+     position: fixed;
+     right: -320px;
+     /* Start off-screen */
+     top: 0;
+     width: 320px;
+     height: 100vh;
+     background: #fff;
+     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+     transition: right 0.3s ease;
+     z-index: 1000;
+     overflow-y: auto;
+ }
+
+ .filter-panel.active {
+     right: 0;
+ }
+
+ .filter-panel-content {
+     /* padding: 24px; */
+     padding: 1.5rem;
+     height: 100%;
+     display: flex;
+     flex-direction: column;
+ }
+
+ .filter-panel-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 24px;
+ }
+
+ .filter-panel-header h3 {
+     margin: 0;
+     font-size: 1.25rem;
+     font-weight: 600;
+ }
+
+ .close-filter-panel {
+     background: none;
+     border: none;
+     font-size: 24px;
+     cursor: pointer;
+     padding: 4px;
+     z-index: 1001;
+ }
+
+ /* Filter Sections */
+ .filter-sections {
+     flex-grow: 1;
+     overflow-y: auto;
+     margin-bottom: 1.75rem;
+     padding-bottom: 1.25rem;
+     max-height: calc(100vh - 200px);
+ }
+
+ .filter-section {
+     margin-bottom: 24px;
+     padding-bottom: 16px;
+     border-bottom: 1px solid #e0e0e0;
+ }
+
+ .filter-section h4 {
+     margin: 0 0 16px 0;
+     font-size: 1rem;
+     font-weight: 500;
+     color: #666;
+ }
+
+ /* Checkboxes */
+ .checkbox-group {
+     display: flex;
+     flex-direction: column;
+     /* gap: 12px; */
+     gap: 0.75rem;
+ }
+
+ .checkbox-label {
+     display: flex;
+     align-items: center;
+     /* gap: 8px; */
+     gap: 0.75rem;
+     padding: 0.75rem;
+     cursor: pointer;
+     /* padding: 8px; */
+     border-radius: 6px;
+     transition: background 0.2s ease;
+
+ }
+
+ .checkbox-label:hover {
+     background: #f5f5f5;
+ }
+
+ .checkbox-label input[type="checkbox"] {
+     margin-right: 0.5rem;
+     cursor: pointer;
+     accent-color: #007bff;
+     border: 1px solid #ddd;
+     border-radius: 4px;
+     /* display: block; */
+ }
+
+ /* .checkbox-custom {
+   width: 18px;
+   height: 18px;
+   border: 2px solid #ddd;
+   border-radius:4px;
+   position: relative;
+   transition: all 0.2s ease;
+} */
+
+ /* .checkbox-label input[type="checkbox"]:checked + .checkbox-custom { */
+ .checkbox-label input[type="checkbox"]:checked {
+     /* border-color: #007bff;
+   background-color: #007bff; */
+     accent-color: #007bff;
+
+ }
+
+ /* .checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+   content: '';
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   width: 10px;
+   height: 10px;
+   background: #007bff;
+   border-radius: 50%;
+} */
+
+ /* .checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+   content: '✓';
+   color: #fff;
+   font-size: 12px;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+} */
+
+ /* Filter Actions */
+ .filter-actions {
+     padding-top: 16px;
+     border-top: 1px solid #e0e0e0;
+     flex-shrink: 0;
+     background: #fff;
+     z-index: 1;
+ }
+
+ .time-icon {
+     margin-right: 8px;
+     font-size: 16px;
+     color: inherit;
+ }
+
+ .clear-filters {
+     width: 100%;
+     padding: 12px;
+     background: #f5f5f5;
+     border: none;
+     border-radius: 6px;
+     font-weight: 500;
+     cursor: pointer;
+     transition: all 0.2s ease;
+     display: block;
+ }
+
+ .clear-filters:hover {
+     background: #e0e0e0;
+ }
+
+ /* for no task match message */
+
+ .no-tasks-container {
+     display: flex;
+     justify-content: center;
+     /* Center horizontally within #task-display */
+     align-items: center;
+     min-height: calc(100vh - 200px);
+     width: 100%;
+     padding-left: calc(300px + 20px);
+     /* Sidebar width (~300px) + left padding (20px), adjust if sidebar width varies */
+     padding-right: 20px;
+     /* Maintain right padding for symmetry */
+     box-sizing: border-box;
+     /* Ensure padding doesn’t exceed width */
+     padding: 0 14px;
+ }
+
+ .no-tasks-message {
+     text-align: center;
+     color: #60a5fa;
+     font-size: 1.1rem;
+     font-weight: 500;
+     padding: 20px 16px;
+     background: #f8fafc;
+     border-radius: 8px;
+     width: 80%;
+     max-width: 350px;
+     border: 1px solid #e2e8f0;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     margin-top: 40px;
+     margin-left: 0;
+ }
+
+ /* sidebar improvments */
+
+ .back-to-home {
+     margin-top: auto;
+     padding: 12px 16px;
+     /* Increased padding */
+     border-radius: 8px;
+     background-color: #f0f7ff;
+     border: 1px solid #d1e0ff;
+     color: #2563eb;
+     font-weight: 500;
+     font-size: 0.95rem;
+     /* Slightly larger font */
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     transition: all 0.2s ease;
+     width: 100%;
+     /* Ensure full width */
+ }
+
+ .back-to-home::before {
+     content: '🏠';
+     margin-right: 8px;
+ }
+
+ .back-to-home:hover {
+     background-color: #2563eb;
+     color: white;
+ }
+
+ #home-page {
+     min-height: 100vh;
+     /* background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), */
+     /* url('./Martian_sukoon.png') center/cover no-repeat; */
+     /* url('https://source.unsplash.com/random/1920x1080') center/cover no-repeat; */
+
+     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+         /* url('https://www.istockphoto.com/photo/man-on-the-mountain-top-watch-the-sunset-of-2024-and-the-sunrise-of-the-new-year-2025-gm2189197706-607671883?utm_campaign=srp_photos_bottom&utm_content=https%3A%2F%2Funsplash.com%2Fs%2Fphotos%2Fto-dolist-landscape-picture&utm_medium=affiliate&utm_source=unsplash&utm_term=to+dolist+landscape+picture%3A%3A%3A') center/cover no-repeat; */
+         url('bg_image.png') center/cover no-repeat;
+     /* url('https://picsum.photos/id/180/1920/1080') center/cover no-repeat; */
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     padding: 20px;
+ }
+
+ .auth-container {
+     background: rgba(255, 255, 255, 0.95);
+     border-radius: 16px;
+     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+     width: 100%;
+     max-width: 400px;
+     padding: 2.5rem;
+     margin: 0 auto;
+ }
+
+ .title {
+     color: white;
+     font-size: 2.5rem;
+     margin-bottom: 2rem;
+     text-align: center;
+     font-weight: 700;
+     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+ }
+
+
+ .auth-container h2 {
+     color: #1a1a1a;
+     font-size: 1.5rem;
+     margin-bottom: 1.5rem;
+     text-align: center;
+ }
+
+ #user-data {
+     margin-bottom: 1.5rem;
+ }
+
+ .input-group {
+     margin-bottom: 1.25rem;
+ }
+
+ label {
+     display: block;
+     margin-bottom: 0.5rem;
+     color: #4a4a4a;
+     font-weight: 500;
+ }
+
+ input[type="text"],
+ input[type="email"] {
+     width: 100%;
+     padding: 0.75rem;
+     border: 1px solid #ddd;
+     border-radius: 8px;
+     font-size: 1rem;
+     transition: all 0.2s;
+ }
+
+ input:focus {
+     outline: none;
+     border-color: #2563eb;
+     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+ }
+
+ #submitBtn {
+     width: 100%;
+     padding: 0.75rem;
+     background: #2563eb;
+     color: white;
+     border: none;
+     border-radius: 8px;
+     font-size: 1rem;
+     font-weight: 500;
+     cursor: pointer;
+     transition: background-color 0.2s;
+ }
+
+ #submitBtn:hover {
+     background: #1d4ed8;
+ }
+
+ /* User Selection */
+ .select-user-btn {
+     width: 100%;
+     padding: 0.75rem;
+     background: white;
+     color: #2563eb;
+     border: 2px solid #2563eb;
+     border-radius: 8px;
+     font-size: 1rem;
+     font-weight: 500;
+     cursor: pointer;
+     transition: all 0.2s;
+     margin-top: 1rem;
+ }
+
+ .select-user-btn:hover {
+     background: rgba(37, 99, 235, 0.1);
+ }
+
+ .user-modal {
+     display: none;
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: rgba(0, 0, 0, 0.5);
+     backdrop-filter: blur(4px);
+     z-index: 1000;
+ }
+
+ .user-modal.active {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ .user-modal-content {
+     background: white;
+     border-radius: 16px;
+     padding: 2rem;
+     width: 90%;
+     max-width: 400px;
+     max-height: 80vh;
+     overflow-y: auto;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ }
+
+ .user-modal-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 1.5rem;
+     padding-bottom: 1rem;
+     border-bottom: 1px solid #eee;
+ }
+
+ .user-modal-header h2 {
+     color: #1a1a1a;
+     font-size: 1.5rem;
+     margin: 0;
+ }
+
+ .close-user-modal {
+     background: none;
+     border: none;
+     font-size: 1.75rem;
+     cursor: pointer;
+     color: #666;
+     padding: 0.5rem;
+     line-height: 1;
+ }
+
+ .user-list {
+     display: grid;
+     gap: 0.75rem;
+ }
+
+ .user-item {
+     display: flex;
+     align-items: center;
+     gap: 1rem;
+     padding: 1rem;
+     border: 1px solid #eee;
+     border-radius: 8px;
+     cursor: pointer;
+     transition: all 0.2s;
+ }
+
+ .user-item:hover {
+     background: #f8f9ff;
+     border-color: #2563eb;
+     transform: translateY(-2px);
+ }
+
+ .user-avatar {
+     width: 40px;
+     height: 40px;
+     background: #2563eb;
+     border-radius: 50%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     color: white;
+     font-weight: bold;
+     flex-shrink: 0;
+ }
+
+ .user-info {
+     flex: 1;
+     min-width: 0;
+ }
+
+ .user-info .name {
+     font-weight: 600;
+     color: #1a1a1a;
+     margin-bottom: 0.25rem;
+ }
+
+ .user-info .email {
+     font-size: 0.875rem;
+     color: #666;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+ }
+
+ .no-users-message {
+     text-align: center;
+     color: #666;
+     margin: 2rem 0;
+     font-size: 1rem;
+ }
+
+ #user-dropdown {
+     display: none;
+ }
+
+ /* @media (max-width: 640px) {
+     .title {
+         font-size: 2rem;
+     }
+
+     .auth-container {
+         padding: 1.5rem;
+     }
+
+     .user-modal-content {
+         width: 95%;
+         padding: 1.5rem;
+     }
+ } */
+
+ /* Modal base styling */
+ #task-modal {
+     display: none;
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.5);
+     backdrop-filter: blur(4px);
+     z-index: 1000;
+ }
+
+ #task-modal.active {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ .modal-body {
+     padding: 1rem;
+ }
+
+ .modal-content {
+     background: white;
+     width: 90%;
+     max-width: 600px;
+     margin: 2% auto;
+     /* padding: 2rem; */
+     padding: 2.5rem;
+     border-radius: 16px;
+     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+ }
+
+ .modal-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     margin-bottom: 2rem;
+     padding-bottom: 1rem;
+     border-bottom: 2px solid #f1f5f9;
+ }
+
+ .modal-header h2 {
+     font-size: 1.5rem;
+     color: #0f172a;
+     font-weight: 600;
+ }
+
+ #close-modal {
+     width: 32px;
+     height: 32px;
+     border: none;
+     border-radius: 50%;
+     background: #f1f5f9;
+     color: #64748b;
+     font-size: 1.25rem;
+     cursor: pointer;
+     transition: all 0.2s;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ #close-modal:hover {
+     background: #e2e8f0;
+     color: #0f172a;
+ }
+
+ /* Form styling */
+ #task-form {
+     max-height: 70vh;
+     overflow-y: auto;
+     /* padding: 10px; */
+     padding: 1.25rem;
+ }
+
+ /* Input groups */
+ .input-group {
+     display: flex;
+     flex-direction: column;
+     gap: 0.75rem;
+     /* added */
+     margin-bottom: 1.5rem;
+     /* gap: 0.5rem; */
+ }
+
+ .input-group label {
+     font-weight: 500;
+     color: #334155;
+     font-size: 0.95rem;
+ }
+
+ .highlight-due-field {
+
+    transition: box-shadow 0.2s;
+ }
+
+ .date-input-wrapper input,
+ .date-input-wrapper .flatpickr-input[readonly] {
+     padding-right: 28px;
+     /* Space for the icon */
+     box-sizing: border-box;
+ }
+
+ .clear-date-icon {
+     position: absolute;
+     right: 12px;
+     top: 50%;
+     transform: translateY(-50%);
+     cursor: pointer;
+     display: none;
+     z-index: 2;
+ }
+
+ .clear-date-icon:hover svg circle,
+ .clear-date-icon:focus svg circle {
+     stroke: #f44336;
+ }
+
+ .clear-date-icon:hover svg line,
+ .clear-date-icon:focus svg line {
+     stroke: #f44336;
+ }
+
+ #task-form input[type="text"],
+ #task-form textarea {
+     width: 100%;
+     padding: 0.75rem 1rem;
+     border: 2px solid #e2e8f0;
+     border-radius: 8px;
+     font-size: 1rem;
+     transition: all 0.2s;
+     background: #f8fafc;
+ }
+
+ #task-form input[type="text"]:focus,
+ #task-form textarea:focus {
+     border-color: #3b82f6;
+     background: white;
+     outline: none;
+     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+ }
+
+ #task-form textarea {
+     min-height: 120px;
+     resize: vertical;
+ }
+
+ /* Select wrapper for custom styling */
+ .select-wrapper {
+     position: relative;
+     width: 100%;
+ }
+
+ /* Select inputs */
+ #modal-status,
+ #modal-priority {
+     width: 100%;
+     padding: 0.75rem 1rem;
+     border: 2px solid #e2e8f0;
+     border-radius: 8px;
+     font-size: 1rem;
+     background: #f8fafc;
+     cursor: pointer;
+     appearance: none;
+     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+     background-repeat: no-repeat;
+     background-position: right 1rem center;
+     background-size: 1.25rem;
+     padding-right: 2.5rem;
+ }
+
+ /* Status colors */
+ #modal-status option[vlaue="not started"] {
+     color: #64748b;
+ }
+
+ #modal-status option[value="in progress"] {
+     color: #0284c7;
+ }
+
+ #modal-status option[value="completed"] {
+     color: #16a34a;
+ }
+
+ /* Priority colors */
+ #modal-priority option[value="high"] {
+     color: #dc2626;
+ }
+
+ #modal-priority option[value="medium"] {
+     color: #d97706;
+ }
+
+ #modal-priority option[value="low"] {
+     color: #2563eb;
+ }
+
+ /* Add some spacing for the icons */
+ #modal-status option,
+ #modal-priority option {
+     padding: 8px;
+     display: flex;
+     align-items: center;
+     gap: 8px;
+ }
+
+ #save-task {
+     background-color: #4CAF50;
+     color: white;
+     padding: 10px 20px;
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     font-size: 16px;
+ }
+
+ #save-task:hover {
+     background-color: #45a049;
+ }
+
+ .task-container {
+     display: grid;
+     gap: 1rem;
+     width: 100%;
+     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+     padding: 1rem;
+     padding-right: calc(1rem + 14px);
+     box-sizing: border-box;
+ }
+
+ .task-card {
+     background: white;
+     border-radius: 12px;
+     padding: 20px;
+     border: 1px solid #e2e8f0;
+     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+     transition: transform 0.2s, box-shadow 0.2s;
+     cursor: pointer;
+     display: flex;
+     flex-direction: column;
+     margin-right: 0;
+     width: 100%
+ }
+
+ /* .task-card:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+} */
+
+ .task-card:hover {
+     transform: translateY(-2px);
+     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+ }
+
+
+ .task-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: flex-start;
+     margin-bottom: 15px;
+ }
+
+
+ .task-actions {
+     display: flex;
+     gap: 10px;
+     margin-top: 15px;
+     /* added later on */
+     position: relative;
+     z-index: 15;
+ }
+
+ /* Delete functionality related css.*/
+
+ .task-card {
+     position: relative;
+     /* For absolute positioning of selection overlay */
+     /* ... your existing task-card styles ... */
+ }
+
+ .task-selection {
+     /* position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start !important;
+    padding: 0 0.5rem; */
+
+     position: absolute;
+     left: 0;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 24px;
+     /* Reduced size to cover only the checkbox area */
+     height: 24px;
+     z-index: 10;
+     pointer-events: none;
+     /* Prevents overlap blocking other elements */
+     display: flex;
+     align-items: center;
+     justify-content: flex-start;
+
+ }
+
+ .task-list-item:hover .task-selection,
+ .task-card:hover .task-selection {
+     pointer-events: auto;
+ }
+
+ /* Show task-selection on hover, but NOT when interactive elements are hovered */
+ .task-card:hover:not(.interactive-hover) .task-selection {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 0.5rem;
+ }
+
+ .task-checkbox-wrapper {
+     position: absolute;
+     left: -12px;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 24px;
+     height: 24px;
+     z-index: 11;
+     opacity: 0;
+     /* Hidden by default */
+     transition: opacity 0.2s ease;
+     pointer-events: auto;
+     /* Smooth transition */
+ }
+
+ /* Always show checkbox when in selection-mode */
+ .selection-mode .task-checkbox-wrapper {
+     opacity: 1;
+     /* pointer-events: auto; */
+ }
+
+ .task-checkbox {
+     /* position: absolute;
+   opacity: 0;
+   cursor: pointer;
+   width: 100%;
+   height: 100%;
+   z-index: 12; */
+     /* Make sure it's clickable */
+
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     z-index: 12;
+     cursor: pointer;
+ }
+
+ /* Show checkbox when card is hovered or checkbox is checked */
+ .task-card:hover .task-checkbox,
+ .task-checkbox:checked {
+     opacity: 1;
+ }
+
+ /* Only show checkbox when card is hovered (not interactive elements) */
+ .task-card:hover:not(.interactive-hover) .task-checkbox-wrapper {
+     opacity: 1;
+ }
+
+ .checkbox-custom {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: white;
+     border: 2px solid #e1e1e1;
+     border-radius: 4px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     opacity: 0;
+ }
+
+ /* Show custom checkbox on hover or when real checkbox is checked */
+ .task-card:hover:not(.interactive-hover) .checkbox-custom,
+ .task-checkbox:checked+.checkbox-custom {
+     opacity: 1;
+ }
+
+ .task-checkbox:checked+.checkbox-custom::after {
+     content: "✓";
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     color: #007bff;
+     font-size: 16px;
+ }
+
+ /* For showing checkbox all the time, when one checkbox is selected, not on hovering on any task */
+ .task-card.selection-active .task-selection {
+     display: flex !important;
+ }
+
+ /* For showing unchecked checkboxes, when a checkbox is marked */
+ /* Ensure task-selection is visible in selection mode */
+ .selection-mode .task-selection {
+     display: flex !important;
+     opacity: 1 !important;
+     /* align-items: center;
+   justify-content: space-between;
+   padding: 0.5rem; */
+ }
+
+ /* Hide delete icon when in selection mode */
+ .selection-mode .delete-icon {
+     display: none !important;
+ }
+
+ /* Updating delete-icon position and size */
+ .delete-icon {
+     position: absolute;
+     right: 0.75rem;
+     top: 1.25rem;
+     font-size: 8px;
+     /* Further reduced size */
+     opacity: 0;
+     cursor: pointer;
+     padding: 1px;
+     /* Even less padding */
+     border-radius: 4px;
+     z-index: 11;
+     color: #64748b;
+     /* Keep the original color */
+     transition: opacity 0.2s ease;
+     pointer-events: auto;
+ }
+
+ /* for changing the size of delete icon in task cards */
+ .task-card .delete-icon {
+     position: absolute;
+     right: 0.75rem;
+     top: 1.25rem;
+     font-size: 20px;
+     /* 20 size of delete icon is balancing the size of checkbox, not too large not too small. */
+     opacity: 0;
+     cursor: pointer;
+     padding: 0;
+     /* Reduced from 1px to 0 to minimize hover size */
+     border-radius: 4px;
+     z-index: 11;
+     color: #64748b;
+     transition: opacity 0.2s ease;
+     pointer-events: auto;
+ }
+
+ /* Ensure delete icon shows on hover when not in selection mode */
+ body:not(.selection-mode) .task-card:hover .delete-icon {
+     opacity: 1;
+ }
+
+ /* Show checkbox on hover when not in selection-mode */
+ body:not(.selection-mode) .task-card:hover .task-checkbox-wrapper {
+     opacity: 1;
+ }
+
+ /* Show delete icon on hover */
+ .task-card:hover .delete-icon {
+     opacity: 1;
+ }
+
+ .delete-icon:hover {
+     /* background-color: rgba(239, 68, 68, 0.1);  /* Softer red background */
+     /* color: #ef4444;  Red on hover */
+     /* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); */
+     background-color: rgba(209, 213, 219, 0.3);
+     /* Lighter gray, more subtle */
+     color: #1f2937;
+     /* Darker gray/almost black on hover */
+     /* Optional: Add a very subtle border on hover */
+     /* border: 1px solid rgba(0, 0, 0, 0.1); */
+ }
+
+ /* Ensure delete icon shows properly after selection mode */
+ .task-card:not(.selection-mode) .delete-icon {
+     position: absolute;
+     right: 0.75rem;
+     top: 0.75rem;
+     transform: none;
+     opacity: 0;
+     transition: opacity 0.2s ease;
+ }
+
+ .task-card:not(.selection-mode):hover .delete-icon {
+     opacity: 1;
+ }
+
+ /* Delete functionality related css completed. */
+
+ /* Delete Modal Styling */
+
+ .delete-modal-content {
+     position: fixed;
+     top: 50%;
+     /* top: 55%; */
+     left: 50%;
+     /* left: 51%; */
+     transform: translate(-50%, -50%);
+     background: white;
+     border-radius: 16px;
+     /* Reduced padding for more compact look */
+     padding: 1.5rem;
+     /* Reduced width for more focused appearrance */
+     width: 90%;
+     /* width: 80%; */
+     max-width: 600px;
+     /* max-width: 500px; */
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+     z-index: 1001;
+     /* Ensure it's on top of other elements */
+     backdrop-filter: blur(4px);
+     display: flex;
+     flex-direction: column;
+     gap: 1.5rem;
+ }
+
+ /* Modal button container fix -- Added later.*/
+ /* .delete-modal-content {
+   display: flex;
+   flex-direction:column;
+   gap: 1.5rem;
+} */
+
+ .delete-modal-actions {
+     display: flex;
+     justify-content: flex-end;
+     gap: 0.75rem;
+     padding-top: 1rem;
+     border-top: 1px solid #eee;
+     /* margin-top: 0.5rem; */
+ }
+
+ .delete-modal-header {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     margin-bottom: 1rem;
+     padding-bottom: 0.75rem;
+     border-bottom: 1px solid #eee;
+ }
+
+ .delete-modal-header h2 {
+     color: #1a1a1a;
+     font-size: 1.5rem;
+     margin: 0;
+ }
+
+ .delete-modal-body {
+     text-align: center;
+     margin-bottom: 0.75 rem;
+ }
+
+ .delete-modal-body h2 {
+     color: #333;
+     font-size: 1rem;
+     margin-bottom: 1.5rem;
+ }
+
+ .modal-cancel-btn,
+ .modal-delete-btn {
+     padding: 0.5rem 1rem;
+     border: none;
+     border-radius: 6px;
+     font-size: 0.875rem;
+     font-weight: 500;
+     cursor: pointer;
+     transition: all 0.2s;
+ }
+
+ .modal-cancel-btn {
+     background-color: #f0f0f0;
+     color: #333;
+ }
+
+ .modal-cancel-btn:hover {
+     background-color: #e0e0e0;
+     transform: scale(1.02);
+ }
+
+ .modal-delete-btn {
+     background-color: #dc3545;
+     color: white;
+ }
+
+ .modal-delete-btn:hover {
+     background-color: #c82333;
+     transform: scale(1.02);
+ }
+
+ .modal-delete-btn:active,
+ .modal-cancel-btn:active {
+     transform: scale(0.98);
+ }
+
+ /* End of Delete Modal related css */
+
+ /* Selection bar css */
+ .selection-bar {
+     position: relative;
+     width: 100%;
+     background-color: white;
+     padding: 1rem;
+     border-bottom: 1px solid #e1e1e1;
+     border-radius: 6px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     z-index: 100;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     margin-bottom: 1.5rem;
+ }
+
+ .selection-info {
+     font-weight: 500;
+ }
+
+ .selection-actions {
+     display: flex;
+     gap: 1rem;
+ }
+
+ .selection-actions button {
+     padding: 0.5rem 1rem;
+     border-radius: 4px;
+     border: none;
+     cursor: pointer;
+     transition: background-color 0.2s ease;
+ }
+
+ .select-all-btn,
+ .cancel-selection-btn {
+     background-color: #f0f0f0;
+ }
+
+ .delete-selected-btn {
+     background-color: #dc3545;
+     color: white;
+ }
+
+ .delete-selected-btn:hover {
+     background-color: #c82333;
+ }
+
+ /* End of selection bar css */
+
+ .card-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: flex-start;
+     /* Added top margin to create space for delete icon */
+     margin-top: 0.5rem;
+     /* margin-bottom: 0.75rem; */
+     margin-bottom: 1rem;
+ }
+
+ .task-title {
+     font-weight: 600;
+     font-size: 18px;
+     /* Increased from 16px */
+     color: #1e293b;
+     margin-bottom: 8px;
+     /* Added to create separation */
+     line-height: 1.3;
+     /* Added for better readability */
+     word-break: break-word;
+ }
+
+ .status-priority {
+     display: flex;
+     align-items: center;
+     flex-wrap: wrap;
+     gap: 8px;
+     margin-top: 10px;
+ }
+
+ .priority-flag {
+     display: flex;
+     align-items: center;
+     gap: 4px;
+     padding: 4px 8px;
+     border-radius: 12px;
+     font-size: 0.75rem;
+     font-family: 'Inter', sans-serif;
+ }
+
+ /* Color variants based on priority */
+ .priority-flag[data-priority="high"] {
+     background: rgba(255, 0, 0, 0.08);
+ }
+
+ .priority-flag[data-priority="medium"] {
+     background: rgba(255, 193, 7, 0.15);
+ }
+
+ .priority-flag[data-priority="low"] {
+     background: rgba(33, 150, 243, 0.08);
+ }
+
+ /* Status badge - keep the original selectors */
+ .status-badge {
+     font-size: 16px;
+     display: inline-flex;
+     padding: 0.25rem 0.5rem;
+     border-radius: 0.375rem;
+     font-size: 0.875rem;
+     transition: none;
+
+ }
+
+ /* Status & Priority Badge Improvements */
+ /* .status-badge,
+.priority-flag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    margin-right: 8px;
+} */
+
+ /* .status-badge {
+   display: flex;
+   align-items: center;
+   font-size: 18px;
+} */
+
+ .status-badge[data-status="completed"] {
+     color: #166534;
+ }
+
+ .status-badge[data-status="in-progress"] {
+     color: #075985;
+ }
+
+ .status-badge[data-status="not-started"] {
+     color: #475569;
+ }
+
+ .priority-indicator {
+     display: flex;
+     align-items: center;
+     gap: 0.25rem;
+     padding: 0.25rem 0.5rem;
+     border-radius: 0.375rem;
+     font-size: 0.75rem;
+     font-weight: 500;
+     transition: none;
+ }
+
+ /* .priority-indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 8px;
+} */
+
+ /* .priority-indicator[data-priority="high"] {
+   background: #fee2e2;
+   color: #991b1b;
+} */
+
+ .priority-indicator.high {
+     background-color: rgba(239, 68, 68, 0.15);
+     color: #ef4444;
+ }
+
+ /* .priority-indicator[data-priority="medium"] {
+   background: #fef3c7;
+   color: #92400e;
+} */
+
+ .priority-indicator.medium {
+     background-color: rgba(245, 158, 11, 0.15);
+     color: #f59e0b;
+ }
+
+ /* .priority-indicator[data-priority="low"] {
+   background: #dbeafe;
+   color: #1e40af;
+} */
+ .priority-indicator.low {
+     background-color: rgba(59, 130, 246, 0.15);
+     color: #3b82f6;
+ }
+
+ .priority-indicator:before {
+     content: '';
+     display: inline-block;
+     width: 10px;
+     height: 10px;
+     border-radius: 50%;
+     margin-right: 6px;
+ }
+
+ .priority-indicator.high:before {
+     background-color: #ef4444;
+ }
+
+ .priority-indicator.medium:before {
+     background-color: #f59e0b;
+ }
+
+ .priority-indicator.low:before {
+     background-color: #3b82f6;
+ }
+
+ .card-footer {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-top: 1.5rem;
+     padding-top: 12px;
+     border-top: 1px solid #f1f5f9;
+     /* Subtle separator */
+ }
+
+ .card-footer,
+ .status-priority {
+     font-size: 0.875rem;
+ }
+
+ /* sidebar-add-task */
+ .sidebar-add-task {
+     background: linear-gradient(to bottom, #0f81ff, #0070f3);
+     color: white;
+     border: none;
+     border-radius: 9px !important;
+     padding: 12px 16px;
+     font-size: 1rem;
+     width: 100%;
+     font-weight: 500;
+     box-shadow: 0 3px 8px rgba(0, 112, 243, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+     transition: all 0.2s ease;
+     text-align: center;
+     margin: 8px 0 16px;
+ }
+
+ .sidebar-add-task:hover {
+     background: linear-gradient(to bottom, #1a8cff, #0064da);
+     transform: translateY(-1px);
+     box-shadow: 0 4px 10px rgba(0, 112, 243, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+ }
+
+ .sidebar-add-task:active {
+     transform: translateY(1px);
+     box-shadow: 0 2px 5px rgba(0, 112, 243, 0.2);
+ }
+
+ /* tag button css */
+ .tag-button {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     background-color: #f0f7ff;
+     /* color: #2563eb; */
+     color: #334155;
+     border: 1px solid #dae7ff;
+     border-radius: 6px;
+     padding: 8px 12px;
+     font-size: 0.9rem;
+     font-weight: 500;
+     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+     transition: all 0.2s ease;
+ }
+
+ .tag-button:hover {
+     background-color: #e6f1ff;
+     border-color: #2563eb;
+     box-shadow: 0 2px 4px rgba(0, 90, 255, 0.1);
+     /* transform: translate(-1px); */
+ }
+
+ .tag-button::before {
+     content: "local_offer";
+     font-family: 'Material Icons';
+     margin-right: 6px;
+     font-size: 16px;
+     color: #2563eb;
+ }
+
+ /*  End of tag button styling.*/
+
+ /* Tagify customization */
+ .tagify {
+     --tag-bg: #f0f4ff;
+     --tag-hover: #e0e7ff;
+     --tag-text-color: #2563eb;
+     --tag-remove-bg: rgba(255, 0, 0, 0.1);
+     --tag-remove-btn-color: #ff4444;
+     --tag-invalid-bg: #ffdddd;
+     --tag-invalid-color: #ff4444;
+     width: 100%;
+     border-radius: 0.5rem;
+     padding: 0.5rem;
+     font-size: 0.875rem;
+ }
+
+ .tagify__input {
+     min-width: 150px;
+ }
+
+ .tagify__dropdown {
+     max-height: 200px;
+     overflow-y: auto;
+ }
+
+ .tagify__dropdown__item {
+     padding: 0.5rem;
+     border-radius: 0.25rem;
+ }
+
+ .tagify--invalid {
+     border-color: #ff4444;
+ }
+
+ .tagify-error {
+     color: #ff4444;
+     font-size: 0.875rem;
+     margin-top: 0.25rem;
+     padding: 0.5rem;
+     background-color: #ffdddd;
+     border-radius: 0.25rem;
+     animation: fadeIn 0.2s ease-in;
+ }
+
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ /* Tag modal container */
+
+ /* For increasing the space between header and tag chip */
+ .tags-container {
+     margin-top: 0.75rem;
+ }
+
+ .tag-modal-container,
+ .tag-filter-modal-container {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 1000;
+     background: white;
+     border-radius: 0.75rem;
+     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+     width: 90%;
+     max-width: 500px;
+     padding: 2rem;
+     animation: modalSlideIn 0.2s ease-out;
+ }
+
+ .tag-modal-header,
+ .tag-filter-modal-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 1rem;
+ }
+
+ /* #tag-filter-search.modal-input {
+    width: 85%; 
+    max-width: 340px;
+    min-width: 150px;
+  } */
+
+ #tag-filter-search {
+     margin-bottom: 0.8rem;
+     /* Increased vertical spacing */
+     padding-right: 100px;
+     /* Space for counter */
+ }
+
+ .tag-chips-container {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 0.5rem;
+     margin: 1rem 0;
+     min-height: 2.5rem;
+     padding: 0.5rem;
+     border: 1px solid #e5e7eb;
+     border-radius: 0.5rem;
+     border-color: transparent;
+ }
+
+
+ /* Tag chips in modal */
+ .tag-chip {
+     display: inline-flex;
+     align-items: center;
+     background-color: #f0f4ff;
+     color: #2563eb;
+     padding: 0.25rem 0.75rem 0.25rem 0.5rem;
+     border-radius: 0.5rem;
+     font-size: 0.875rem;
+     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+     transition: all 0.2s ease;
+ }
+
+ .tag-chip:hover {
+     background-color: #e0e7ff;
+ }
+
+ .tag-text {
+     margin-right: 0.5rem;
+ }
+
+ .remove-tag {
+     cursor: pointer;
+     color: #ff4444;
+     font-weight: bold;
+     font-size: 0.75rem;
+     width: 16px;
+     height: 16px;
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     border-radius: 50%;
+     margin-left: 0.25rem;
+ }
+
+ .remove-tag:hover {
+     background-color: rgba(255, 68, 68, 0.1);
+ }
+
+ /* Tags in task cards */
+ .task-tag {
+     position: relative;
+     /* Adding space for remove button.*/
+     padding-right: 1.5rem;
+     display: inline-block;
+     background-color: #f0f4ff;
+     color: #2563eb;
+     padding-right: 20px;
+     border-radius: 0.5rem;
+     font-size: 0.75rem;
+     margin-right: 0.5rem;
+     margin-bottom: 0.25rem;
+     padding: 0.25rem 0.75rem 0.25rem 0.5rem;
+ }
+
+ /* Remove button for tags in task cards */
+ .remove-task-tag {
+     position: absolute;
+     right: 0.25rem;
+     /* right: 2px; */
+     top: 1px;
+     cursor: pointer;
+     font-weight: bold;
+     font-size: 12px;
+     color: #ff4444;
+     opacity: 0.7;
+     transition: opacity 0.2s ease;
+ }
+
+ .task-tag .remove-task-tag {
+     opacity: 0;
+     transition: opacity 0.2s ease;
+ }
+
+
+ .task-tag:hover .remove-task-tag {
+     opacity: 1;
+ }
+
+ .remove-task-tag:hover {
+     color: #ff0000;
+ }
+
+ /* Tag counter to show remaining tags */
+ .tag-counter {
+     font-size: 0.75rem;
+     color: #666;
+     margin-top: 4px;
+     margin-bottom: 8px;
+     padding: 4px;
+     background-color: #f8f9fa;
+     border-radius: 4px;
+     text-align: right;
+ }
+
+ /* Style for when maximum tags is reached */
+ .tagify.tagify--readonly {
+     background-color: #f5f5f5;
+     cursor: not-allowed;
+ }
+
+ /* Make the remove button more visible in task chips */
+ .tag-chip .remove-tag {
+     font-size: 14px;
+     width: 18px;
+     height: 18px;
+ }
+
+ /* Save button */
+ /* #save-tag {
+     background-color: #2563eb;
+     color: white;
+     padding: 0.5rem 1rem;
+     border: none;
+     border-radius: 0.5rem;
+     cursor: pointer;
+     font-weight: 500;
+     transition: background-color 0.2s ease;
+ } */
+
+ /* #save-tag:hover {
+     background-color: #1d4ed8;
+ } */
+
+ #close-tag-modal,
+ #close-tag-filter-modal {
+     /* background: none;
+     border: none;
+     font-size: 1.5rem;
+     cursor: pointer;
+     color: #6b7280; */
+
+     background: none;
+     border: none;
+     font-size: 1.8rem;
+     cursor: pointer;
+     /* color: #6b7280;
+     position: absolute;
+     top: 1.3rem;
+     right: 2rem;
+     line-height: 1;
+     padding: 0;
+     transition: color 0.17s; */
+     color: #9ca3af;
+     position: absolute;
+     top: 1.2rem;
+     right: 1.8rem;
+     line-height: 1;
+     padding: 0.2rem;
+     transition: all 0.2s ease;
+     border-radius: 0.3rem;
+ }
+
+ #close-tag-modal,
+ #close-tag-filter-modal:hover {
+     color: #374151;
+     background: #f3f4f6;
+     /* color: #111827; */
+ }
+
+ /* Tag color related css */
+ .tag-color-selection {
+     margin: 1rem 0;
+ }
+
+ .tag-color-selection h4 {
+     margin-bottom: 0.5rem;
+     font-size: 0.875rem;
+     font-weight: 500;
+ }
+
+ .color-options {
+     display: flex;
+     gap: 0.5rem;
+ }
+
+ .color-option {
+     width: 24px;
+     height: 24px;
+     border-radius: 50%;
+     cursor: pointer;
+     border: 2px solid transparent;
+     transition: all 0.2s ease;
+ }
+
+ /* Blue */
+ .color-option:nth-child(1) {
+     background-color: #d1e8ff;
+     /* background-color: #f0f4ff; */
+ }
+
+ /* Green */
+ .color-option:nth-child(2) {
+     background-color: #dcf5e6;
+     /* background-color: #f0fdf4; */
+ }
+
+ /* Red */
+ .color-option:nth-child(3) {
+     background-color: #fde0e0;
+     /* background-color: #fef2f2; */
+ }
+
+ /* Purple */
+ .color-option:nth-child(4) {
+     /* background-color: #faf5ff; */
+     background-color: #efe5ff;
+ }
+
+ /* Yellow */
+ .color-option:nth-child(5) {
+     background-color: #fef9c3;
+     /* background-color: #fefce8; */
+ }
+
+ /* Teal */
+ .color-option:nth-child(6) {
+     background-color: #d6f5f5;
+ }
+
+ /* Coral */
+ .color-option:nth-child(7) {
+     background-color: #ffe6e6;
+ }
+
+ /* Lavender */
+ .color-option:nth-child(8) {
+     background-color: #efe3ff;
+ }
+
+ /* Mint */
+ .color-option:nth-child(9) {
+     background-color: #e0f5e9;
+ }
+
+ /* Peach */
+ .color-option:nth-child(10) {
+     background-color: #ffecd9;
+ }
+
+ .color-option.selected {
+     border-color: #000;
+     transform: scale(1.1);
+ }
+
+ /* Tag related code above */
+
+ /* Tag Filter Modal and Tag Bar related CSS. */
+ /* Tag Filter Modal (reuse your existing modal styles for .modal, .modal-content, etc.) */
+ .tag-filter-modal-body {
+     margin-bottom: 1.3rem;
+     position: relative;
+     padding-top: 2.2rem;
+     /* Space for absolutely positioned counter */
+ }
+
+ /* Place counter in its own row, right-aligned */
+ .selected-tags-counter-row {
+     width: 100%;
+     text-align: right;
+     margin-bottom: 0.1rem;
+ }
+
+ /* --- MODAL COUNTER --- */
+ /* #selected-tags-counter {
+    font-size: 0.89rem;
+    color: #64748b;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    margin-top: 0.5rem;
+    margin-right: 0.1rem;
+    letter-spacing: 0.025em;
+    user-select: none;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    text-align: right;
+    position: absolute;
+    right: 0.5rem;
+    top: 0.8rem;
+    background: #f8fafc;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.4rem;
+    border: 1px solid #e2e8f0;
+ } */
+
+ /* Variant A: No background, just text */
+ #selected-tags-counter {
+     color: #64748b;
+     font-weight: 600;
+     font-size: 0.97rem;
+     letter-spacing: 0.02em;
+     padding: 0;
+     background: none;
+     border: none;
+ }
+
+ /* Variant B: Light border */
+ /* #selected-tags-counter {
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.97rem;
+    letter-spacing: 0.02em;
+    padding: 0.12rem 0.62rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.4rem;
+    background: none;
+} */
+
+ /* Variant C: Very subtle background */
+ /* #selected-tags-counter {
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.97rem;
+    letter-spacing: 0.02em;
+    padding: 0.13rem 0.62rem;
+    background: rgba(0,0,0,0.03);
+    border: 1px solid #e0e0e0;
+    border-radius: 0.4rem;
+} */
+
+
+ /* Tag Suggestions Dropdown */
+ .tag-suggestions {
+     margin-top: -0.7rem;
+     border: 1px solid #e5e7eb;
+     background: #fafaff;
+     border-radius: 0.5rem;
+     max-height: 120px;
+     overflow-y: auto;
+     margin-bottom: 0.65rem;
+     display: none;
+     position: relative;
+     /* position: absolute; */
+     left: 0;
+     right: 0;
+     /* top: 100%; */
+     z-index: 1001;
+     border-bottom: 1px solid #e5e7eb;
+     padding-bottom: 0.5rem;
+ }
+
+ .tag-suggestion-item {
+     padding: 0.55rem 1.1rem;
+     cursor: pointer;
+     font-size: 1.01rem;
+     border-radius: 0.38rem;
+     transition: background 0.13s, color 0.13s;
+ }
+
+ .tag-suggestion-item:hover,
+ .tag-suggestion-item.active {
+     background: #e0e7ff;
+     color: #2563eb;
+ }
+
+ /* Chips for selected tags (reuse .tag-chip if you want, or use .selected-tag-pill) */
+ .selected-tags {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 0.28rem;
+     min-height: 2rem;
+     margin-top: 0.8rem;
+     /* Increased spacing between search and chips */
+     margin-bottom: 0.8rem;
+     padding: 0.4rem 0;
+     /* More vertical padding */
+ }
+
+ /* .selected-tags,
+ .filter-bar-tags {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 0.22rem 0.16rem;
+     row-gap: 0.38rem;
+     align-items: flex-start;
+ } */
+
+ .selected-tag-pill {
+     display: inline-flex;
+     align-items: center;
+     background-color: #e5ebfb;
+     /* Muted blue */
+     color: #30418b;
+     padding: 0.08rem 0.65rem;
+     border-radius: 0.72rem;
+     font-size: 0.86rem;
+     margin-right: 0.4rem;
+     margin-bottom: 0.4rem;
+     box-shadow: 0 1px 2px rgba(33, 60, 104, 0.06);
+     border: 1px solid #d0d7e7;
+     font-weight: 500;
+     max-width: 85px;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+ }
+
+ .selected-tag-pill .remove-tag {
+     margin-left: 0.14rem;
+     cursor: pointer;
+     color: #b91c1c;
+     font-size: 1.03rem;
+     background: none;
+     border: none;
+     padding: 0;
+     line-height: 1;
+     transition: color 0.15s;
+ }
+
+ .selected-tag-pill .remove-tag:hover,
+ .filter-bar-chip .remove-tag:hover {
+     background: rgba(239, 68, 68, 0.16);
+     color: #ef4444;
+     border-radius: 50%;
+     transition: background 0.15s, color 0.15s;
+
+ }
+
+ /* Tag filter bar css */
+ #tag-filter-bar {
+     /* display: flex; */
+     display: none;
+     align-items: center;
+     padding: 0.8rem 1.25rem;
+     background: #fff;
+     box-shadow: 0 2px 8px rgba(33, 60, 104, 0.08);
+     border-radius: 1.2rem;
+     border: 1px solid #edeff3;
+     margin: 1.2rem 0;
+     gap: 0.6rem;
+     min-height: 2.2rem;
+     position: relative;
+ }
+
+ .filter-bar-label {
+     font-weight: 500;
+     color: #1e2439;
+     margin-right: 0.57rem;
+     font-size: 1.03rem;
+     user-select: none;
+ }
+
+ .filter-bar-tags {
+     display: flex;
+     gap: 0.1rem;
+     flex-wrap: wrap;
+ }
+
+ .filter-bar-chip {
+     display: flex;
+     align-items: center;
+     background: #e5ebfb;
+     /* Muted blue */
+     color: #30418b;
+     /* Muted deep blue */
+     border-radius: 0.72rem;
+     padding: 0.06rem 0.7rem;
+     font-size: 0.86rem;
+     margin: 0 0.15rem 0.15rem 0;
+     ;
+     box-shadow: 0 1px 2px rgba(33, 60, 104, 0.06);
+     transition: background 0.18s, color 0.18s;
+     white-space: nowrap;
+     max-width: 85px;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     border: 1px solid #d0d7e7;
+     font-weight: 500;
+ }
+
+ .filter-bar-chip .remove-tag {
+     margin-left: 0.15rem;
+     cursor: pointer;
+     color: #b91c1c;
+     font-size: 1.02rem;
+     background: none;
+     border: none;
+     padding: 0;
+     line-height: 1;
+     transition: color 0.15s;
+ }
+
+ /* .filter-bar-chip .remove-tag:hover {
+     color: #ef4444;
+ } */
+
+ .filter-bar-chip .remove-tag,
+ .selected-tag-pill .remove-tag {
+     margin-left: 0.32rem;
+     font-size: 1.12rem;
+     /* Rest same */
+ }
+
+
+ /* Truncate Long Tag Names */
+ .filter-bar-chip,
+ .selected-tag-pill {
+     position: relative;
+     display: inline-flex;
+     align-items: center;
+     min-width: 60px;
+     max-width: 160px;
+     /* Allows for longer tag names */
+     height: 32px;
+     /* Consistent chip height */
+     padding: 0 32px 0 12px;
+     /* Right for close btn, left for text */
+     background: #f3f4f6;
+     /* Softer, less vibrant */
+     color: #374151;
+     border-radius: 16px;
+     font-size: 0.97rem;
+     margin: 0 0.12rem 0.20rem 0.12rem;
+     box-shadow: 0 1px 2px rgba(33, 60, 104, 0.06);
+     border: 1px solid #e5e7eb;
+     font-weight: 500;
+     overflow: hidden;
+     white-space: nowrap;
+ }
+
+ .filter-bar-chip .tag-text,
+ .selected-tag-pill .tag-text {
+     flex: 1 1 auto;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+     margin-right: 4px;
+     display: inline-block;
+ }
+
+ /* X button absolute positioning */
+ .filter-bar-chip .remove-tag,
+ .selected-tag-pill .remove-tag {
+     position: absolute;
+     right: 8px;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 18px;
+     height: 18px;
+     cursor: pointer;
+     color: #b91c1c;
+     font-size: 1.15rem;
+     background: none;
+     border: none;
+     line-height: 1;
+     padding: 0;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ /* .filter-bar-chip .remove-tag:hover,
+ .selected-tag-pill .remove-tag:hover {
+     color: #ef4444;
+ } */
+
+ @keyframes modalSlideIn {
+     from {
+         opacity: 0;
+         transform: translate(-50%, -55%);
+     }
+
+     to {
+         opacity: 1;
+         transform: translate(-50%, -50%);
+     }
+ }
+
+ /* Responsive improvements for tag filter */
+ @media (max-width: 500px) {
+     #selected-tags-counter {
+         position: static;
+         text-align: left;
+         margin-bottom: 0.8rem;
+         background: none;
+         border: none;
+         padding: 0;
+     }
+
+     .tag-filter-modal-body {
+         padding-top: 0;
+     }
+
+     #tag-filter-search {
+         padding-right: 1rem;
+     }
+
+     .filter-bar-add-btn {
+         width: 1.6rem;
+         height: 1.6rem;
+     }
+
+     .filter-bar-add-btn .material-icons {
+         font-size: 1.1rem;
+     }
+ }
+
+ .filter-bar-add-btn {
+     /* background: #2563eb;
+     color: #fff;
+     border: none;
+     border-radius: 50%;
+     width: 2.1rem;
+     height: 2.1rem;
+     margin-left: 0.45rem;
+     margin-right: 0.7rem;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+     transition: background 0.2s, box-shadow 0.15s;
+     box-shadow: 0 1px 4px rgba(33, 60, 104, 0.10);
+     font-size: 1.25rem;
+     outline: none;
+     padding: 0; */
+     background: #3b82f6;
+     color: #fff;
+     border: none;
+     border-radius: 50%;
+     width: 1.8rem;
+     /* Reduced from 2.1rem */
+     height: 1.8rem;
+     /* Reduced from 2.1rem */
+     margin-left: 0.4rem;
+     margin-right: 0.6rem;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+     transition: all 0.2s ease;
+     box-shadow: 0 1px 3px rgba(59, 130, 246, 0.15);
+     font-size: 1.1rem;
+     /* Reduced font size */
+     outline: none;
+     padding: 0;
+ }
+
+ .filter-bar-add-btn .material-icons {
+     font-size: 1.2rem;
+     line-height: 1;
+ }
+
+ .filter-bar-add-btn:hover {
+     background: #2563eb;
+     transform: translateY(-1px);
+     box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+ }
+
+ .filter-bar-add-btn:active {
+     transform: translateY(0);
+ }
+
+ /* For disabling the filter bar add button When tag limit reached */
+ /* .filter-bar-add-btn:disabled { */
+ /* background: #f8fafc; */
+ /* color: #64748b; */
+ /* cursor: help; Shows help cursor for tooltip */
+ /* opacity: 0.6; */
+ /* pointer-events: all; Allow tooltip to show */
+ /* box-shadow: none; */
+ /* border: 1px solid #e2e8f0; */
+ /* } */
+
+ .filter-bar-add-btn:disabled {
+     background: #e2e8f0;
+     color: #94a3b8;
+     cursor: not-allowed;
+     /* More standard */
+     opacity: 0.7;
+     border: 1px solid #cbd5e1;
+     box-shadow: none;
+     transform: none;
+     /* Prevent hover transforms */
+ }
+
+ .filter-bar-add-btn:disabled:hover {
+     background: #e2e8f0;
+     /* Prevent hover changes */
+     transform: none;
+     box-shadow: none;
+ }
+
+ .filter-bar-clear-btn,
+ .tag-filter-clear-btn,
+ .tag-clear-btn {
+     background: #fff;
+     border: 1px solid #dc2626;
+     color: #dc2626;
+     font-weight: 500;
+     margin-left: auto;
+     cursor: pointer;
+     font-size: 0.95rem;
+     /* Slightly smaller */
+     padding: 0.35rem 1.0rem;
+     /* More compact */
+     border-radius: 0.6rem;
+     transition: all 0.18s ease;
+     outline: none;
+     box-shadow: 0 1px 2px rgba(220, 38, 38, 0.08);
+ }
+
+ .filter-bar-clear-btn:hover,
+ .filter-bar-clear-btn:focus,
+ .tag-filter-clear-btn:hover,
+ .tag-filter-clear-btn:focus,
+ .tag-clear-btn:hover,
+ .tag-clear-btn:focus {
+     background: #fef2f2;
+     color: #b91c1c;
+     border-color: #fca5a5;
+     transform: translateY(-1px);
+     box-shadow: 0 2px 4px rgba(220, 38, 38, 0.15);
+ }
+
+ /* --- ACCESSIBILITY: Focus State for Chips and Buttons --- */
+ .filter-bar-chip:focus,
+ .selected-tag-pill:focus,
+ .filter-bar-add-btn:focus,
+ .filter-bar-clear-btn:focus {
+     outline: 2px solid #3b82f6;
+     outline-offset: 2px;
+ }
+
+ /* End of tag Filter bar css */
+ /* Modal Footer Buttons */
+ .modal-footer .btn,
+ .save-tag {
+     font-size: 1rem;
+     padding: 0.48rem 1.18rem;
+     margin: 0 0.25rem;
+ }
+
+ .modal-footer .btn-primary,
+ .modal-footer .save-tag {
+     background: #1d4ed8;
+     ;
+     color: #fff;
+     border: none;
+     border-radius: 0.5rem;
+     font-weight: 700;
+     cursor: pointer;
+     box-shadow: 0 2px 8px rgba(59, 130, 246, 0.13);
+     transition: background 0.2s, box-shadow 0.15s, transform 0.15s;
+ }
+
+ .modal-footer .btn-primary:hover,
+ .modal-footer .btn-primary:focus,
+ .modal-footer .save-tag:hover,
+ .modal-footer .save-tag:focus {
+     background: #1743b3;
+     box-shadow: 0 4px 14px rgba(59, 130, 246, 0.18);
+     transform: translateY(-1px) scale(1.035);
+ }
+
+ /* .modal-footer .btn-secondary {
+     background: #f4f4f4;
+     color: #374151;
+     border: none;
+     border-radius: 0.5rem;
+     font-weight: 500;
+     cursor: pointer;
+     transition: background 0.2s;
+ }
+
+ .modal-footer .btn-secondary:hover,
+ .modal-footer .btn-secondary:focus {
+     background: #e0e7ff;
+ } */
+
+ /* End of tag filter related css */
+ /* task list css for list view */
+
+ /* Task List Container */
+ .task-list-container {
+     position: relative;
+     min-height: 100%;
+     display: flex;
+     flex-direction: column;
+     gap: 8px;
+     /* Added for jump buttons */
+     padding: 1rem;
+     padding-right: calc(1rem + 14px);
+     /* Add space for buttons */
+     /* Don't need padding at bottom in the task list, basically spacing
+     /* padding-bottom: 50px;  */
+ }
+
+ /* LIST ITEM */
+ .task-list-item {
+     /* display: flex;
+   align-items: center;
+   padding: 10px 12px;
+   border-radius: 8px;
+   background-color: white;
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+   transition: box-shadow 0.2s, transform 0.2s;
+   margin-bottom: 4px;
+   position: relative;    */
+
+     position: relative;
+     display: flex;
+     align-items: center;
+     padding: 9px 11px;
+     border-radius: 8px;
+     background-color: white;
+     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+     transition: box-shadow 0.2s, transform 0.2s;
+     margin-bottom: 8px;
+ }
+
+ .task-list-item:hover {
+     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+ }
+
+ /* Task selection styling */
+ /* Commented out this selection code because it is doing nothing, maybe this selection code is meant for showing the selection bar which i am already handling in my deletionManager. */
+
+ /* .task-list-item .task-selection {
+   visibility: hidden;
+   opacity: 0;
+   transition: opacity 0.2s;
+   margin-right: 10px;
+   display: flex;
+   align-items: center;
+   width: 60px;
+}
+
+.task-list-item:hover .task-selection {
+   visibility: visible;
+   opacity: 1;
+} */
+
+ /* Task Selection Container */
+ .task-list-item .task-selection {
+     display: flex !important;
+     position: absolute;
+     left: 0;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     z-index: 10;
+     pointer-events: none;
+     display: flex;
+     align-items: center;
+     justify-content: flex-start !important;
+     padding: 0 0.5rem;
+     transition: opacity 0.2s ease;
+     opacity: 0;
+ }
+
+ .task-list-item:hover .task-selection {
+     display: flex;
+     align-items: center;
+     justify-content: flex-start;
+     pointer-events: auto;
+ }
+
+ .task-list-item:hover .task-selection,
+ .task-list-item.selection-active .task-selection,
+ .selection-mode .task-list-item .task-selection {
+     opacity: 1;
+     pointer-events: auto;
+     /* Enable pointer events when the item is hovered or in selection mode */
+ }
+
+ /* Importantly, when the card has .interactive-hover, we want to disable the overlay */
+ .task-list-item.interactive-hover .task-selection {
+     pointer-events: none !important;
+     opacity: 0 !important;
+     /* Ensure it visually disappears too */
+ }
+
+ .task-list-item.interactive-hover:hover .task-selection {
+     opacity: 0 !important;
+     /* Keep it hidden even on hover of the card when interactive-hover is active */
+ }
+
+ /* Checkbox Wrapper */
+ .task-list-item .task-checkbox-wrapper {
+     width: 16px;
+     height: 16px;
+     align-self: center;
+     margin-right: 8px;
+     margin-top: 0;
+     margin-bottom: 0;
+ }
+
+ .selection-mode .task-list-item .task-checkbox-wrapper {
+     opacity: 1;
+ }
+
+ .task-list-item .task-checkbox {
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     z-index: 12;
+     cursor: pointer;
+     opacity: 0;
+     /* added later for removing outline */
+     /* outline:none;  */
+ }
+
+ .task-list-item:hover .task-checkbox-wrapper,
+ .task-list-item .task-checkbox:checked {
+     opacity: 1;
+ }
+
+ .task-list-item .checkbox-custom {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: white;
+     border: 2px solid #e1e1e1;
+     border-radius: 4px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     opacity: 0;
+ }
+
+ .task-list-item:hover .checkbox-custom,
+ .task-list-item .task-checkbox:checked+.checkbox-custom {
+     opacity: 1;
+ }
+
+ .task-list-item .task-checkbox:checked+.checkbox-custom::after {
+     content: "✓";
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     color: #007bff;
+     font-size: 10px;
+ }
+
+ .task-list-item.selection-active .task-selection {
+     display: flex !important;
+ }
+
+ .selection-mode .task-list-item .task-selection {
+     display: flex !important;
+     opacity: 1 !important;
+ }
+
+ .selection-mode .task-list-item .delete-icon {
+     display: none !important;
+ }
+
+ /* Delete Icon */
+ .task-list-item .delete-icon {
+     position: absolute;
+     right: 0.4rem;
+     top: 0.4rem;
+     /* transform: translateY(-50%); */
+     font-size: 20px;
+     opacity: 0;
+     cursor: pointer;
+     padding: 0;
+     border-radius: 4px;
+     z-index: 11;
+     color: #64748b;
+     transition: opacity 0.2s ease;
+     pointer-events: auto;
+ }
+
+ body:not(.selection-mode) .task-list-item:hover .delete-icon {
+     opacity: 1;
+ }
+
+ body:not(.selection-mode) .task-list-item:hover .task-checkbox-wrapper {
+     opacity: 1;
+ }
+
+ .task-list-item:hover .delete-icon {
+     opacity: 1;
+ }
+
+ .task-list-item .delete-icon:hover {
+     background-color: rgba(209, 213, 219, 0.3);
+     color: #1f2937;
+     border: 1px solid rgba(0, 0, 0, 0.1);
+ }
+
+ .task-list-item:not(.selection-mode) .delete-icon {
+     position: absolute;
+     right: 0.5rem;
+     top: 0.5rem;
+     /* transform: translateY(-50%); */
+     opacity: 0;
+     transition: opacity 0.2s ease;
+ }
+
+ .task-list-item:not(.selection-mode):hover .delete-icon {
+     opacity: 1;
+ }
+
+ /* Task content */
+ .list-item-content {
+     flex: 1;
+     cursor: pointer;
+     display: flex;
+     flex-direction: column;
+     gap: 4px;
+ }
+
+ .list-item-main {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+
+ .list-item-title {
+     font-weight: 600;
+     font-size: 15px;
+     color: #333;
+ }
+
+ .list-item-indicators {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     padding-right: 1.5rem;
+ }
+
+ /* Status and priority indicators - compact version of your card styles */
+ .list-item-indicators .status-badge,
+ .list-item-indicators .priority-flag {
+     display: flex;
+     align-items: center;
+     font-size: 12px;
+     gap: 4px;
+ }
+
+ /* Style the priority text */
+ .list-item-indicators .priority-flag span:last-child {
+     text-transform: capitalize;
+     font-size: 11px;
+     /* Reduced from 12px for better hierarchy */
+     color: #666;
+ }
+
+ /* Task details row */
+ .list-item-details {
+     display: flex;
+     align-items: center;
+     gap: 12px;
+     margin-top: 2px;
+ }
+
+ .list-item-date {
+     font-size: 11px;
+     color: #666;
+ }
+
+ /* Responsive Adjustments */
+ /* @media (max-width: 768px) {
+     .task-list-item {
+         padding: 7px 9px;
+     }
+
+     .task-list-item .task-checkbox-wrapper {
+         margin-right: 6px;
+     }
+
+     .task-list-item .delete-icon {
+         right: 0.4rem;
+         top: 0.4rem;
+     }
+
+     .list-item-indicators {
+         flex-direction: column;
+         align-items: flex-end;
+         padding-right: 1rem;
+     }
+
+     .list-item-details {
+         flex-direction: column;
+         align-items: flex-start;
+     }
+
+     .task-list-container {
+        padding-right: 40px;
+     }
+ } */
+
+ /* End of task list css for list view */
+ /* view all btn css */
+
+ /* Updated view all button css*/
+
+ /* Style when in list mode */
+ .view-all-button[data-view-mode="list"] {
+     background-color: #e6f7ff;
+ }
+
+ .view-all-button {
+     display: flex;
+     /* Align icon and text horizontally */
+     align-items: center;
+     gap: 8px;
+     /* Space between icon and text */
+     width: 100%;
+     padding: 10px 16px;
+     border-radius: 8px;
+     background-color: #f0f7ff;
+     border: 1px solid #dae7ff;
+     color: #2563eb;
+     font-weight: 500;
+     font-size: 0.95rem;
+     transition: all 0.2s ease;
+     margin-bottom: 16px;
+     /* unnecessary */
+     justify-content: flex-start;
+ }
+
+ .view-all-button:hover {
+     background-color: #e6f1ff;
+     border-color: #2563eb;
+ }
+
+ /* .view-all-button::after {
+    content: "→";
+    font-size: 1.1rem;
+} */
+
+ /* Style the icon */
+ .view-all-button i {
+     font-size: 18px;
+     /* Slightly larger icon for visibility */
+     color: #0c59ff;
+     /* color: #5c7cfa; */
+     /* color: #64748b; */
+     line-height: 1;
+     vertical-align: middle;
+ }
+
+ .view-all-button span {
+     line-height: 1;
+     /* Ensure text aligns with icon */
+     vertical-align: middle;
+     /* Align with icon */
+ }
+
+ /* end of view all btn css */
+
+ /*  Reminder Button css */
+
+ /* Updated CSS */
+ /* Base Bell Icon Styling */
+ .reminder-button {
+     /* position: relative;
+     border: none;
+     background: transparent;
+     cursor: pointer;
+     padding: 8px;
+     border-radius: 50%;
+     transition: all 0.2s ease;
+     font-size: 18px;
+     line-height: 1;
+     display: flex;
+     align-items: center;
+     justify-content: center; */
+     position: relative;
+     border: none;
+     background: transparent;
+     cursor: pointer;
+     padding: 5px;
+     border-radius: 50%;
+     font-size: 16px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     transition: background-color 0.2s;
+ }
+
+ /* Bell Base SVG: always outline, color controlled by parent class */
+ .reminder-button .bell-icon svg {
+     width: 18px;
+     height: 18px;
+     stroke-width: 2;
+     fill: none;
+     transition: stroke 0.2s, opacity 0.2s;
+ }
+
+ /* Grey Bell */
+ .reminder-button.bell-noDueDate .bell-icon svg {
+     stroke: #999;
+     /* stroke: #808080; */
+     opacity: 1;
+ }
+
+ /* Yellow Bell */
+ .reminder-button.bell-hasDueNoReminder .bell-icon svg {
+     stroke: #f59f00;
+     opacity: 1;
+ }
+
+ /* Active Snooze Bell (ripple on hover, otherwise yellow outline) */
+ /* .reminder-button.bell-reminderActive .bell-icon svg {
+    stroke: #f59f00;
+    opacity: 1;
+} */
+
+ /* Active Snooze Bell (ripple on hover, otherwise yellow outline) */
+ .reminder-button.bell-reminderActive .bell-icon svg {
+     stroke: #f59f00;
+     opacity: 1;
+ }
+
+ /* Ripple effect, only on hover */
+ .reminder-button.bell-reminderActive:hover::before {
+     content: "";
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     transform: translate(-50%, -50%);
+     width: 28px;
+     height: 28px;
+     background: rgba(245, 159, 0, 0.30);
+     border-radius: 50%;
+     z-index: 0;
+     pointer-events: none;
+     /* animation: ripple 1.5s infinite ease-out; */
+     /* animation: ripple 1.2s linear; */
+     animation: ripple 1.5s ease-out infinite;
+ }
+
+ @keyframes ripple {
+     0% {
+         transform: translate(-50%, -50%) scale(0.8);
+         opacity: 1;
+     }
+
+     100% {
+         transform: translate(-50%, -50%) scale(1.5);
+         opacity: 0;
+     }
+ }
+
+
+ /* Faded Snooze Bell (disabled look) */
+ .reminder-button.bell-reminderFired .bell-icon svg {
+     stroke: #f59f00;
+     opacity: 0.4;
+     /* filter: drop-shadow(0 1px 2px rgba(245, 159, 0, 0.3)); */
+     /* filter: drop-shadow(0 1px 3px #fff5c0); */
+     filter: drop-shadow(0 1px 3px rgba(255, 245, 192, 0.6));
+     /* Softer shadow with rgba */
+     transition: all 0.2s ease;
+     /* Smooth transitions */
+ }
+
+ /* .reminder-button.bell-reminderFired .bell-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: #f59f00;
+    opacity: 0.7;
+    transform: rotate(-15deg);
+} */
+ /* On hover, lift opacity a bit for faded bell only */
+ .reminder-button.bell-reminderFired:hover .bell-icon svg {
+     opacity: 0.7;
+     filter: drop-shadow(0 2px 4px rgba(255, 245, 192, 0.8));
+     /* Enhanced shadow on hover */
+     /* transform: scale(1.05); Subtle scale effect */
+ }
+
+ /* Bell States */
+ /* Default state - outline bell */
+ /* .reminder-button .bell-icon {
+     color: #808080;
+ } */
+
+
+
+ /* Active reminder - outline bell with yellow color */
+ /* .reminder-button[data-reminder="active"] .bell-icon {
+     color: #f59f00;
+ } */
+
+ /* Setting reminder state - Bell with sound waves */
+ /* .reminder-button.setting-reminder .bell-icon {
+     color: #f59f00;
+ } */
+
+ /* Hover effects */
+ .reminder-button:hover {
+     background-color: rgba(245, 159, 0, 0.08);
+ }
+
+ /* Ripple effect on hover for active and setting reminder states */
+ /* .reminder-button[data-reminder="active"]:hover::before,
+ .reminder-button.setting-reminder:hover::before {
+     content: "";
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(245, 159, 0, 0.3);
+     border-radius: 50%;
+     z-index: -1;
+     animation: ripple 1.5s infinite ease-out;
+ } */
+
+ /* Custom Tooltip */
+ .reminder-tooltip {
+     position: absolute;
+     bottom: 120%;
+     right: -10px;
+     background: #334155;
+     color: white;
+     padding: 6px 12px;
+     border-radius: 4px;
+     font-size: 12px;
+     white-space: nowrap;
+     pointer-events: none;
+     opacity: 0;
+     visibility: hidden;
+     transition: all 0.2s ease;
+     transform: translateY(5px);
+     z-index: 10;
+     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+ }
+
+ .reminder-button:hover .reminder-tooltip {
+     opacity: 1;
+     visibility: visible;
+     transform: translateY(0);
+ }
+
+ /* Bell ring animation on hover */
+ @keyframes bellRing {
+     0% {
+         transform: rotate(0);
+     }
+
+     10% {
+         transform: rotate(10deg);
+     }
+
+     20% {
+         transform: rotate(-10deg);
+     }
+
+     30% {
+         transform: rotate(6deg);
+     }
+
+     40% {
+         transform: rotate(-6deg);
+     }
+
+     50% {
+         transform: rotate(0);
+     }
+
+     100% {
+         transform: rotate(0);
+     }
+ }
+
+ .reminder-button:hover .bell-icon {
+     animation: bellRing 0.8s ease;
+ }
+
+ /* @keyframes ripple {
+     0% {
+         transform: scale(0.8);
+         opacity: 1;
+     }
+
+     100% {
+         transform: scale(1.5);
+         opacity: 0;
+     }
+ } */
+
+
+ /* End of reminder button css */
+
+
+ /* Notification related css */
+ /* For positioning the bell icon and general help button to the right */
+
+ .header-actions {
+     display: flex;
+     align-items: center;
+     gap: 12px;
+     position: absolute;
+     top: 40px;
+     /* top: 70px; */
+     right: 80px;
+ }
+
+ .notification-center-button {
+     background: none;
+     border: none;
+     cursor: pointer;
+     padding: 8px;
+     border-radius: 50%;
+     transition: background-color 0.2s;
+     /* position: relative; */
+ }
+
+ .notification-center-button:hover {
+     background-color: rgba(0, 0, 0, 0.05);
+ }
+
+ .notification-center-button .bell-icon svg {
+     /* fill: #f59e0b; */
+     /* stroke: #f59e0b;
+    stroke-width: 0;
+    vertical-align: middle; */
+     width: 24px;
+     height: 24px;
+     fill: #f59e0b;
+     /* Using your medium priority color */
+     vertical-align: middle;
+
+ }
+
+ .general-help-button {
+     background: none;
+     border: none;
+     cursor: pointer;
+     width: 30px;
+     height: 30px;
+     border-radius: 50%;
+     font-size: 1rem;
+     font-weight: 500;
+     color: #666;
+     display: inline-flex;
+     justify-content: center;
+     align-items: center;
+     margin-left: 8px;
+     transition: background-color 0.2s;
+ }
+
+ .general-help-button:hover {
+     background-color: rgba(0, 0, 0, 0.05);
+ }
+
+ /* Notification modal wrapper for creating the overlay effect and still allowing things to work, like being able to click the bell icon for opening the modal */
+
+ .notification-modal-wrapper {
+     position: fixed;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     background-color: rgba(0, 0, 0, 0.3);
+     display: none;
+     /* Will be toggled with JavaScript */
+     /* justify-content: flex-end; */
+     justify-content: flex-end;
+     align-items: flex-start;
+     z-index: 1000;
+     /* Ensure it's above everything */
+ }
+
+ :root {
+     --primary-color: #1a73e8;
+     --surface-color: #ffffff;
+     --text-color: #333333;
+     --border-color: #e0e0e0;
+     --danger-color: #e53935;
+     --low-color: #2196f3;
+     --medium-color: #ffb300;
+     --high-color: #f44336;
+ }
+
+ /* Already exist, but not the same details as here. */
+
+ .notification-modal {
+
+     background-color: #ffffff;
+     border-radius: 12px;
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+     width: 420px;
+     max-width: 80vw;
+     max-height: 80vh;
+     overflow: hidden;
+     display: flex;
+     flex-direction: column;
+     position: absolute;
+     /* margin-top: 120px; */
+     top: 110px;
+     right: 75px;
+     /* Position below the header */
+     /* margin-right: 60px; */
+     /* Margin from the right edge */
+     animation: slideIn 0.2s ease-out;
+ }
+
+ .notification-modal-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 16px 20px;
+     border-bottom: 1px solid var(--border-color);
+ }
+
+ .notification-modal-title {
+     font-size: 1.25rem;
+     font-weight: 600;
+     margin: 0;
+ }
+
+ .close-button {
+     background: none;
+     border: none;
+     font-size: 1.5rem;
+     cursor: pointer;
+     color: #666;
+     padding: 0;
+ }
+
+ .close-button:hover {
+     color: #333;
+ }
+
+ .notification-settings {
+     padding: 18px 20px;
+     border-bottom: 1px solid var(--border-color);
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+
+ .settings-label {
+     font-weight: 500;
+ }
+
+ .toggle-switch {
+     position: relative;
+     display: inline-block;
+     width: 52px;
+     height: 26px;
+ }
+
+ .toggle-switch input {
+     opacity: 0;
+     width: 0;
+     height: 0;
+ }
+
+ .toggle-switch input[type="checkbox"].disabled-toggle {
+     opacity: 0.5;
+     cursor: not-allowed;
+     pointer-events: none;
+ }
+
+ .slider {
+     position: absolute;
+     cursor: pointer;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     background-color: #ccc;
+     transition: .3s;
+     border-radius: 34px;
+ }
+
+ .slider:before {
+     position: absolute;
+     content: "";
+     height: 18px;
+     width: 18px;
+     left: 4px;
+     bottom: 4px;
+     background-color: white;
+     transition: .3s;
+     border-radius: 50%;
+ }
+
+ input:checked+.slider {
+     background-color: var(--primary-color);
+ }
+
+ input:checked+.slider:before {
+     transform: translateX(26px);
+ }
+
+
+ .sound-toggle-button {
+     background: none;
+     border: none;
+     cursor: pointer;
+     padding: 5px;
+     border-radius: 50%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     transition: background-color 0.2s;
+ }
+
+ .sound-toggle-button:hover {
+     background-color: rgba(0, 0, 0, 0.05);
+ }
+
+ .sound-icon {
+     display: flex;
+ }
+
+ .sound-on {
+     color: #2563eb;
+     /* Blue color for enabled */
+ }
+
+ .sound-off {
+     color: #9ca3af;
+     /* Gray color for disabled */
+ }
+
+ .hidden {
+     display: none;
+ }
+
+ .notification-list {
+     overflow-y: auto;
+     padding: 0;
+     margin: 0;
+     max-height: 450px;
+ }
+
+ .notification-item {
+     padding: 18px 20px;
+     border-bottom: 1px solid var(--border-color);
+     display: flex;
+     align-items: flex-start;
+     cursor: default;
+ }
+
+ .notification-item:hover {
+     background-color: #f9f9f9;
+ }
+
+ /* For marking the notification as read */
+ .notification-item.read {
+     background-color: #f0f0f0;
+ }
+
+ /* For highlighting the task when notification is clicked */
+ /* .task-card.highlighted-task {
+    border: 2px solid rgb(6, 167, 247);
+} */
+
+ .task-card.highlighted-task {
+     animation: highlight-glow 6s ease-out forwards;
+ }
+
+ @keyframes highlight-glow {
+     0% {
+         box-shadow: 0 0 10px 3px rgba(66, 133, 244, 0.6);
+     }
+
+     70% {
+         box-shadow: 0 0 10px 3px rgba(66, 133, 244, 0.6);
+     }
+
+     100% {
+         box-shadow: none;
+     }
+ }
+
+
+
+ .notification-icon {
+     margin-right: 16px;
+     width: 36px;
+     height: 36px;
+     border-radius: 50%;
+     background-color: #e3f2fd;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     color: var(--primary-color);
+     font-size: 1.25rem;
+ }
+
+ .notification-content {
+     flex: 1;
+     padding-right: 10px;
+ }
+
+ .notification-title {
+     font-weight: 500;
+     margin-bottom: 4px;
+ }
+
+ .notification-message {
+     font-size: 0.9rem;
+     color: #666;
+     margin-bottom: 10px;
+     line-height: 1.4;
+ }
+
+ .notification-meta {
+     font-size: 0.75rem;
+     color: #888;
+     display: flex;
+     justify-content: space-between;
+ }
+
+ /*  Css for notification blocked popup */
+
+ .notification-popup {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: rgba(0, 0, 0, 0.5);
+     display: none;
+     justify-content: center;
+     align-items: center;
+     z-index: 1500;
+     opacity: 0;
+     transition: opacity 0.3s ease;
+ }
+
+ .notification-popup.show {
+     display: flex;
+     opacity: 1;
+ }
+
+ .popup-content {
+     background: white;
+     padding: 30px;
+     border-radius: 12px;
+     max-width: 450px;
+     width: 90%;
+     text-align: center;
+     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+     position: relative;
+     transform: scale(0.9);
+     transition: transform 0.3s ease;
+ }
+
+ .notification-popup.show .popup-content {
+     transform: scale(1);
+ }
+
+ .popup-content h3 {
+     color: #333;
+     margin-bottom: 20px;
+     font-size: 1.25rem;
+ }
+
+ .popup-content p {
+     color: #666;
+     margin-bottom: 15px;
+ }
+
+ .browser-icons {
+     background-color: #f4f4f4;
+     padding: 10px;
+     border-radius: 8px;
+     margin-bottom: 10px;
+     text-align: left;
+     color: #333;
+     font-size: 0.9rem;
+ }
+
+ .close-popup {
+     width: 100%;
+     padding: 12px;
+     background-color: #007bff;
+     color: white;
+     border: none;
+     border-radius: 6px;
+     margin-top: 15px;
+     cursor: pointer;
+     transition: background-color 0.2s ease;
+ }
+
+ .close-popup:hover {
+     background-color: #0056b3;
+ }
+
+
+ /* End of notification blocked popup css */
+
+ /* Notification reminder modal css */
+ /* Reminder Modal Styles */
+
+ /* Updated CSS for the reminder modal with Days/Hours/Minutes UI */
+ .reminder-modal-content {
+     max-width: 360px;
+     width: 90%;
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 1000;
+     padding: 20px;
+     border-radius: 8px;
+     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+     background-color: white;
+ }
+
+ .reminder-modal-content .modal-header {
+     padding: 0 0 16px 0;
+     border-bottom: 1px solid #e5e5e5;
+     margin-bottom: 16px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+
+ .reminder-modal-content .modal-header h2 {
+     font-size: 1.2rem;
+     margin: 0;
+     font-weight: 500;
+ }
+
+ .reminder-form .form-group {
+     margin: 12px 0;
+ }
+
+ .preset-chips {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 8px;
+     margin-bottom: 20px;
+     justify-content: space-between;
+
+ }
+
+ .preset-chip {
+     flex: 1;
+     padding: 8px 0;
+     border-radius: 16px;
+     background-color: #f0f0f0;
+     color: #333;
+     cursor: pointer;
+     transition: all 0.2s ease;
+     font-size: 0.9rem;
+     border: 1px solid transparent;
+     user-select: none;
+     text-align: center;
+ }
+
+ .preset-chip:hover {
+     background-color: #e0e0e0;
+     border-color: #ccc;
+ }
+
+ .preset-chip.selected {
+     background-color: var(--primary-color, #007bff);
+     color: white;
+     font-weight: 500;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
+
+ /* Custom time input styling */
+ .custom-time-container {
+     margin-top: 16px;
+     padding-top: 16px;
+     border-top: 1px solid #eee;
+ }
+
+ .custom-time-container label {
+     display: block;
+     margin-bottom: 10px;
+     font-weight: 500;
+     color: #333;
+     font-size: 0.9rem;
+     /* text-align: center; */
+ }
+
+ .time-inputs-container {
+     display: flex;
+     gap: 12px;
+     margin-top: 10px;
+     align-items: center;
+     justify-content: center;
+ }
+
+ .time-input-group {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+ }
+
+ .time-input {
+     width: 55px;
+     padding: 8px 4px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     text-align: center;
+     font-size: 0.9rem;
+     /* font-size: 16px; */
+ }
+
+ .time-input:focus {
+     border-color: var(--primary-color, #007bff);
+     outline: none;
+     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+ }
+
+ /* Added validation styles */
+ .time-input.invalid {
+     border-color: #dc3545;
+     background-color: #fff8f8;
+ }
+
+ .time-label {
+     font-size: 12px;
+     color: #666;
+     margin-top: 6px;
+ }
+
+ .reminder-preview {
+     margin-top: 16px;
+     padding: 10px 12px;
+     font-size: 14px;
+     color: #444;
+     font-style: normal;
+     background-color: #f0f7ff;
+     border-radius: 4px;
+     text-align: center;
+ }
+
+ /* Footer styling with dual buttons */
+ .modal-footer {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-top: 20px;
+     padding-top: 16px;
+     border-top: 1px solid #eee;
+
+ }
+
+ .secondary-button {
+     background-color: #f0f0f0;
+     color: #333;
+     padding: 8px 16px;
+     border-radius: 4px;
+     border: 1px solid #ccc;
+     cursor: pointer;
+     font-size: 0.9rem;
+     transition: background-color 0.2s;
+     margin-right: 12px;
+     min-width: 120px;
+     text-align: center;
+ }
+
+ .secondary-button:hover {
+     background-color: #e0e0e0;
+ }
+
+ .set-reminder-btn {
+     background-color: var(--primary-color, #007bff);
+     color: white;
+     padding: 8px 16px;
+     border-radius: 4px;
+     border: none;
+     cursor: pointer;
+     font-size: 0.9rem;
+     transition: background-color 0.2s;
+     min-width: 120px;
+     text-align: center;
+ }
+
+ .set-reminder-btn:hover {
+     background-color: var(--primary-hover-color, #0056b3);
+ }
+
+ /* Error message styling */
+ .error-message {
+     color: #dc3545;
+     font-size: 14px;
+     margin-top: 10px;
+     display: none;
+ }
+
+ /* Hide remove button by default (shown only when editing) */
+ #remove-reminder-btn {
+     display: none;
+ }
+
+ #reminder-modal {
+     display: none;
+     /* z-index: 1000; */
+ }
+
+ /* When only set-reminder-btn is visible, add auto margin to the left to center it */
+ .modal-footer.single-button .set-reminder-btn {
+     margin-left: auto;
+     margin-right: auto;
+ }
+
+ /* When both buttons are present, we want to push them to the right side */
+ .modal-footer.two-buttons {
+     justify-content: flex-end;
+ }
+
+ #reminder-error {
+     color: var(--error-color, #dc3545);
+     font-size: 14px;
+     margin-top: 8px;
+     display: none;
+ }
+
+ @keyframes bell-ring {
+
+     0%,
+     100% {
+         transform: rotate(0);
+     }
+
+     20%,
+     60% {
+         transform: rotate(8deg);
+     }
+
+     40%,
+     80% {
+         transform: rotate(-8deg);
+     }
+ }
+
+ .help-button {
+     background: none;
+     border: none;
+     cursor: pointer;
+     color: #666;
+     font-size: 1rem;
+     margin-left: 8px;
+     width: 24px;
+     height: 24px;
+     border-radius: 50%;
+     display: inline-flex;
+     justify-content: center;
+     align-items: center;
+ }
+
+ .help-button:hover {
+     background-color: #f0f0f0;
+ }
+
+ @keyframes slideIn {
+     from {
+         opacity: 0;
+         transform: translateY(-20px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ /* End of Notification related css */
+
+ /*Add Task button styling */
+ #open-task-modal {
+     background-color: #007bff;
+     color: white;
+     padding: 10px 20px;
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     font-size: 16px;
+     margin-bottom: 20px;
+ }
+
+ #open-task-modal:hover {
+     background-color: #0056b3;
+ }
+
+ .error-message {
+     color: #dc3545;
+     padding: 10px;
+     margin: 5px 0;
+     border-radius: 4px;
+     background-color: #f8d7da;
+ }
+
+ .success-message {
+     position: fixed;
+     top: 20px;
+     right: 20px;
+     background-color: #d4edda;
+     color: #155724;
+     padding: 15px;
+     border-radius: 4px;
+ }
+
+
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ @keyframes fadeOut {
+     from {
+         opacity: 1;
+     }
+
+     to {
+         opacity: 0;
+     }
+ }
+
+ /* Add this to ensure the task display area works with cards */
+ #task-display {
+     position: relative;
+     flex: 1;
+     width: 100%;
+     padding: 1rem;
+     margin-top: 0;
+     padding-top: 0;
+     transition: opacity 0.3s ease;
+     height: 100%;
+     margin-right: 0;
+     padding-right: 0;
+     /* Basic scrollbar setup */
+     overflow-y: auto;
+
+     /* -webkit-overflow-scrolling: touch; */
+
+     /* Webkit scrollbar styling */
+     &::-webkit-scrollbar {
+         width: 14px;
+         position: absolute;
+         right: 0;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+         /* Completely transparent track */
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background-color: rgba(0, 0, 0, 0.2);
+         /* Light gray, very transparent */
+         border: 4px solid transparent;
+         /* Creates padding effect */
+         background-clip: content-box;
+         border-radius: 7px;
+         min-height: 40px;
+
+         /* Remove default button appearance */
+         /* &:vertical {
+             &:start {
+                 display: none;
+             }
+
+             &:end {
+                 display: none;
+             }
+         } */
+
+         /* Darker on hover */
+         &:hover {
+             background-color: rgba(0, 0, 0, 0.3);
+         }
+     }
+
+     /* Firefox */
+     scrollbar-width: thin;
+     scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+
+
+ }
+
+ #task-display.fade {
+     opacity: 0;
+ }
+
+ /* Adjust task container for task display specific needs */
+ #task-display .task-container {
+     width: 100%;
+ }
+
+ /* Floating Button Core Styles */
+ .jump-button {
+     position: fixed;
+     right: 24px;
+     /* right: 1.5rem; */
+     /* right: calc(24px + 2rem); */
+     /* Base spacing from right + extra space from scrollbar */
+     height: 40px;
+     width: 40px;
+     border-radius: 50%;
+     background-color: #2563eb;
+     color: white;
+     border: none;
+     cursor: pointer;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     /* transition: opacity 0.3s ease, transform 0.3s ease; */
+     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+     opacity: 0;
+     /* Start hidden */
+     visibility: hidden;
+     /* Ensure completely hidden initially */
+     pointer-events: none;
+     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+     z-index: 1000;
+     /* Higher than filter panel */
+     /* padding: 0 !important; */
+     /* transform: translateZ(0); */
+
+ }
+
+ .jump-button.visible {
+     animation: fadeIn 0.3s ease;
+     opacity: 0.9;
+     visibility: visible;
+     pointer-events: auto;
+ }
+
+ /* Hover effect */
+ /* .jump-button.visible:hover {
+    opacity: 1;
+    transform: scale(1.1);
+} */
+
+
+
+ /* Individual button positions */
+ .jump-button.jump-to-top {
+     bottom: 80px;
+ }
+
+ .jump-button.jump-to-bottom {
+     bottom: 24px;
+ }
+
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 0.9;
+         transform: translateY(0);
+     }
+ }
+
+ /* Hover States */
+ .jump-button.visible:hover {
+     opacity: 1;
+     transform: scale(1.05);
+     /* Reduced from 1.1 for subtler effect */
+     background-color: #1d4ed8;
+     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+ }
+
+ /* Hover effects */
+ /* .jump-button:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+} */
+
+ /* Material icon sizing */
+ .jump-button .material-icons {
+     font-size: 20px;
+     line-height: 1;
+ }
+
+ /* Filter panel adjustments */
+ .app-container.filter-active .jump-button {
+     /* right: 344px; */
+     /* 320px + 24px */
+     right: calc(344px + 1.5rem);
+
+ }
+
+ /* Responsive adjustments */
+ @media (max-width: 768px) {
+
+     .title {
+         font-size: 2rem;
+     }
+
+     .auth-container {
+         padding: 1.5rem;
+     }
+
+     .user-modal-content {
+         width: 95%;
+         padding: 1.5rem;
+     }
+
+     .task-container {
+         grid-template-columns: 1fr;
+         /* Single column on mobile */
+     }
+
+     .jump-button {
+         right: 20px;
+         /* right: calc(16px + 0.75rem); */
+         /* Smaller base spacing + extra space on mobile */
+         height: 36px;
+         width: 36px;
+     }
+
+     .jump-to-top {
+         bottom: 80px;
+     }
+
+     .jump-to-bottom {
+         bottom: 28px;
+     }
+
+
+     .app-container.filter-active .jump-button {
+         /* right: 336px; */
+         /* 320px + 16px */
+         right: calc(336px + 20px);
+     }
+
+     .task-list-item {
+         padding: 7px 9px;
+     }
+
+     .task-list-item .task-checkbox-wrapper {
+         margin-right: 6px;
+     }
+
+     .task-list-item .delete-icon {
+         right: 0.4rem;
+         top: 0.4rem;
+     }
+
+     .list-item-indicators {
+         flex-direction: column;
+         align-items: flex-end;
+         padding-right: 1rem;
+     }
+
+     .list-item-details {
+         flex-direction: column;
+         align-items: flex-start;
+     }
+
+     .task-list-container {
+         padding-right: 40px;
+     }
+ }
+
+ /* Adjust for filter panel */
+ .app-container.filter-active #task-display {
+     margin-right: 344px;
+ }
+
+ /* Adjust for filter panel open state */
+ .app-container.filter-active .jump-button {
+     right: calc(344px + 24px);
+     /* right: calc(344px + 2rem); */
+     /* 320px (filter width) + 24px (base spacing) + extra space */
+ }
+
+ /* Loading spinner and load more button css */
+ .loading-spinner {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     padding: 1rem;
+     opacity: 0;
+     transition: opacity 0.3s ease;
+ }
+
+ .loading-spinner.visible {
+     opacity: 1;
+ }
+
+ .loading-spinner .material-icons {
+     animation: spin 1s linear infinite;
+ }
+
+ @keyframes spin {
+     0% {
+         transform: rotate(0deg);
+     }
+
+     100% {
+         transform: rotate(360deg);
+     }
+ }
+
+ .load-more-button {
+     display: block;
+     margin: 20px auto;
+     padding: 10px 20px;
+     background-color: #0366d6;
+     color: white;
+     border: none;
+     border-radius: 6px;
+     cursor: pointer;
+     transition: background-color 0.3s ease;
+ }
+
+ .load-more-button:hover {
+     background-color: #0256b9;
+ }
+
+ .load-more-button:disabled {
+     background-color: #ccc;
+     cursor: not-allowed;
+ }
+
+ .load-more-container {
+     text-align: center;
+     margin-top: 20px;
+     margin-bottom: 20px;
+ }
